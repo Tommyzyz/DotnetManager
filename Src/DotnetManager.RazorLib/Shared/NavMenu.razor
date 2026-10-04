@@ -1,0 +1,93 @@
+@inject UiLocalizer L
+@inject LocalizationState Localization
+@implements IDisposable
+
+<div class="top-row ps-3 navbar navbar-dark">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="">
+			<i class="fa-solid fa-screwdriver-wrench"></i> @L["App.Title"]
+		</a>
+		<button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	</div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+	<nav class="flex-column">
+		<div class="nav-section">@L["Nav.GroupTools"]</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+				<i class="fa-solid fa-gauge-high"></i> @L["Nav.Overview"]
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="tools/local">
+				<i class="fa-solid fa-cubes"></i> @L["Nav.LocalTools"]
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="tools/global">
+				<i class="fa-solid fa-globe"></i> @L["Nav.GlobalTools"]
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="tools/search">
+				<i class="fa-solid fa-magnifying-glass"></i> @L["Nav.ToolSearch"]
+			</NavLink>
+		</div>
+
+		<div class="nav-section">@L["Nav.GroupNuGet"]</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="nuget/sources">
+				<i class="fa-solid fa-server"></i> @L["Nav.PackageSources"]
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="nuget/caches">
+				<i class="fa-solid fa-database"></i> @L["Nav.Caches"]
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="nuget/config">
+				<i class="fa-solid fa-file-code"></i> @L["Nav.ConfigFiles"]
+			</NavLink>
+		</div>
+
+		<div class="nav-section">@L["Nav.GroupEnvironment"]</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="workloads">
+				<i class="fa-solid fa-layer-group"></i> @L["Nav.Workloads"]
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="sdk">
+				<i class="fa-solid fa-microchip"></i> @L["Nav.Sdk"]
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="output">
+				<i class="fa-solid fa-terminal"></i> @L["Nav.Output"]
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="settings">
+				<i class="fa-solid fa-gear"></i> @L["Nav.Settings"]
+			</NavLink>
+		</div>
+	</nav>
+</div>
+
+@code {
+	private bool collapseNavMenu = true;
+
+	protected override void OnInitialized() => Localization.Changed += HandleLocalizationChanged;
+
+	public void Dispose() => Localization.Changed -= HandleLocalizationChanged;
+
+	private void HandleLocalizationChanged() => InvokeAsync(StateHasChanged);
+
+	private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+	private void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
+}

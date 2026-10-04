@@ -1,0 +1,24 @@
+﻿@* Shared status message plus the streamed CLI output of the current operation. *@
+@if (!string.IsNullOrWhiteSpace(StatusMessage))
+{
+	<div class="result-box @(StatusIsError ? "result-fail" : "result-ok")">@StatusMessage</div>
+}
+
+@if (HasOutput)
+{
+	<pre class="log-output">@OutputText</pre>
+}
+
+@code {
+	[Parameter]
+	public string? StatusMessage { get; set; }
+
+	[Parameter]
+	public bool StatusIsError { get; set; }
+
+	[Parameter]
+	public string? OutputText { get; set; }
+
+	[Parameter]
+	public bool HasOutput { get; set; }
+}

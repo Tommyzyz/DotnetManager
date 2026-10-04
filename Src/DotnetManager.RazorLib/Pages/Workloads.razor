@@ -1,0 +1,90 @@
+@page "/workloads"
+@inherits ViewModelPage<WorkloadsViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.Workloads"]</h1>
+
+<div class="toolbar">
+	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
+		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.ShowRawListAsync">
+		<i class="fa-solid fa-terminal"></i> @L["Workloads.RawList"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.UpdateAllAsync">
+		<i class="fa-solid fa-arrow-up-right-from-square"></i> @L["Workloads.UpdateAll"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RepairAsync">
+		<i class="fa-solid fa-screwdriver-wrench"></i> @L["Workloads.Repair"]
+	</button>
+	<span class="spacer"></span>
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" id="runElevated" @bind="ViewModel.RunElevated" />
+		<label class="form-check-label" for="runElevated">@L["Workloads.RunElevated"]</label>
+	</div>
+	@if (!ViewModel.IsElevated)
+	{
+		<span class="badge text-bg-secondary">@L["App.NotElevated"]</span>
+	}
+</div>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<div class="card mb-3">
+	<div class="card-body">
+		<h2 class="h6 card-title">@L["Workloads.Install"]</h2>
+		<div class="toolbar mb-0">
+			<input class="form-control form-control-sm" style="max-width: 18rem" placeholder="@L["Workloads.IdPlaceholder"]"
+				   @bind="ViewModel.NewWorkloadId" @bind:event="oninput" />
+			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.InstallAsync">
+				<i class="fa-solid fa-plus"></i> @L["Common.Install"]
+			</button>
+			<span class="spacer"></span>
+			<input class="form-control form-control-sm" style="max-width: 18rem" placeholder="@L["Common.Search"]"
+				   @bind="ViewModel.SearchQuery" @bind:event="oninput" />
+			<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.SearchAsync">
+				<i class="fa-solid fa-magnifying-glass"></i> @L["Common.Search"]
+			</button>
+		</div>
+	</div>
+</div>
+
+<table class="table table-sm table-hover grid">
+	<thead>
+		<tr>
+			<th>@L["Workloads.Id"]</th>
+			<th>@L["Workloads.ManifestVersion"]</th>
+			<th>@L["Workloads.InstallSource"]</th>
+			<th>@L["Common.Actions"]</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var workload in ViewModel.Workloads)
+		{
+			<tr>
+				<td><code>@workload.Id</code></td>
+				<td>@workload.ManifestVersion</td>
+				<td class="hint">@workload.InstallSource</td>
+				<td>
+					<div class="toolbar mb-0">
+						<button class="btn btn-outline-danger btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.UninstallAsync(workload)">
+							@L["Common.Uninstall"]
+						</button>
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@if (ViewModel.Workloads.Count == 0)
+{
+	<p class="hint">@L["Common.None"]</p>
+}
+
+@code {
+	protected override async Task OnInitializedAsync() => await ViewModel.InitializeAsync();
+}

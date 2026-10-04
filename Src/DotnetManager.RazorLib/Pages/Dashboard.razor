@@ -1,0 +1,124 @@
+@page "/"
+@inherits ViewModelPage<DashboardViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.Overview"]</h1>
+
+<div class="toolbar">
+	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
+		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
+	</button>
+	<span class="spacer"></span>
+	<span class="hint path-box">@L["Dashboard.Dotnet"] @ViewModel.DotnetPath (SDK @ViewModel.SdkVersion)</span>
+</div>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<div class="row g-3">
+	<div class="col-12 col-xl-6">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">@L["Dashboard.Sdks"]</h2>
+				@if (ViewModel.Sdks.Count == 0)
+				{
+					<p class="hint mb-0">@L["Common.Loading"]</p>
+				}
+				else
+				{
+					<ul class="list-unstyled mb-0">
+						@foreach (var sdk in ViewModel.Sdks)
+						{
+							<li><code>@sdk.Version</code> <span class="hint path-box">@sdk.Path</span></li>
+						}
+					</ul>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-xl-6">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">@L["Dashboard.Runtimes"] <span class="badge text-bg-secondary">@ViewModel.Runtimes.Count</span></h2>
+				@if (ViewModel.Runtimes.Count == 0)
+				{
+					<p class="hint mb-0">@L["Common.Loading"]</p>
+				}
+				else
+				{
+					<ul class="list-unstyled mb-0">
+						@foreach (var runtime in ViewModel.Runtimes.Take(8))
+						{
+							<li><code>@runtime.Name @runtime.Version</code></li>
+						}
+					</ul>
+					@if (ViewModel.Runtimes.Count > 8)
+					{
+						<p class="hint mb-0">+ @(ViewModel.Runtimes.Count - 8) @L["Dashboard.More"]</p>
+					}
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-xl-4">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">@L["Dashboard.GlobalTools"] <span class="badge text-bg-secondary">@ViewModel.GlobalTools.Count</span></h2>
+				<ul class="list-unstyled mb-0">
+					@foreach (var tool in ViewModel.GlobalTools)
+					{
+						<li><code>@tool.PackageId</code> <span class="hint">@tool.Version</span></li>
+					}
+				</ul>
+				@if (ViewModel.GlobalTools.Count == 0)
+				{
+					<p class="hint mb-0">@L["Common.None"]</p>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-xl-4">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">@L["Dashboard.Workloads"] <span class="badge text-bg-secondary">@ViewModel.Workloads.Count</span></h2>
+				<ul class="list-unstyled mb-0">
+					@foreach (var workload in ViewModel.Workloads)
+					{
+						<li><code>@workload.Id</code> <span class="hint">@workload.ManifestVersion</span></li>
+					}
+				</ul>
+				@if (ViewModel.Workloads.Count == 0)
+				{
+					<p class="hint mb-0">@L["Common.None"]</p>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-xl-4">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">@L["Dashboard.NuGet"]</h2>
+				<dl class="row mb-0">
+					<dt class="col-6">@L["Dashboard.GlobalPackages"]</dt>
+					<dd class="col-6 path-box mb-1">@ViewModel.GlobalPackagesFolder</dd>
+					<dt class="col-6">@L["Common.Size"]</dt>
+					<dd class="col-6 mb-1">@(ViewModel.GlobalPackagesSize ?? L["Common.NotAvailable"])</dd>
+					<dt class="col-6">@L["Dashboard.HttpCache"]</dt>
+					<dd class="col-6 mb-1">@(ViewModel.HttpCacheSize ?? L["Common.NotAvailable"])</dd>
+					<dt class="col-6">@L["Dashboard.Sources"]</dt>
+					<dd class="col-6 mb-0">@(ViewModel.Nuget?.Sources.Count ?? 0)</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	protected override async Task OnInitializedAsync() => await ViewModel.RefreshAsync();
+}

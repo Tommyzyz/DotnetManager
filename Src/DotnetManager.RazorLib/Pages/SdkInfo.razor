@@ -1,0 +1,116 @@
+@page "/sdk"
+@inherits ViewModelPage<SdkInfoViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.Sdk"]</h1>
+
+<div class="toolbar">
+	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
+		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.SdkCheckAsync">
+		<i class="fa-solid fa-shield-halved"></i> dotnet sdk check
+	</button>
+</div>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<div class="row g-3">
+	<div class="col-12 col-xl-6">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">SDK</h2>
+				<table class="table table-sm grid mb-0">
+					<tbody>
+						@foreach (var sdk in ViewModel.Sdks)
+						{
+							<tr>
+								<td><code>@sdk.Version</code></td>
+								<td class="hint path-box">@sdk.Path</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col-12 col-xl-6">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">@L["Dashboard.Runtimes"] <span class="badge text-bg-secondary">@ViewModel.Runtimes.Count</span></h2>
+				<table class="table table-sm grid mb-0">
+					<tbody>
+						@foreach (var runtime in ViewModel.Runtimes)
+						{
+							<tr>
+								<td>@runtime.Name</td>
+								<td><code>@runtime.Version</code></td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card mt-3">
+	<div class="card-body">
+		<h2 class="h6 card-title">global.json</h2>
+		<div class="toolbar">
+			<input class="form-control form-control-sm path-box" style="max-width: 24rem" readonly value="@ViewModel.GlobalJsonDirectory" />
+			<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickGlobalJsonDirectoryAsync">@L["Common.Browse"]</button>
+			<select class="form-select form-select-sm" style="max-width: 12rem" value="@ViewModel.GlobalJsonVersion" @onchange="OnVersionChanged">
+				@foreach (var sdk in ViewModel.Sdks)
+				{
+					<option value="@sdk.Version">@sdk.Version</option>
+				}
+			</select>
+			<select class="form-select form-select-sm" style="max-width: 12rem" value="@ViewModel.GlobalJsonRollForward" @onchange="OnRollForwardChanged">
+				@foreach (var option in ViewModel.RollForwardOptions)
+				{
+					<option value="@option">@option</option>
+				}
+			</select>
+			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.WriteGlobalJsonAsync">@L["Common.Save"]</button>
+			<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.OpenGlobalJson">@L["Common.OpenFolder"]</button>
+		</div>
+		<p class="hint path-box mb-0">@ViewModel.GlobalJsonPath</p>
+	</div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(ViewModel.CheckText))
+{
+	<div class="card mt-3">
+		<div class="card-body">
+			<h2 class="h6 card-title">dotnet sdk check</h2>
+			<pre class="log-output">@ViewModel.CheckText</pre>
+		</div>
+	</div>
+}
+
+<div class="card mt-3">
+	<div class="card-body">
+		<h2 class="h6 card-title">dotnet --info</h2>
+		<pre class="log-output">@ViewModel.InfoText</pre>
+	</div>
+</div>
+
+@code {
+	protected override async Task OnInitializedAsync() => await ViewModel.InitializeAsync();
+
+	private async Task OnVersionChanged(ChangeEventArgs args)
+	{
+		ViewModel.GlobalJsonVersion = args.Value?.ToString() ?? string.Empty;
+		await Task.CompletedTask;
+	}
+
+	private async Task OnRollForwardChanged(ChangeEventArgs args)
+	{
+		ViewModel.GlobalJsonRollForward = args.Value?.ToString() ?? string.Empty;
+		await Task.CompletedTask;
+	}
+}

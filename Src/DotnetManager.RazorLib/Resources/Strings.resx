@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="App.Title" xml:space="preserve"><value>.NET Manager</value></data>
+  <data name="App.Language" xml:space="preserve"><value>Language</value></data>
+  <data name="App.Privileges" xml:space="preserve"><value>Privileges</value></data>
+  <data name="App.Elevated" xml:space="preserve"><value>Administrator</value></data>
+  <data name="App.NotElevated" xml:space="preserve"><value>Standard user</value></data>
+  <data name="App.Dotnet" xml:space="preserve"><value>dotnet</value></data>
+
+  <data name="Common.Refresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="Common.Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Common.Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Common.Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Common.Browse" xml:space="preserve"><value>Browse…</value></data>
+  <data name="Common.Folder" xml:space="preserve"><value>Folder</value></data>
+  <data name="Common.OpenFolder" xml:space="preserve"><value>Open folder</value></data>
+  <data name="Common.Copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="Common.Saved" xml:space="preserve"><value>Saved.</value></data>
+  <data name="Common.Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Common.Success" xml:space="preserve"><value>Succeeded</value></data>
+  <data name="Common.Loading" xml:space="preserve"><value>Loading…</value></data>
+  <data name="Common.Search" xml:space="preserve"><value>Search</value></data>
+  <data name="Common.Searching" xml:space="preserve"><value>Searching…</value></data>
+  <data name="Common.Install" xml:space="preserve"><value>Install</value></data>
+  <data name="Common.Uninstall" xml:space="preserve"><value>Uninstall</value></data>
+  <data name="Common.Update" xml:space="preserve"><value>Update</value></data>
+  <data name="Common.Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="Common.Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Common.Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Common.Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Common.Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="Common.Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Common.Url" xml:space="preserve"><value>URL</value></data>
+  <data name="Common.Path" xml:space="preserve"><value>Path</value></data>
+  <data name="Common.Version" xml:space="preserve"><value>Version</value></data>
+  <data name="Common.Latest" xml:space="preserve"><value>Latest</value></data>
+  <data name="Common.Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Common.Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="Common.Enabled" xml:space="preserve"><value>Enabled</value></data>
+  <data name="Common.Disabled" xml:space="preserve"><value>Disabled</value></data>
+  <data name="Common.Source" xml:space="preserve"><value>Source</value></data>
+  <data name="Common.Command" xml:space="preserve"><value>Command</value></data>
+  <data name="Common.Commands" xml:space="preserve"><value>Commands</value></data>
+  <data name="Common.Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Common.Yes" xml:space="preserve"><value>Yes</value></data>
+  <data name="Common.No" xml:space="preserve"><value>No</value></data>
+  <data name="Common.None" xml:space="preserve"><value>None</value></data>
+  <data name="Common.Size" xml:space="preserve"><value>Size</value></data>
+  <data name="Common.Files" xml:space="preserve"><value>Files</value></data>
+  <data name="Common.Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="Common.NotAvailable" xml:space="preserve"><value>n/a</value></data>
+  <data name="Common.SelectFolder" xml:space="preserve"><value>Select folder</value></data>
+  <data name="Common.WorkingDirectory" xml:space="preserve"><value>Working directory</value></data>
+  <data name="Common.AdminRequired" xml:space="preserve"><value>Administrator rights are required for this operation.</value></data>
+  <data name="Common.ElevationDenied" xml:space="preserve"><value>The elevation prompt was declined or failed.</value></data>
+  <data name="Common.ConfirmTitle" xml:space="preserve"><value>Please confirm</value></data>
+  <data name="Common.ErrorTitle" xml:space="preserve"><value>Error</value></data>
+  <data name="Common.InfoTitle" xml:space="preserve"><value>Information</value></data>
+  <data name="Common.Output" xml:space="preserve"><value>Output</value></data>
+  <data name="Common.ExitCode" xml:space="preserve"><value>Exit code</value></data>
+  <data name="Common.Duration" xml:space="preserve"><value>Duration</value></data>
+  <data name="Common.Time" xml:space="preserve"><value>Time</value></data>
+  <data name="Common.All" xml:space="preserve"><value>All</value></data>
+  <data name="Common.Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Common.Machine" xml:space="preserve"><value>Machine</value></data>
+  <data name="Common.User" xml:space="preserve"><value>User</value></data>
+  <data name="Common.Default" xml:space="preserve"><value>Default</value></data>
+  <data name="Common.EnvironmentVariable" xml:space="preserve"><value>Environment variable</value></data>
+  <data name="Common.ConfigFile" xml:space="preserve"><value>Config file</value></data>
+  <data name="Common.Running" xml:space="preserve"><value>Running…</value></data>
+  <data name="Common.PreRelease" xml:space="preserve"><value>Include prerelease</value></data>
+  <data name="Common.Filter" xml:space="preserve"><value>Filter</value></data>
+  <data name="Common.Total" xml:space="preserve"><value>Total</value></data>
+  <data name="Common.Downloads" xml:space="preserve"><value>Downloads</value></data>
+  <data name="Common.Authors" xml:space="preserve"><value>Authors</value></data>
+  <data name="Common.Package" xml:space="preserve"><value>Package</value></data>
+  <data name="Common.RawContent" xml:space="preserve"><value>Raw content</value></data>
+  <data name="Common.NotExists" xml:space="preserve"><value>Does not exist</value></data>
+  <data name="Common.Backup" xml:space="preserve"><value>Backup</value></data>
+  <data name="Common.RestartRequired" xml:space="preserve"><value>Restart Visual Studio or your terminal for this change to take effect.</value></data>
+  <data name="Common.OperationCancelled" xml:space="preserve"><value>Operation cancelled.</value></data>
+
+  <data name="Nav.GroupTools" xml:space="preserve"><value>Tools</value></data>
+  <data name="Nav.GroupNuGet" xml:space="preserve"><value>NuGet</value></data>
+  <data name="Nav.GroupEnvironment" xml:space="preserve"><value>Environment</value></data>
+  <data name="Nav.Overview" xml:space="preserve"><value>Overview</value></data>
+  <data name="Nav.LocalTools" xml:space="preserve"><value>Local tools</value></data>
+  <data name="Nav.GlobalTools" xml:space="preserve"><value>Global tools</value></data>
+  <data name="Nav.ToolSearch" xml:space="preserve"><value>Tool search</value></data>
+  <data name="Nav.PackageSources" xml:space="preserve"><value>Package sources</value></data>
+  <data name="Nav.Caches" xml:space="preserve"><value>Caches</value></data>
+  <data name="Nav.ConfigFiles" xml:space="preserve"><value>Config files</value></data>
+  <data name="Nav.Workloads" xml:space="preserve"><value>Workloads</value></data>
+  <data name="Nav.Sdk" xml:space="preserve"><value>SDKs &amp; runtimes</value></data>
+  <data name="Nav.Output" xml:space="preserve"><value>Run log</value></data>
+  <data name="Nav.Settings" xml:space="preserve"><value>Settings</value></data>
+
+  <data name="Layout.About" xml:space="preserve"><value>About</value></data>
+  <data name="NotFound" xml:space="preserve"><value>Sorry, there is nothing at this address.</value></data>
+  <data name="Common.Notes" xml:space="preserve"><value>Notes</value></data>
+
+  <data name="Dashboard.Dotnet" xml:space="preserve"><value>dotnet</value></data>
+  <data name="Dashboard.Sdks" xml:space="preserve"><value>Installed SDKs</value></data>
+  <data name="Dashboard.Runtimes" xml:space="preserve"><value>Runtimes</value></data>
+  <data name="Dashboard.More" xml:space="preserve"><value>more</value></data>
+  <data name="Dashboard.GlobalTools" xml:space="preserve"><value>Global tools</value></data>
+  <data name="Dashboard.Workloads" xml:space="preserve"><value>Workloads</value></data>
+  <data name="Dashboard.NuGet" xml:space="preserve"><value>NuGet</value></data>
+  <data name="Dashboard.GlobalPackages" xml:space="preserve"><value>Global packages</value></data>
+  <data name="Dashboard.HttpCache" xml:space="preserve"><value>HTTP cache</value></data>
+  <data name="Dashboard.Sources" xml:space="preserve"><value>Sources</value></data>
+
+  <data name="LocalTools.CreateManifest" xml:space="preserve"><value>New manifest</value></data>
+  <data name="LocalTools.Restore" xml:space="preserve"><value>Restore tools</value></data>
+  <data name="LocalTools.CheckUpdates" xml:space="preserve"><value>Check updates</value></data>
+  <data name="LocalTools.UpdateAll" xml:space="preserve"><value>Update all</value></data>
+  <data name="LocalTools.Manifests" xml:space="preserve"><value>Manifest</value></data>
+  <data name="LocalTools.Install" xml:space="preserve"><value>Install a local tool</value></data>
+  <data name="LocalTools.PackageId" xml:space="preserve"><value>Package id</value></data>
+  <data name="LocalTools.VersionPlaceholder" xml:space="preserve"><value>Version (empty = latest)</value></data>
+  <data name="LocalTools.Lookup" xml:space="preserve"><value>Look up</value></data>
+  <data name="LocalTools.NoManifest" xml:space="preserve"><value>No .config/dotnet-tools.json was found below this directory.</value></data>
+  <data name="LocalTools.Run" xml:space="preserve"><value>Run</value></data>
+  <data name="LocalTools.RemoveFromManifest" xml:space="preserve"><value>Remove entry</value></data>
+
+  <data name="GlobalTools.Directory" xml:space="preserve"><value>Tools directory</value></data>
+  <data name="GlobalTools.Store" xml:space="preserve"><value>Tool store</value></data>
+
+  <data name="ToolSearch.Query" xml:space="preserve"><value>Search nuget.org</value></data>
+  <data name="ToolSearch.ToolOnly" xml:space="preserve"><value>Tool packages only</value></data>
+  <data name="ToolSearch.InstallGlobally" xml:space="preserve"><value>Install as a global tool</value></data>
+  <data name="ToolSearch.InstallDirectory" xml:space="preserve"><value>Local install directory</value></data>
+
+  <data name="Sources.RootDirectory" xml:space="preserve"><value>Choose root directory</value></data>
+  <data name="Sources.UserOnly" xml:space="preserve"><value>User configuration only</value></data>
+  <data name="Sources.TargetFile" xml:space="preserve"><value>File that changes are written to</value></data>
+  <data name="Sources.Add" xml:space="preserve"><value>Add or update a package source</value></data>
+  <data name="Sources.Credentials" xml:space="preserve"><value>credentials</value></data>
+  <data name="Sources.ConfigChain" xml:space="preserve"><value>Configuration files (lowest to highest precedence)</value></data>
+
+  <data name="NuGetCache.GlobalPackages" xml:space="preserve"><value>Global packages</value></data>
+  <data name="NuGetCache.HttpCache" xml:space="preserve"><value>HTTP cache</value></data>
+  <data name="NuGetCache.PluginsCache" xml:space="preserve"><value>Plugins cache</value></data>
+  <data name="NuGetCache.Temp" xml:space="preserve"><value>Temporary files</value></data>
+  <data name="NuGetCache.Measure" xml:space="preserve"><value>Measure</value></data>
+  <data name="NuGetCache.MeasureAll" xml:space="preserve"><value>Measure all</value></data>
+  <data name="NuGetCache.ClearAll" xml:space="preserve"><value>Clear all</value></data>
+  <data name="NuGetCache.Total" xml:space="preserve"><value>Total</value></data>
+  <data name="NuGetCache.Edit" xml:space="preserve"><value>Change location</value></data>
+  <data name="NuGetCache.ChangeLocation" xml:space="preserve"><value>Change where a cache lives</value></data>
+  <data name="NuGetCache.ChangeLocationHint" xml:space="preserve"><value>NuGet reads these locations from environment variables first; machine scope requires elevation.</value></data>
+  <data name="NuGetCache.ApplyEnvironment" xml:space="preserve"><value>Set environment variable</value></data>
+  <data name="NuGetCache.RemoveEnvironment" xml:space="preserve"><value>Remove environment variable</value></data>
+  <data name="NuGetCache.ApplyConfig" xml:space="preserve"><value>Write to user NuGet.Config</value></data>
+  <data name="NuGetCache.UserConfig" xml:space="preserve"><value>User configuration</value></data>
+  <data name="NuGetCache.FallbackFolders" xml:space="preserve"><value>Fallback package folders</value></data>
+
+  <data name="Config.Chain" xml:space="preserve"><value>Configuration files</value></data>
+  <data name="Config.Unsaved" xml:space="preserve"><value>unsaved changes</value></data>
+  <data name="Config.SelectFile" xml:space="preserve"><value>Select a configuration file on the left.</value></data>
+  <data name="Config.Revert" xml:space="preserve"><value>Revert</value></data>
+
+  <data name="Workloads.Id" xml:space="preserve"><value>Workload id</value></data>
+  <data name="Workloads.ManifestVersion" xml:space="preserve"><value>Manifest version</value></data>
+  <data name="Workloads.InstallSource" xml:space="preserve"><value>Install source</value></data>
+  <data name="Workloads.IdPlaceholder" xml:space="preserve"><value>Workload id</value></data>
+  <data name="Workloads.Install" xml:space="preserve"><value>Install a workload</value></data>
+  <data name="Workloads.RawList" xml:space="preserve"><value>Raw list</value></data>
+  <data name="Workloads.UpdateAll" xml:space="preserve"><value>Update all</value></data>
+  <data name="Workloads.Repair" xml:space="preserve"><value>Repair</value></data>
+  <data name="Workloads.RunElevated" xml:space="preserve"><value>Run elevated</value></data>
+
+  <data name="Settings.ResolvedPath" xml:space="preserve"><value>In use</value></data>
+  <data name="Settings.ResolvedPathHint" xml:space="preserve"><value>Leave empty to use the dotnet found on PATH</value></data>
+  <data name="Settings.InvalidPath" xml:space="preserve"><value>not found</value></data>
+  <data name="Settings.Reset" xml:space="preserve"><value>Reset</value></data>
+  <data name="Settings.AutoCheckUpdates" xml:space="preserve"><value>Check for tool updates automatically</value></data>
+  <data name="Settings.OpenSettingsFile" xml:space="preserve"><value>Show settings file</value></data>
+</root>

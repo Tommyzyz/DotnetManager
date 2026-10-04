@@ -1,0 +1,86 @@
+@page "/tools/search"
+@inherits ViewModelPage<ToolSearchViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.ToolSearch"]</h1>
+
+<div class="toolbar">
+	<input class="form-control form-control-sm" style="max-width: 22rem" placeholder="@L["ToolSearch.Query"]"
+		   @bind="ViewModel.QueryText" @bind:event="oninput" @onkeyup="OnKeyUp" />
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" id="searchPrerelease" @bind="ViewModel.IncludePrerelease" />
+		<label class="form-check-label" for="searchPrerelease">@L["Common.PreRelease"]</label>
+	</div>
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" id="toolOnly" @bind="ViewModel.ToolOnly" />
+		<label class="form-check-label" for="toolOnly">@L["ToolSearch.ToolOnly"]</label>
+	</div>
+	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.SearchAsync">
+		<i class="fa-solid fa-magnifying-glass @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Search"]
+	</button>
+</div>
+
+<div class="toolbar">
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" id="installGlobally" @bind="ViewModel.InstallGlobally" />
+		<label class="form-check-label" for="installGlobally">@L["ToolSearch.InstallGlobally"]</label>
+	</div>
+	@if (!ViewModel.InstallGlobally)
+	{
+		<input class="form-control form-control-sm path-box" style="max-width: 26rem" readonly value="@ViewModel.InstallDirectory" />
+		<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickInstallDirectoryAsync">
+			<i class="fa-solid fa-folder-open"></i> @L["ToolSearch.InstallDirectory"]
+		</button>
+	}
+</div>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<table class="table table-sm table-hover grid">
+	<thead>
+		<tr>
+			<th>@L["Common.Package"]</th>
+			<th>@L["Common.Latest"]</th>
+			<th>@L["Common.Authors"]</th>
+			<th>@L["Common.Downloads"]</th>
+			<th>@L["Common.Description"]</th>
+			<th>@L["Common.Actions"]</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var package in ViewModel.Results)
+		{
+			<tr>
+				<td><code>@package.Id</code></td>
+				<td>@package.LatestVersion</td>
+				<td>@package.Authors</td>
+				<td>@package.TotalDownloads</td>
+				<td class="hint">@package.Description</td>
+				<td>
+					<div class="toolbar mb-0">
+						<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.InstallAsync(package)">@L["Common.Install"]</button>
+						<button class="btn btn-outline-secondary btn-sm" @onclick="() => ViewModel.OpenPackagePage(package)">nuget.org</button>
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@if (ViewModel.HasSearched && ViewModel.Results.Count == 0)
+{
+	<p class="hint">@L["Common.None"]</p>
+}
+
+@code {
+	private async Task OnKeyUp(KeyboardEventArgs args)
+	{
+		if (string.Equals(args.Key, "Enter", StringComparison.Ordinal))
+		{
+			await ViewModel.SearchAsync();
+		}
+	}
+}

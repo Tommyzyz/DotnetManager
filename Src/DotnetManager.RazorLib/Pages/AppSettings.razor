@@ -1,0 +1,77 @@
+@page "/settings"
+@inherits ViewModelPage<AppSettingsViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.Settings"]</h1>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<div class="card">
+	<div class="card-body">
+		<div class="mb-3">
+			<label class="form-label" for="language">@L["App.Language"]</label>
+			<select id="language" class="form-select form-select-sm" style="max-width: 16rem" value="@ViewModel.Language" @onchange="OnLanguageChanged">
+				@foreach (var language in ViewModel.Languages)
+				{
+					<option value="@language">@AppSettingsViewModel.DisplayLanguage(language)</option>
+				}
+			</select>
+		</div>
+
+		<div class="mb-3">
+			<label class="form-label" for="dotnetPath">dotnet.exe</label>
+			<div class="toolbar mb-1">
+				<input id="dotnetPath" class="form-control form-control-sm path-box" style="max-width: 32rem"
+					   placeholder="@L["Settings.ResolvedPathHint"]" @bind="ViewModel.DotnetPath" @bind:event="oninput" />
+				<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickDotnetPath">@L["Common.Browse"]</button>
+				<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.ResetDotnetPath">@L["Settings.Reset"]</button>
+			</div>
+			<p class="hint path-box mb-0">
+				@L["Settings.ResolvedPath"]: @ViewModel.ResolvedDotnetPath
+				@if (!ViewModel.DotnetPathIsValid)
+				{
+					<span class="badge text-bg-danger">@L["Settings.InvalidPath"]</span>
+				}
+			</p>
+		</div>
+
+		<div class="mb-3">
+			<label class="form-label" for="workingDirectory">@L["Common.WorkingDirectory"]</label>
+			<div class="toolbar mb-0">
+				<input id="workingDirectory" class="form-control form-control-sm path-box" style="max-width: 32rem"
+					   @bind="ViewModel.DefaultWorkingDirectory" @bind:event="oninput" />
+				<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickWorkingDirectory">@L["Common.Browse"]</button>
+			</div>
+		</div>
+
+		<div class="form-check mb-2">
+			<input class="form-check-input" type="checkbox" id="settingsPrerelease" @bind="ViewModel.IncludePrerelease" />
+			<label class="form-check-label" for="settingsPrerelease">@L["Common.PreRelease"]</label>
+		</div>
+
+		<div class="form-check mb-3">
+			<input class="form-check-input" type="checkbox" id="autoCheck" @bind="ViewModel.AutoCheckToolUpdates" />
+			<label class="form-check-label" for="autoCheck">@L["Settings.AutoCheckUpdates"]</label>
+		</div>
+
+		<div class="toolbar mb-0">
+			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.SaveAsync">
+				<i class="fa-solid fa-check"></i> @L["Common.Save"]
+			</button>
+			<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.RevealSettingsFile">@L["Settings.OpenSettingsFile"]</button>
+		</div>
+
+		<p class="hint path-box mb-0 mt-2">@ViewModel.SettingsFilePath</p>
+	</div>
+</div>
+
+@code {
+	private async Task OnLanguageChanged(ChangeEventArgs args)
+	{
+		ViewModel.Language = args.Value?.ToString() ?? LocalizationState.DefaultLanguage;
+		await ViewModel.SaveAsync();
+	}
+}

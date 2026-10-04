@@ -1,0 +1,66 @@
+@page "/output"
+@inherits ViewModelPage<ActivityLogViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.Output"]</h1>
+
+<div class="toolbar">
+	<input class="form-control form-control-sm" style="max-width: 18rem" placeholder="@L["Common.Filter"]"
+		   @bind="ViewModel.Filter" @bind:event="oninput" />
+	<span class="hint">@ViewModel.EntryCount</span>
+	<span class="spacer"></span>
+	<button class="btn btn-outline-danger btn-sm" @onclick="ViewModel.Clear">
+		<i class="fa-solid fa-broom"></i> @L["Common.Clear"]
+	</button>
+</div>
+
+<table class="table table-sm table-hover grid">
+	<thead>
+		<tr>
+			<th>@L["Common.Time"]</th>
+			<th>@L["Common.Command"]</th>
+			<th>@L["Common.Status"]</th>
+			<th>@L["Common.Duration"]</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var entry in ViewModel.FilteredEntries)
+		{
+			<tr @onclick="() => ViewModel.Select(entry)">
+				<td>@entry.Timestamp.ToLocalTime().ToString("HH:mm:ss")</td>
+				<td class="path-box">@entry.CommandLine</td>
+				<td>
+					@if (entry.IsRunning)
+					{
+						<span class="badge text-bg-info">@L["Common.Running"]</span>
+					}
+					else if (entry.Success)
+					{
+						<span class="badge text-bg-success">OK</span>
+					}
+					else
+					{
+						<span class="badge text-bg-danger">@L["Common.ExitCode"] @entry.ExitCode</span>
+					}
+				</td>
+				<td>@entry.Duration.TotalSeconds.ToString("0.0")s</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@if (ViewModel.SelectedEntry is not null)
+{
+	<div class="card">
+		<div class="card-body">
+			<h2 class="h6 card-title path-box">@ViewModel.SelectedEntry.CommandLine</h2>
+			<pre class="log-output">@ViewModel.SelectedEntry.Output</pre>
+		</div>
+	</div>
+}
+
+@code {
+	protected override void OnInitialized() => ViewModel.Attach();
+
+	protected override void DisposeViewModel() => ViewModel.Dispose();
+}

@@ -1,0 +1,604 @@
+/* ------------------------------------------------------------------
+   DotnetManager – global styles.
+   Everything below applies to page content (child components), so it
+   has to live here rather than in a scoped *.razor.css file.
+   ------------------------------------------------------------------ */
+
+:root {
+    --accent: #2f6fed;
+    --accent-strong: #2456c4;
+    --accent-soft: #e8efff;
+    --accent-ring: rgba(47, 111, 237, 0.32);
+
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --surface-alt: #f8fafc;
+    --border: #e2e6ed;
+    --border-strong: #cbd2dd;
+    --text: #1c2430;
+    --text-muted: #697689;
+    --text-faint: #93a0b1;
+
+    --ok: #16835f;
+    --ok-bg: #e3f5ed;
+    --warn: #9a6513;
+    --warn-bg: #fdf1dc;
+    --danger: #c0392f;
+    --danger-bg: #fbe9e7;
+
+    --sidebar-top: #1b2536;
+    --sidebar-bottom: #22304a;
+    --sidebar-text: #c2ccdb;
+    --sidebar-active: rgba(255, 255, 255, 0.13);
+    --sidebar-hover: rgba(255, 255, 255, 0.08);
+
+    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+    --radius-sm: 5px;
+    --radius: 8px;
+}
+
+/* ============================== base ============================== */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    font-family: 'Segoe UI Variable Text', 'Segoe UI', -apple-system,
+        BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.app-content {
+    background-color: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+    font-size: 1.45rem;
+    font-weight: 650;
+    letter-spacing: -0.012em;
+    color: var(--text);
+    margin: 0 0 1.15rem;
+}
+
+h2.h5,
+h2.h6 {
+    font-weight: 620;
+    letter-spacing: -0.006em;
+    color: var(--text);
+}
+
+h2.h6 {
+    font-size: 0.95rem;
+}
+
+h1:focus {
+    outline: none;
+}
+
+a,
+.btn-link {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover,
+.btn-link:hover {
+    color: var(--accent-strong);
+    text-decoration: underline;
+}
+
+code {
+    color: var(--text);
+    background-color: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.08em 0.38em;
+    font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.86em;
+    word-break: break-word;
+}
+
+::selection {
+    background: var(--accent-soft);
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-ring);
+    outline-offset: 2px;
+}
+
+/* ============================= layout ============================= */
+
+.content {
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
+}
+
+.card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.card-body {
+    padding: 1.15rem 1.25rem;
+}
+
+.card-title {
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* ============================= toolbar ============================ */
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.15rem;
+}
+
+.toolbar .spacer {
+    flex: 1 1 auto;
+}
+
+.toolbar > .form-control,
+.toolbar > .form-select {
+    flex: 0 1 auto;
+}
+
+/* ============================ text bits =========================== */
+
+.path-box {
+    font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.795rem;
+    line-height: 1.5;
+    word-break: break-all;
+    color: var(--text);
+}
+
+p.path-box {
+    color: var(--text-muted);
+}
+
+.hint {
+    color: var(--text-muted);
+    font-size: 0.835rem;
+    line-height: 1.55;
+}
+
+/* ============================ result box ========================== */
+
+.result-box {
+    padding: 0.62rem 0.95rem;
+    border: 1px solid transparent;
+    border-left-width: 3px;
+    border-radius: var(--radius);
+    margin-bottom: 1.15rem;
+    font-size: 0.885rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    box-shadow: var(--shadow-sm);
+}
+
+.result-ok {
+    background-color: var(--ok-bg);
+    border-color: rgba(22, 131, 95, 0.28);
+    border-left-color: var(--ok);
+    color: var(--ok);
+}
+
+.result-fail {
+    background-color: var(--danger-bg);
+    border-color: rgba(192, 57, 47, 0.26);
+    border-left-color: var(--danger);
+    color: var(--danger);
+}
+
+/* ============================== tables ============================ */
+
+table.grid {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Cells paint their own background via an inset box-shadow in Bootstrap,
+   so the rules below have to target the cells and clear that shadow. */
+table.grid > :is(thead, tbody) > tr > :is(th, td) {
+    vertical-align: middle;
+    padding: 0.62rem 0.85rem;
+    background-color: transparent;
+    box-shadow: none;
+    border-color: var(--border);
+    border-bottom: 0;
+}
+
+table.grid > thead > tr > th {
+    background-color: var(--surface-alt);
+    color: var(--text-muted);
+    font-size: 0.755rem;
+    font-weight: 640;
+    text-transform: uppercase;
+    letter-spacing: 0.045em;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+}
+
+table.grid > tbody > tr > :is(th, td) {
+    border-top: 1px solid var(--border);
+}
+
+table.grid > tbody > tr:first-child > :is(th, td) {
+    border-top: 0;
+}
+
+table.grid > tbody > tr:hover > :is(th, td) {
+    background-color: var(--surface-alt);
+}
+
+table.grid td .hint {
+    margin: 0.12rem 0 0;
+    line-height: 1.35;
+}
+
+/* ========================== form controls ========================= */
+
+.form-label {
+    color: var(--text);
+    font-size: 0.845rem;
+    font-weight: 590;
+    margin-bottom: 0.32rem;
+}
+
+.form-control,
+.form-select {
+    background-color: var(--surface);
+    border-color: var(--border-strong);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--surface);
+    border-color: var(--accent);
+    color: var(--text);
+    box-shadow: 0 0 0 0.19rem var(--accent-ring);
+}
+
+.form-control::placeholder {
+    color: var(--text-faint);
+}
+
+textarea.raw-editor {
+    font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.825rem;
+    line-height: 1.62;
+    min-height: 20rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius);
+    border-color: var(--border-strong);
+    background-color: var(--surface);
+    color: var(--text);
+    resize: vertical;
+    tab-size: 2;
+}
+
+.form-check-input {
+    border-color: var(--border-strong);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.form-check-label {
+    color: var(--text);
+    font-size: 0.855rem;
+}
+
+/* ============================= buttons ============================ */
+
+.btn {
+    border-radius: var(--radius-sm);
+    font-size: 0.845rem;
+    font-weight: 560;
+    padding: 0.34rem 0.72rem;
+    white-space: nowrap;
+    transition: background-color 0.14s ease, border-color 0.14s ease,
+        color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 1px 2px rgba(36, 86, 196, 0.28);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    color: #fff;
+    background-color: var(--accent-strong);
+    border-color: var(--accent-strong);
+    box-shadow: 0 2px 6px rgba(36, 86, 196, 0.32);
+}
+
+.btn-primary:active {
+    background-color: var(--accent-strong);
+    border-color: var(--accent-strong);
+}
+
+.btn-outline-primary {
+    color: var(--accent);
+    border-color: rgba(47, 111, 237, 0.5);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.btn-outline-secondary {
+    color: var(--text-muted);
+    border-color: var(--border-strong);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+    background-color: var(--surface-alt);
+    border-color: var(--text-faint);
+    color: var(--text);
+}
+
+.btn-outline-danger {
+    color: var(--danger);
+    border-color: rgba(192, 57, 47, 0.42);
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+    background-color: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+}
+
+.btn:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn i {
+    margin-right: 0.12rem;
+}
+
+/* ============================== badges ============================ */
+
+/* Bootstrap 5.1 has no .text-bg-* helpers, so the badge colours used across
+   the pages are defined here instead. */
+.badge {
+    font-size: 0.725rem;
+    font-weight: 580;
+    padding: 0.32em 0.62em;
+    border-radius: 4px;
+    letter-spacing: 0.005em;
+    vertical-align: 0.045em;
+    background-color: var(--border);
+    color: var(--text-muted);
+}
+
+.badge.text-bg-success {
+    background-color: var(--ok-bg);
+    color: var(--ok);
+}
+
+.badge.text-bg-warning {
+    background-color: var(--warn-bg);
+    color: var(--warn);
+}
+
+.badge.text-bg-danger {
+    background-color: var(--danger-bg);
+    color: var(--danger);
+}
+
+.badge.text-bg-info {
+    background-color: var(--accent-soft);
+    color: var(--accent-strong);
+}
+
+.badge.text-bg-secondary,
+.badge.text-bg-primary {
+    background-color: var(--border);
+    color: var(--text-muted);
+}
+
+/* ============================ log output ========================== */
+
+.log-output {
+    font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.795rem;
+    line-height: 1.62;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background-color: #16202e;
+    color: #d6dfe9;
+    padding: 0.95rem 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius);
+    max-height: 26rem;
+    overflow: auto;
+    margin-bottom: 0;
+}
+
+.log-output::selection {
+    background: rgba(120, 170, 255, 0.35);
+}
+
+.log-error {
+    color: #ff9c8b;
+}
+
+/* =========================== misc affordances ===================== */
+
+/* =============================== dark ============================= */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --accent: #6ea1ff;
+        --accent-strong: #8ab4ff;
+        --accent-soft: rgba(110, 161, 255, 0.16);
+        --accent-ring: rgba(110, 161, 255, 0.34);
+
+        --bg: #0f141c;
+        --surface: #161d28;
+        --surface-alt: #1c2531;
+        --border: #253040;
+        --border-strong: #34414f;
+        --text: #e3e9f1;
+        --text-muted: #98a5b6;
+        --text-faint: #6c7a8c;
+
+        --ok: #57d19f;
+        --ok-bg: rgba(87, 209, 159, 0.13);
+        --warn: #e6b161;
+        --warn-bg: rgba(230, 177, 97, 0.13);
+        --danger: #f1837a;
+        --danger-bg: rgba(241, 131, 122, 0.13);
+
+        --sidebar-top: #121a25;
+        --sidebar-bottom: #16202e;
+
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32);
+    }
+
+    code {
+        background-color: #1b2431;
+    }
+
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:focus {
+        box-shadow: none;
+    }
+
+    .log-output {
+        background-color: #0c111a;
+        border-color: var(--border);
+    }
+
+    #blazor-error-ui {
+        background: var(--danger-bg);
+        color: var(--danger);
+    }
+}
+
+/* ============================ scrollbar =========================== */
+
+::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--border-strong);
+    border: 3px solid var(--bg);
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-faint);
+}
+
+/* ===================== validation & error UI ===================== */
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid var(--ok);
+}
+
+.invalid {
+    outline: 1px solid var(--danger);
+}
+
+.validation-message {
+    color: var(--danger);
+    font-size: 0.835rem;
+}
+
+#blazor-error-ui {
+    background: var(--danger-bg);
+    color: var(--danger);
+    bottom: 0;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.18);
+    display: none;
+    left: 0;
+    padding: 0.62rem 1.25rem 0.72rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    font-size: 0.9rem;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+.blazor-error-boundary {
+    background-color: var(--danger);
+    padding: 1rem;
+    color: #fff;
+    border-radius: var(--radius);
+}
+
+.blazor-error-boundary::after {
+    content: "An error has occurred.";
+}
+
+/* ========================== startup splash ======================== */
+
+div.splash {
+    height: 100%;
+    width: 100%;
+}
+
+.splash .center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-faint);
+}
+
+/* ======================== reduced motion ========================= */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}

@@ -1,0 +1,165 @@
+@page "/nuget/sources"
+@inherits ViewModelPage<PackageSourcesViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.PackageSources"]</h1>
+
+<div class="toolbar">
+	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
+		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.PickRootDirectoryAsync">
+		<i class="fa-solid fa-folder-open"></i> @L["Sources.RootDirectory"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.UseUserProfile">
+		<i class="fa-solid fa-user"></i> @L["Sources.UserOnly"]
+	</button>
+	<span class="spacer"></span>
+	@if (ViewModel.TargetNeedsElevation)
+	{
+		<span class="badge text-bg-warning"><i class="fa-solid fa-shield-halved"></i> @L["Common.AdminRequired"]</span>
+	}
+</div>
+
+<div class="mb-3">
+	<label class="hint" for="targetFile">@L["Sources.TargetFile"]</label>
+	<select id="targetFile" class="form-select form-select-sm path-box" value="@ViewModel.EffectiveTargetFile" @onchange="OnTargetFileChanged">
+		@foreach (var file in ViewModel.ConfigFiles)
+		{
+			<option value="@file.Path">@file.Path@(file.Exists ? string.Empty : " (" + L["Common.NotExists"] + ")")</option>
+		}
+	</select>
+</div>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<div class="card mb-3">
+	<div class="card-body">
+		<h2 class="h6 card-title">@L["Sources.Add"]</h2>
+		<div class="toolbar mb-0">
+			<input class="form-control form-control-sm" style="max-width: 14rem" placeholder="@L["Common.Name"]"
+				   @bind="ViewModel.NewSourceName" @bind:event="oninput" />
+			<input class="form-control form-control-sm" style="max-width: 30rem" placeholder="@L["Common.Url"]"
+				   @bind="ViewModel.NewSourceUrl" @bind:event="oninput" />
+			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.AddOrUpdateSourceAsync">
+				<i class="fa-solid fa-plus"></i> @L["Common.Add"]
+			</button>
+		</div>
+	</div>
+</div>
+
+<table class="table table-sm table-hover grid">
+	<thead>
+		<tr>
+			<th>@L["Common.Name"]</th>
+			<th>@L["Common.Url"]</th>
+			<th>@L["Common.Status"]</th>
+			<th>@L["Common.ConfigFile"]</th>
+			<th>@L["Common.Notes"]</th>
+			<th>@L["Common.Actions"]</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var source in ViewModel.Sources)
+		{
+			<tr>
+				<td><code>@source.Name</code></td>
+				<td class="path-box">@source.Url</td>
+				<td>
+					@if (source.Enabled)
+					{
+						<span class="badge text-bg-success">@L["Common.Enabled"]</span>
+					}
+					else
+					{
+						<span class="badge text-bg-secondary">@L["Common.Disabled"]</span>
+					}
+				</td>
+				<td class="hint path-box">@source.ConfigFile</td>
+				<td class="hint">
+					@if (source.IsMachineWide)
+					{
+						<span class="badge text-bg-info">@L["Common.Machine"]</span>
+					}
+					@if (source.IsBuiltIn)
+					{
+						<span class="badge text-bg-primary">nuget.org</span>
+					}
+					@if (source.HasCredentials)
+					{
+						<span class="badge text-bg-warning">@L["Sources.Credentials"]</span>
+					}
+				</td>
+				<td>
+					<div class="toolbar mb-0">
+						<button class="btn btn-outline-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.ToggleSourceAsync(source)">
+							@(source.Enabled ? L["Common.Disabled"] : L["Common.Enabled"])
+						</button>
+						<button class="btn btn-outline-danger btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.RemoveSourceAsync(source)">@L["Common.Remove"]</button>
+						<button class="btn btn-outline-secondary btn-sm" @onclick="() => ViewModel.RevealFile(FindFile(source.ConfigFile))">@L["Common.OpenFolder"]</button>
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<h2 class="h5 mt-4">@L["Sources.ConfigChain"]</h2>
+<table class="table table-sm grid">
+	<thead>
+		<tr>
+			<th>@L["Common.Path"]</th>
+			<th>@L["Common.Type"]</th>
+			<th>@L["Common.Status"]</th>
+			<th>@L["Common.Actions"]</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var file in ViewModel.ConfigFiles)
+		{
+			<tr>
+				<td class="path-box">@file.Path</td>
+				<td>@file.Scope</td>
+				<td>
+					@if (file.Exists)
+					{
+						<span class="badge text-bg-success">@L["Common.Success"]</span>
+					}
+					else
+					{
+						<span class="badge text-bg-secondary">@L["Common.NotExists"]</span>
+					}
+					@if (file.IsReadOnly)
+					{
+						<span class="badge text-bg-warning">@L["Common.AdminRequired"]</span>
+					}
+				</td>
+				<td>
+					<div class="toolbar mb-0">
+						<button class="btn btn-outline-secondary btn-sm" @onclick="() => ViewModel.RevealFile(file)">@L["Common.OpenFolder"]</button>
+						@if (!file.Exists)
+						{
+							<button class="btn btn-outline-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.CreateConfigFileAsync(file)">@L["Common.Add"]</button>
+						}
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@code {
+	protected override async Task OnInitializedAsync() => await ViewModel.InitializeAsync();
+
+	private async Task OnTargetFileChanged(ChangeEventArgs args)
+	{
+		ViewModel.SetTargetFile(args.Value?.ToString());
+		await Task.CompletedTask;
+	}
+
+	private NuGetConfigFileInfo? FindFile(string? path) =>
+		ViewModel.ConfigFiles.FirstOrDefault(file => string.Equals(file.Path, path, StringComparison.OrdinalIgnoreCase));
+}

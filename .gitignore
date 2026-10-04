@@ -1,0 +1,97 @@
+# ==========================================================
+# 按目录忽略生成物
+# ==========================================================
+
+# ---- 编译输出目录 ----
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# ---- 产物 / 发布 / 打包目录 ----
+artifacts/
+[Pp]ublish/
+out/
+PublishScripts/
+bld/
+
+# ---- 日志目录 ----
+[Ll]og/
+[Ll]ogs/
+
+# ---- IDE 缓存目录 ----
+.vs/
+.idea/
+_ReSharper*/
+
+# VS Code：只保留团队共享的配置
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ---- 测试 / 覆盖率 / 基准测试目录 ----
+[Tt]est[Rr]esult*/
+test-results/
+coverage*/
+BenchmarkDotNet.Artifacts/
+
+# ---- NuGet 还原目录（packages.config 方式）----
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+# ---- 回收站 ----
+$RECYCLE.BIN/
+
+
+# ==========================================================
+# 散落在源码目录里的用户级 / 生成文件
+# ==========================================================
+
+# VS / Rider 用户选项
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.rsuser
+*.DotSettings.user
+*.sln.iml
+*.code-workspace
+
+# MSBuild 二进制日志
+*.binlog
+
+# NuGet 包产物
+*.nupkg
+*.snupkg
+
+# 发布配置与签名凭据（绝不提交）
+*.pubxml
+*.pubxml.user
+*.pfx
+*.snk
+*.crt
+*.cer
+*.p12
+
+# 测试结果文件
+*.trx
+*.coverage
+*.coveragexml
+
+# 操作系统杂项
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+*.stackdump

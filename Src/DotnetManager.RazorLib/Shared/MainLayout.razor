@@ -1,0 +1,70 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject UiLocalizer L
+@inject LocalizationState Localization
+@inject IAppSettingsStore Settings
+@inject IEnvironmentService Environment
+@inject IDotnetCli Cli
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<div class="top-row px-4">
+			<div class="top-row-left">
+				<span class="badge rounded-pill @PrivilegeBadgeClass">
+					<i class="fa-solid @PrivilegeIconClass"></i>
+					@(Environment.IsElevated ? L["App.Elevated"] : L["App.NotElevated"])
+				</span>
+				<span class="top-row-muted" title="@L["App.Dotnet"]">
+					<i class="fa-solid fa-code"></i> @Cli.ExecutablePath
+				</span>
+			</div>
+			@* <div class="top-row-right">
+				<label class="top-row-muted" for="languageSelect">@L["App.Language"]</label>
+				<select id="languageSelect" class="form-select form-select-sm language-select"
+						value="@Localization.Language" @onchange="OnLanguageChangedAsync">
+					@foreach (var lang in LocalizationState.SupportedLanguages)
+					{
+						<option value="@lang">@LocalizationState.DisplayName(lang)</option>
+					}
+				</select>
+			</div> *@
+		</div>
+
+		<article class="content px-4">
+			@Body
+		</article>
+	</main>
+</div>
+
+@code {
+	protected override void OnInitialized() => Localization.Changed += HandleLocalizationChanged;
+
+	public void Dispose() => Localization.Changed -= HandleLocalizationChanged;
+
+	private void HandleLocalizationChanged() => InvokeAsync(StateHasChanged);
+
+	private string PrivilegeBadgeClass => Environment.IsElevated
+		? "text-bg-success"
+		: "text-bg-secondary";
+
+	private string PrivilegeIconClass => Environment.IsElevated
+		? "fa-shield-halved"
+		: "fa-user";
+
+	private async Task OnLanguageChangedAsync(ChangeEventArgs args)
+	{
+		var language = args.Value?.ToString();
+		if (string.IsNullOrWhiteSpace(language) || language == Localization.Language)
+		{
+			return;
+		}
+
+		Localization.SetLanguage(language);
+		Settings.Current.Language = Localization.Language;
+		await Settings.SaveAsync();
+	}
+}

@@ -1,0 +1,155 @@
+@page "/nuget/caches"
+@inherits ViewModelPage<NuGetCachesViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.Caches"]</h1>
+
+<div class="toolbar">
+	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
+		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.MeasureAllAsync">
+		<i class="fa-solid fa-hard-drive"></i> @L["NuGetCache.MeasureAll"]
+	</button>
+	<button class="btn btn-outline-danger btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.ClearAllAsync">
+		<i class="fa-solid fa-broom"></i> @L["NuGetCache.ClearAll"]
+	</button>
+	<span class="spacer"></span>
+	<span class="hint">@L["NuGetCache.Total"]: @(ViewModel.TotalSizeText ?? L["Common.NotAvailable"])</span>
+</div>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<table class="table table-sm table-hover grid">
+	<thead>
+		<tr>
+			<th>@L["Common.Type"]</th>
+			<th>@L["Common.Path"]</th>
+			<th>@L["Common.Source"]</th>
+			<th>@L["Common.Size"]</th>
+			<th>@L["Common.Actions"]</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var row in ViewModel.Caches)
+		{
+			<tr>
+				<td>@L[row.LabelKey]</td>
+				<td class="path-box">@row.Path</td>
+				<td class="hint">@row.Source</td>
+				<td>
+					@if (row.IsMeasuring)
+					{
+						<i class="fa-solid fa-spinner fa-spin"></i>
+					}
+					else
+					{
+						@(row.SizeText ?? "-")
+					}
+				</td>
+				<td>
+					<div class="toolbar mb-0">
+						<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.MeasureAsync(row)">@L["NuGetCache.Measure"]</button>
+						<button class="btn btn-outline-secondary btn-sm" @onclick="() => ViewModel.UseLocation(row)">@L["NuGetCache.Edit"]</button>
+						<button class="btn btn-outline-secondary btn-sm" @onclick="() => ViewModel.Open(row)">@L["Common.OpenFolder"]</button>
+						<button class="btn btn-outline-danger btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.ClearAsync(row)">@L["Common.Clear"]</button>
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<div class="card mb-3">
+	<div class="card-body">
+		<h2 class="h6 card-title">@L["NuGetCache.ChangeLocation"]</h2>
+		<p class="hint">@L["NuGetCache.ChangeLocationHint"]</p>
+		<div class="toolbar">
+			<select class="form-select form-select-sm" style="max-width: 12rem" value="@ViewModel.EditKind" @onchange="OnKindChanged">
+				@foreach (var row in ViewModel.Caches)
+				{
+					<option value="@row.Kind">@L[row.LabelKey]</option>
+				}
+			</select>
+			<input class="form-control form-control-sm path-box" style="max-width: 30rem" placeholder="@L["Common.Path"]"
+				   @bind="ViewModel.EditPath" @bind:event="oninput" />
+			<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickEditDirectory">@L["Common.Browse"]</button>
+			<select class="form-select form-select-sm" style="max-width: 9rem" value="@ViewModel.EditScope" @onchange="OnScopeChanged">
+				<option value="User">@L["Common.User"]</option>
+				<option value="Machine">@L["Common.Machine"]</option>
+			</select>
+		</div>
+		<div class="toolbar mb-0">
+			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.ApplyEnvironmentVariableAsync">
+				<i class="fa-solid fa-check"></i> @L["NuGetCache.ApplyEnvironment"]
+			</button>
+			<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RemoveEnvironmentVariableAsync">
+				@L["NuGetCache.RemoveEnvironment"]
+			</button>
+			<button class="btn btn-outline-secondary btn-sm" disabled="@(!ViewModel.CanApplyConfigValue || ViewModel.IsBusy)" @onclick="ViewModel.ApplyConfigValueAsync">
+				@L["NuGetCache.ApplyConfig"]
+			</button>
+			@if (!ViewModel.IsElevated)
+			{
+				<span class="badge text-bg-warning">@L["Common.AdminRequired"]</span>
+			}
+		</div>
+		<p class="hint mb-0 mt-2">@L["Common.RestartRequired"]</p>
+		<p class="hint mb-0 path-box">@L["NuGetCache.UserConfig"]: @ViewModel.UserConfigPath</p>
+	</div>
+</div>
+
+<div class="card">
+	<div class="card-body">
+		<h2 class="h6 card-title">@L["NuGetCache.FallbackFolders"]</h2>
+		<div class="toolbar">
+			<input class="form-control form-control-sm path-box" style="max-width: 30rem" placeholder="@L["Common.Path"]"
+				   @bind="ViewModel.NewFallbackFolder" @bind:event="oninput" />
+			<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickFallbackFolder">@L["Common.Browse"]</button>
+			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.AddFallbackFolderAsync">@L["Common.Add"]</button>
+		</div>
+		<table class="table table-sm grid mb-0">
+			<tbody>
+				@foreach (var folder in ViewModel.FallbackFolders)
+				{
+					<tr>
+						<td class="path-box">@folder.Path</td>
+						<td class="hint path-box">@folder.Source</td>
+						<td>
+							<button class="btn btn-outline-danger btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.RemoveFallbackFolderAsync(folder)">@L["Common.Remove"]</button>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@code {
+	protected override async Task OnInitializedAsync() => await ViewModel.InitializeAsync();
+
+	private async Task OnKindChanged(ChangeEventArgs args)
+	{
+		ViewModel.EditKind = args.Value?.ToString() ?? ViewModel.EditKind;
+		var row = ViewModel.Caches.FirstOrDefault(cache => string.Equals(cache.Kind, ViewModel.EditKind, StringComparison.OrdinalIgnoreCase));
+		if (row is not null)
+		{
+			ViewModel.EditPath = row.Path;
+		}
+
+		await Task.CompletedTask;
+	}
+
+	private async Task OnScopeChanged(ChangeEventArgs args)
+	{
+		if (Enum.TryParse<EnvScope>(args.Value?.ToString(), out var scope))
+		{
+			ViewModel.EditScope = scope;
+		}
+
+		await Task.CompletedTask;
+	}
+}

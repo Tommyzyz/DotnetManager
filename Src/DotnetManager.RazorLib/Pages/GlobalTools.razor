@@ -1,0 +1,100 @@
+@page "/tools/global"
+@inherits ViewModelPage<GlobalToolsViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.GlobalTools"]</h1>
+
+<div class="toolbar">
+	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
+		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.CheckUpdatesAsync">
+		<i class="fa-solid fa-arrows-rotate"></i> @L["LocalTools.CheckUpdates"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.UpdateAllAsync">
+		<i class="fa-solid fa-arrow-up-right-from-square"></i> @L["LocalTools.UpdateAll"]
+	</button>
+	<span class="spacer"></span>
+	<input class="form-control form-control-sm" style="max-width: 14rem" placeholder="@L["Common.Filter"]"
+		   @bind="ViewModel.Filter" @bind:event="oninput" />
+</div>
+
+<div class="mb-3 hint path-box">
+	<div><i class="fa-solid fa-folder"></i> @L["GlobalTools.Directory"]: @ViewModel.ToolsDirectory</div>
+	<div><i class="fa-solid fa-box"></i> @L["GlobalTools.Store"]: @ViewModel.StoreDirectory</div>
+</div>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<div class="card mb-3">
+	<div class="card-body">
+		<h2 class="h6 card-title">@L["Common.Install"]</h2>
+		<div class="toolbar mb-0">
+			<input class="form-control form-control-sm" style="max-width: 18rem" placeholder="@L["LocalTools.PackageId"]"
+				   @bind="ViewModel.NewPackageId" @bind:event="oninput" />
+			<input class="form-control form-control-sm" style="max-width: 12rem" placeholder="@L["LocalTools.VersionPlaceholder"]"
+				   @bind="ViewModel.NewPackageVersion" @bind:event="oninput" />
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="globalPrerelease" @bind="ViewModel.InstallPrerelease" />
+				<label class="form-check-label" for="globalPrerelease">@L["Common.PreRelease"]</label>
+			</div>
+			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.InstallAsync">
+				<i class="fa-solid fa-plus"></i> @L["Common.Install"]
+			</button>
+		</div>
+	</div>
+</div>
+
+<table class="table table-sm table-hover grid">
+	<thead>
+		<tr>
+			<th>@L["Common.Package"]</th>
+			<th>@L["Common.Version"]</th>
+			<th>@L["Common.Latest"]</th>
+			<th>@L["Common.Commands"]</th>
+			<th>@L["Common.Actions"]</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var tool in ViewModel.FilteredTools)
+		{
+			<tr>
+				<td><code>@tool.PackageId</code></td>
+				<td>@tool.Version</td>
+				<td>
+					@if (tool.IsChecking)
+					{
+						<i class="fa-solid fa-spinner fa-spin"></i>
+					}
+					else if (tool.HasUpdate)
+					{
+						<span class="badge text-bg-warning">@tool.LatestVersion</span>
+					}
+					else
+					{
+						<span class="hint">@(tool.LatestVersion ?? "-")</span>
+					}
+				</td>
+				<td><code>@tool.CommandText</code></td>
+				<td>
+					<div class="toolbar mb-0">
+						<button class="btn btn-outline-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.UpdateAsync(tool)">@L["Common.Update"]</button>
+						<button class="btn btn-outline-danger btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.UninstallAsync(tool)">@L["Common.Uninstall"]</button>
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@if (ViewModel.Tools.Count == 0)
+{
+	<p class="hint">@L["Common.None"]</p>
+}
+
+@code {
+	protected override async Task OnInitializedAsync() => await ViewModel.InitializeAsync();
+}

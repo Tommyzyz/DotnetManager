@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="App.Title" xml:space="preserve"><value>.NET 管理器</value></data>
+  <data name="App.Language" xml:space="preserve"><value>语言</value></data>
+  <data name="App.Privileges" xml:space="preserve"><value>权限</value></data>
+  <data name="App.Elevated" xml:space="preserve"><value>管理员</value></data>
+  <data name="App.NotElevated" xml:space="preserve"><value>标准用户</value></data>
+  <data name="App.Dotnet" xml:space="preserve"><value>dotnet</value></data>
+
+  <data name="Common.Refresh" xml:space="preserve"><value>刷新</value></data>
+  <data name="Common.Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Common.Clear" xml:space="preserve"><value>清理</value></data>
+  <data name="Common.Close" xml:space="preserve"><value>关闭</value></data>
+  <data name="Common.Browse" xml:space="preserve"><value>浏览…</value></data>
+  <data name="Common.Folder" xml:space="preserve"><value>目录</value></data>
+  <data name="Common.OpenFolder" xml:space="preserve"><value>打开目录</value></data>
+  <data name="Common.Copy" xml:space="preserve"><value>复制</value></data>
+  <data name="Common.Saved" xml:space="preserve"><value>已保存。</value></data>
+  <data name="Common.Failed" xml:space="preserve"><value>失败</value></data>
+  <data name="Common.Success" xml:space="preserve"><value>成功</value></data>
+  <data name="Common.Loading" xml:space="preserve"><value>加载中…</value></data>
+  <data name="Common.Search" xml:space="preserve"><value>搜索</value></data>
+  <data name="Common.Searching" xml:space="preserve"><value>搜索中…</value></data>
+  <data name="Common.Install" xml:space="preserve"><value>安装</value></data>
+  <data name="Common.Uninstall" xml:space="preserve"><value>卸载</value></data>
+  <data name="Common.Update" xml:space="preserve"><value>更新</value></data>
+  <data name="Common.Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="Common.Add" xml:space="preserve"><value>添加</value></data>
+  <data name="Common.Edit" xml:space="preserve"><value>编辑</value></data>
+  <data name="Common.Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Common.Apply" xml:space="preserve"><value>应用</value></data>
+  <data name="Common.Name" xml:space="preserve"><value>名称</value></data>
+  <data name="Common.Url" xml:space="preserve"><value>地址</value></data>
+  <data name="Common.Path" xml:space="preserve"><value>路径</value></data>
+  <data name="Common.Version" xml:space="preserve"><value>版本</value></data>
+  <data name="Common.Latest" xml:space="preserve"><value>最新</value></data>
+  <data name="Common.Status" xml:space="preserve"><value>状态</value></data>
+  <data name="Common.Actions" xml:space="preserve"><value>操作</value></data>
+  <data name="Common.Enabled" xml:space="preserve"><value>已启用</value></data>
+  <data name="Common.Disabled" xml:space="preserve"><value>已禁用</value></data>
+  <data name="Common.Source" xml:space="preserve"><value>来源</value></data>
+  <data name="Common.Command" xml:space="preserve"><value>命令</value></data>
+  <data name="Common.Commands" xml:space="preserve"><value>命令</value></data>
+  <data name="Common.Description" xml:space="preserve"><value>说明</value></data>
+  <data name="Common.Yes" xml:space="preserve"><value>是</value></data>
+  <data name="Common.No" xml:space="preserve"><value>否</value></data>
+  <data name="Common.None" xml:space="preserve"><value>无</value></data>
+  <data name="Common.Size" xml:space="preserve"><value>大小</value></data>
+  <data name="Common.Files" xml:space="preserve"><value>文件数</value></data>
+  <data name="Common.Unknown" xml:space="preserve"><value>未知</value></data>
+  <data name="Common.NotAvailable" xml:space="preserve"><value>不可用</value></data>
+  <data name="Common.SelectFolder" xml:space="preserve"><value>选择目录</value></data>
+  <data name="Common.WorkingDirectory" xml:space="preserve"><value>工作目录</value></data>
+  <data name="Common.AdminRequired" xml:space="preserve"><value>此操作需要管理员权限。</value></data>
+  <data name="Common.ElevationDenied" xml:space="preserve"><value>提权请求被拒绝或失败。</value></data>
+  <data name="Common.ConfirmTitle" xml:space="preserve"><value>请确认</value></data>
+  <data name="Common.ErrorTitle" xml:space="preserve"><value>错误</value></data>
+  <data name="Common.InfoTitle" xml:space="preserve"><value>提示</value></data>
+  <data name="Common.Output" xml:space="preserve"><value>输出</value></data>
+  <data name="Common.ExitCode" xml:space="preserve"><value>退出码</value></data>
+  <data name="Common.Duration" xml:space="preserve"><value>耗时</value></data>
+  <data name="Common.Time" xml:space="preserve"><value>时间</value></data>
+  <data name="Common.All" xml:space="preserve"><value>全部</value></data>
+  <data name="Common.Type" xml:space="preserve"><value>类型</value></data>
+  <data name="Common.Machine" xml:space="preserve"><value>机器级</value></data>
+  <data name="Common.User" xml:space="preserve"><value>用户级</value></data>
+  <data name="Common.Default" xml:space="preserve"><value>默认</value></data>
+  <data name="Common.EnvironmentVariable" xml:space="preserve"><value>环境变量</value></data>
+  <data name="Common.ConfigFile" xml:space="preserve"><value>配置文件</value></data>
+  <data name="Common.Running" xml:space="preserve"><value>执行中…</value></data>
+  <data name="Common.PreRelease" xml:space="preserve"><value>包含预览版</value></data>
+  <data name="Common.Filter" xml:space="preserve"><value>筛选</value></data>
+  <data name="Common.Total" xml:space="preserve"><value>合计</value></data>
+  <data name="Common.Downloads" xml:space="preserve"><value>下载量</value></data>
+  <data name="Common.Authors" xml:space="preserve"><value>作者</value></data>
+  <data name="Common.Package" xml:space="preserve"><value>包</value></data>
+  <data name="Common.RawContent" xml:space="preserve"><value>原始内容</value></data>
+  <data name="Common.NotExists" xml:space="preserve"><value>不存在</value></data>
+  <data name="Common.Backup" xml:space="preserve"><value>备份</value></data>
+  <data name="Common.RestartRequired" xml:space="preserve"><value>需要重启 Visual Studio 或终端后生效。</value></data>
+  <data name="Common.OperationCancelled" xml:space="preserve"><value>操作已取消。</value></data>
+
+  <data name="Nav.GroupTools" xml:space="preserve"><value>工具</value></data>
+  <data name="Nav.GroupNuGet" xml:space="preserve"><value>NuGet</value></data>
+  <data name="Nav.GroupEnvironment" xml:space="preserve"><value>环境</value></data>
+  <data name="Nav.Overview" xml:space="preserve"><value>概览</value></data>
+  <data name="Nav.LocalTools" xml:space="preserve"><value>本地工具</value></data>
+  <data name="Nav.GlobalTools" xml:space="preserve"><value>全局工具</value></data>
+  <data name="Nav.ToolSearch" xml:space="preserve"><value>工具搜索</value></data>
+  <data name="Nav.PackageSources" xml:space="preserve"><value>包源</value></data>
+  <data name="Nav.Caches" xml:space="preserve"><value>缓存</value></data>
+  <data name="Nav.ConfigFiles" xml:space="preserve"><value>配置文件</value></data>
+  <data name="Nav.Workloads" xml:space="preserve"><value>工作负载</value></data>
+  <data name="Nav.Sdk" xml:space="preserve"><value>SDK 与运行时</value></data>
+  <data name="Nav.Output" xml:space="preserve"><value>运行日志</value></data>
+  <data name="Nav.Settings" xml:space="preserve"><value>设置</value></data>
+
+  <data name="Layout.About" xml:space="preserve"><value>关于</value></data>
+  <data name="NotFound" xml:space="preserve"><value>抱歉，此地址下没有任何内容。</value></data>
+  <data name="Common.Notes" xml:space="preserve"><value>备注</value></data>
+
+  <data name="Dashboard.Dotnet" xml:space="preserve"><value>dotnet</value></data>
+  <data name="Dashboard.Sdks" xml:space="preserve"><value>已安装的 SDK</value></data>
+  <data name="Dashboard.Runtimes" xml:space="preserve"><value>运行时</value></data>
+  <data name="Dashboard.More" xml:space="preserve"><value>更多</value></data>
+  <data name="Dashboard.GlobalTools" xml:space="preserve"><value>全局工具</value></data>
+  <data name="Dashboard.Workloads" xml:space="preserve"><value>工作负载</value></data>
+  <data name="Dashboard.NuGet" xml:space="preserve"><value>NuGet</value></data>
+  <data name="Dashboard.GlobalPackages" xml:space="preserve"><value>全局包目录</value></data>
+  <data name="Dashboard.HttpCache" xml:space="preserve"><value>HTTP 缓存</value></data>
+  <data name="Dashboard.Sources" xml:space="preserve"><value>包源数量</value></data>
+
+  <data name="LocalTools.CreateManifest" xml:space="preserve"><value>新建清单</value></data>
+  <data name="LocalTools.Restore" xml:space="preserve"><value>还原工具</value></data>
+  <data name="LocalTools.CheckUpdates" xml:space="preserve"><value>检查更新</value></data>
+  <data name="LocalTools.UpdateAll" xml:space="preserve"><value>全部更新</value></data>
+  <data name="LocalTools.Manifests" xml:space="preserve"><value>工具清单</value></data>
+  <data name="LocalTools.Install" xml:space="preserve"><value>安装本地工具</value></data>
+  <data name="LocalTools.PackageId" xml:space="preserve"><value>包 ID</value></data>
+  <data name="LocalTools.VersionPlaceholder" xml:space="preserve"><value>版本（留空表示最新）</value></data>
+  <data name="LocalTools.Lookup" xml:space="preserve"><value>查询最新版</value></data>
+  <data name="LocalTools.NoManifest" xml:space="preserve"><value>此目录下未找到 .config/dotnet-tools.json。</value></data>
+  <data name="LocalTools.Run" xml:space="preserve"><value>运行</value></data>
+  <data name="LocalTools.RemoveFromManifest" xml:space="preserve"><value>从清单移除</value></data>
+
+  <data name="GlobalTools.Directory" xml:space="preserve"><value>工具目录</value></data>
+  <data name="GlobalTools.Store" xml:space="preserve"><value>工具存储 (store)</value></data>
+
+  <data name="ToolSearch.Query" xml:space="preserve"><value>在 nuget.org 上搜索</value></data>
+  <data name="ToolSearch.ToolOnly" xml:space="preserve"><value>仅搜索工具包</value></data>
+  <data name="ToolSearch.InstallGlobally" xml:space="preserve"><value>安装为全局工具</value></data>
+  <data name="ToolSearch.InstallDirectory" xml:space="preserve"><value>本地安装目录</value></data>
+
+  <data name="Sources.RootDirectory" xml:space="preserve"><value>选择根目录</value></data>
+  <data name="Sources.UserOnly" xml:space="preserve"><value>仅使用用户级配置</value></data>
+  <data name="Sources.TargetFile" xml:space="preserve"><value>写入的目标配置文件</value></data>
+  <data name="Sources.Add" xml:space="preserve"><value>添加或更新包源</value></data>
+  <data name="Sources.Credentials" xml:space="preserve"><value>已配置凭据</value></data>
+  <data name="Sources.ConfigChain" xml:space="preserve"><value>配置文件（从低到高优先级）</value></data>
+
+  <data name="NuGetCache.GlobalPackages" xml:space="preserve"><value>全局包目录</value></data>
+  <data name="NuGetCache.HttpCache" xml:space="preserve"><value>HTTP 缓存</value></data>
+  <data name="NuGetCache.PluginsCache" xml:space="preserve"><value>插件缓存</value></data>
+  <data name="NuGetCache.Temp" xml:space="preserve"><value>临时文件</value></data>
+  <data name="NuGetCache.Measure" xml:space="preserve"><value>统计大小</value></data>
+  <data name="NuGetCache.MeasureAll" xml:space="preserve"><value>统计全部</value></data>
+  <data name="NuGetCache.ClearAll" xml:space="preserve"><value>全部清理</value></data>
+  <data name="NuGetCache.Total" xml:space="preserve"><value>合计</value></data>
+  <data name="NuGetCache.Edit" xml:space="preserve"><value>修改位置</value></data>
+  <data name="NuGetCache.ChangeLocation" xml:space="preserve"><value>修改缓存位置</value></data>
+  <data name="NuGetCache.ChangeLocationHint" xml:space="preserve"><value>NuGet 优先从环境变量读取这些位置；机器级需要管理员权限。</value></data>
+  <data name="NuGetCache.ApplyEnvironment" xml:space="preserve"><value>设置环境变量</value></data>
+  <data name="NuGetCache.RemoveEnvironment" xml:space="preserve"><value>删除环境变量</value></data>
+  <data name="NuGetCache.ApplyConfig" xml:space="preserve"><value>写入用户级 NuGet.Config</value></data>
+  <data name="NuGetCache.UserConfig" xml:space="preserve"><value>用户级配置</value></data>
+  <data name="NuGetCache.FallbackFolders" xml:space="preserve"><value>回退包目录 (fallback)</value></data>
+
+  <data name="Config.Chain" xml:space="preserve"><value>配置文件</value></data>
+  <data name="Config.Unsaved" xml:space="preserve"><value>有未保存的修改</value></data>
+  <data name="Config.SelectFile" xml:space="preserve"><value>请在左侧选择一个配置文件。</value></data>
+  <data name="Config.Revert" xml:space="preserve"><value>撤销修改</value></data>
+
+  <data name="Workloads.Id" xml:space="preserve"><value>工作负载 ID</value></data>
+  <data name="Workloads.ManifestVersion" xml:space="preserve"><value>清单版本</value></data>
+  <data name="Workloads.InstallSource" xml:space="preserve"><value>安装源</value></data>
+  <data name="Workloads.IdPlaceholder" xml:space="preserve"><value>工作负载 ID</value></data>
+  <data name="Workloads.Install" xml:space="preserve"><value>安装工作负载</value></data>
+  <data name="Workloads.RawList" xml:space="preserve"><value>原始输出</value></data>
+  <data name="Workloads.UpdateAll" xml:space="preserve"><value>全部更新</value></data>
+  <data name="Workloads.Repair" xml:space="preserve"><value>修复</value></data>
+  <data name="Workloads.RunElevated" xml:space="preserve"><value>以管理员身份运行</value></data>
+
+  <data name="Settings.ResolvedPath" xml:space="preserve"><value>实际使用</value></data>
+  <data name="Settings.ResolvedPathHint" xml:space="preserve"><value>留空则使用 PATH 中的 dotnet</value></data>
+  <data name="Settings.InvalidPath" xml:space="preserve"><value>未找到</value></data>
+  <data name="Settings.Reset" xml:space="preserve"><value>重置</value></data>
+  <data name="Settings.AutoCheckUpdates" xml:space="preserve"><value>自动检查工具更新</value></data>
+  <data name="Settings.OpenSettingsFile" xml:space="preserve"><value>打开设置文件</value></data>
+</root>

@@ -1,0 +1,137 @@
+@page "/nuget/config"
+@inherits ViewModelPage<NuGetConfigFilesViewModel>
+@inject UiLocalizer L
+
+<h1>@L["Nav.ConfigFiles"]</h1>
+
+<div class="toolbar">
+	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
+		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
+	</button>
+	<span class="spacer"></span>
+	@if (ViewModel.RequiresElevation)
+	{
+		<span class="badge text-bg-warning"><i class="fa-solid fa-shield-halved"></i> @L["Common.AdminRequired"]</span>
+	}
+	@if (ViewModel.IsDirty)
+	{
+		<span class="badge text-bg-info">@L["Config.Unsaved"]</span>
+	}
+</div>
+
+<OperationPanel HasOutput="@ViewModel.HasOutput"
+				OutputText="@ViewModel.OutputText"
+				StatusIsError="@ViewModel.StatusIsError"
+				StatusMessage="@ViewModel.StatusMessage" />
+
+<div class="row g-3">
+	<div class="col-12 col-xl-5">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">@L["Config.Chain"]</h2>
+				<table class="table table-sm grid mb-0">
+					<tbody>
+						@foreach (var file in ViewModel.Files)
+						{
+							<tr>
+								<td class="path-box">
+									<a href="" @onclick="() => ViewModel.SelectAsync(file)" @onclick:preventDefault="true">@file.Path</a>
+									<div class="hint">@file.Scope · @(file.Exists ? L["Common.Success"] : L["Common.NotExists"])</div>
+								</td>
+								<td>
+									<div class="toolbar mb-0">
+										<button class="btn btn-outline-secondary btn-sm" @onclick="() => ViewModel.RevealFile(file)">@L["Common.OpenFolder"]</button>
+										@if (!file.Exists)
+										{
+											<button class="btn btn-outline-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="() => ViewModel.CreateFileAsync(file)">@L["Common.Add"]</button>
+										}
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-xl-7">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">@L["Common.RawContent"]</h2>
+				@if (ViewModel.SelectedFile is null)
+				{
+					<p class="hint">@L["Config.SelectFile"]</p>
+				}
+				else
+				{
+					<p class="hint path-box mb-2">@ViewModel.SelectedFile.Path</p>
+					<textarea class="form-control raw-editor" spellcheck="false"
+							  @bind="ViewModel.RawContent" @bind:event="oninput"></textarea>
+					<div class="toolbar mt-2 mb-0">
+						<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy || !ViewModel.CanSave" @onclick="ViewModel.SaveAsync">
+							<i class="fa-solid fa-check"></i> @L["Common.Save"]
+						</button>
+						<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy || ViewModel.SelectedFile is null" @onclick="() => ViewModel.SelectAsync(ViewModel.SelectedFile)">
+							@L["Config.Revert"]
+						</button>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row g-3 mt-1">
+	<div class="col-12 col-xl-6">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">&lt;config&gt;</h2>
+				<table class="table table-sm grid mb-0">
+					<thead>
+						<tr>
+							<th>@L["Common.Name"]</th>
+							<th>@L["Common.Path"]</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var entry in ViewModel.ConfigValues)
+						{
+							<tr>
+								<td><code>@entry.Key</code></td>
+								<td class="path-box">@entry.Value</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-xl-6">
+		<div class="card h-100">
+			<div class="card-body">
+				<h2 class="h6 card-title">disabledPackageSources</h2>
+				<table class="table table-sm grid mb-0">
+					<tbody>
+						@foreach (var entry in ViewModel.DisabledSources)
+						{
+							<tr>
+								<td><code>@entry.Key</code></td>
+								<td class="hint path-box">@entry.ConfigFile</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+				@if (ViewModel.DisabledSources.Count == 0)
+				{
+					<p class="hint mb-0">@L["Common.None"]</p>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	protected override async Task OnInitializedAsync() => await ViewModel.InitializeAsync();
+}
