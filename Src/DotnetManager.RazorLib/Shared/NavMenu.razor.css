@@ -1,6 +1,7 @@
 .top-row {
 	height: 3.5rem;
-	background-color: rgba(0, 0, 0, 0.22);
+	/* No background of its own: the sidebar gradient shows through so this block
+	   stays flush with both the sidebar and the window caption above it. */
 }
 
 .navbar-toggler {
