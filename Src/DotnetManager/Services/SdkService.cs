@@ -42,7 +42,10 @@ public sealed partial class SdkService : ISdkService
     public Task<CliResult> SdkCheckAsync(CancellationToken cancellationToken = default) =>
         RunAsync(["sdk", "check"], "dotnet sdk check", cancellationToken);
 
-    public string? FindGlobalJson(string? directory)
+    public string? FindGlobalJson(string? directory) => FindGlobalJsonIn(directory);
+
+    /// <summary>Walks up from <paramref name="directory"/> looking for global.json.</summary>
+    public static string? FindGlobalJsonIn(string? directory)
     {
         if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
         {

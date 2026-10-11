@@ -1,0 +1,97 @@
+@inject DotnetEnvironmentViewModel Env
+@inject UiLocalizer L
+@inject LocalizationState Localization
+@implements IDisposable
+
+@if (Env.NeedsAttention)
+{
+	<div class="env-banner @ToneClass">
+		<i class="fa-solid @IconClass env-banner-icon"></i>
+		<div class="env-banner-body">
+			<div class="env-banner-title">@Title</div>
+			<div class="env-banner-text">@Message</div>
+			@if (!string.IsNullOrWhiteSpace(Detail))
+			{
+				<div class="env-banner-detail path-box">@Detail</div>
+			}
+			@if (!string.IsNullOrWhiteSpace(Env.DownloadStatus))
+			{
+				<div class="env-banner-detail hint">@Env.DownloadStatus</div>
+			}
+		</div>
+		<div class="env-banner-actions">
+			@if (Env.DownloadVisible)
+			{
+				<button class="btn btn-primary btn-sm" disabled="@Env.IsBusy" @onclick="Env.DownloadInstallerAsync">
+					<i class="fa-solid fa-download"></i> @L["Env.DownloadInstaller"]
+				</button>
+			}
+			<button class="btn btn-outline-secondary btn-sm" disabled="@Env.IsBusy" @onclick="Env.OpenDownloadPageAsync">
+				<i class="fa-solid fa-globe"></i> @L["Env.OpenDownloadPage"]
+			</button>
+			<button class="btn btn-outline-secondary btn-sm" disabled="@Env.IsBusy" @onclick="Env.RefreshAsync">
+				<i class="fa-solid fa-rotate @(Env.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Env.Redetect"]
+			</button>
+			<button class="btn btn-outline-secondary btn-sm" title="@L["Env.Dismiss"]" @onclick="Env.Dismiss">
+				<i class="fa-solid fa-xmark"></i>
+			</button>
+		</div>
+	</div>
+}
+
+@code {
+	protected override void OnInitialized()
+	{
+		Env.PropertyChanged += HandleViewModelChanged;
+		Localization.Changed += HandleLocalizationChanged;
+		_ = Env.InitializeAsync();
+	}
+
+	public void Dispose()
+	{
+		Env.PropertyChanged -= HandleViewModelChanged;
+		Localization.Changed -= HandleLocalizationChanged;
+	}
+
+	private void HandleViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) =>
+		InvokeAsync(StateHasChanged);
+
+	private void HandleLocalizationChanged() => InvokeAsync(StateHasChanged);
+
+	private DotnetEnvironmentStatus? Status => Env.Status;
+
+	private string ToneClass => Status switch
+	{
+		{ State: DotnetState.InstalledButStalePath } => "env-banner-warning",
+		{ State: not DotnetState.Installed } => "env-banner-danger",
+		_ => "env-banner-warning",
+	};
+
+	private string IconClass => Status switch
+	{
+		{ State: DotnetState.InstalledButStalePath } => "fa-circle-info",
+		_ => "fa-triangle-exclamation",
+	};
+
+	private string Title => Status switch
+	{
+		{ } status => L["Env.State." + DotnetEnvironmentViewModel.StateKey(status.State)],
+		_ => string.Empty,
+	};
+
+	private string Message => Status switch
+	{
+		{ State: DotnetState.NotInstalled } => L["Env.Banner.NotInstalled"],
+		{ State: DotnetState.RuntimeOnly } => L["Env.Banner.RuntimeOnly"],
+		{ State: DotnetState.InstalledButStalePath } => L["Env.Banner.StalePath"],
+		{ State: DotnetState.SdkVersionTooOld, RequiredSdkVersion: { } required } => L["Env.Banner.VersionTooOld", required],
+		_ => string.Empty,
+	};
+
+	private string Detail => Status switch
+	{
+		{ State: DotnetState.SdkVersionTooOld, GlobalJsonPath: { } path } => path,
+		{ State: DotnetState.InstalledButStalePath } => Status!.DotnetPath,
+		_ => string.Empty,
+	};
+}

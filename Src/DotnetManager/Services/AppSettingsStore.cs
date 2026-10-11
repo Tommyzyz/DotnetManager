@@ -33,7 +33,7 @@ public sealed class AppSettingsStore : IAppSettingsStore
         }
 
         await using var stream = File.Create(SettingsFilePath);
-        await JsonSerializer.SerializeAsync(stream, Current, SerializerOptions, cancellationToken);
+        await JsonSerializer.SerializeAsync(stream, Current, HostJsonSerializerContext.Default.AppSettings, cancellationToken);
         Changed?.Invoke();
     }
 
@@ -47,7 +47,7 @@ public sealed class AppSettingsStore : IAppSettingsStore
         try
         {
             using var stream = File.OpenRead(SettingsFilePath);
-            return JsonSerializer.Deserialize<AppSettings>(stream, SerializerOptions) ?? new AppSettings();
+            return JsonSerializer.Deserialize(stream, HostJsonSerializerContext.Default.AppSettings) ?? new AppSettings();
         }
         catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
         {

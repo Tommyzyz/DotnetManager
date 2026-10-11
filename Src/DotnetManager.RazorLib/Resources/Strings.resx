@@ -189,4 +189,45 @@
   <data name="Settings.Reset" xml:space="preserve"><value>Reset</value></data>
   <data name="Settings.AutoCheckUpdates" xml:space="preserve"><value>Check for tool updates automatically</value></data>
   <data name="Settings.OpenSettingsFile" xml:space="preserve"><value>Show settings file</value></data>
+
+  <data name="Env.CardTitle" xml:space="preserve"><value>.NET environment</value></data>
+  <data name="Env.State.Checking" xml:space="preserve"><value>Checking…</value></data>
+  <data name="Env.State.Unknown" xml:space="preserve"><value>Check failed</value></data>
+  <data name="Env.State.NotInstalled" xml:space="preserve"><value>No .NET found</value></data>
+  <data name="Env.State.RuntimeOnly" xml:space="preserve"><value>Runtime only, SDK missing</value></data>
+  <data name="Env.State.Installed" xml:space="preserve"><value>Ready</value></data>
+  <data name="Env.State.StalePath" xml:space="preserve"><value>SDK not visible to this app</value></data>
+  <data name="Env.State.VersionTooOld" xml:space="preserve"><value>Required SDK version missing</value></data>
+
+  <data name="Env.Banner.NotInstalled" xml:space="preserve"><value>No .NET runtime or SDK was found on this machine. Installing the SDK is required to build projects and manage tools.</value></data>
+  <data name="Env.Banner.RuntimeOnly" xml:space="preserve"><value>The .NET runtime is installed, but the SDK is not. dotnet build, publish and tool management will not work until the SDK is installed.</value></data>
+  <data name="Env.Banner.StalePath" xml:space="preserve"><value>An SDK is installed but this process still uses a PATH from before the install. The registry location is being used now; re-check once the setup has finished.</value></data>
+  <data name="Env.Banner.VersionTooOld" xml:space="preserve"><value>global.json requires .NET SDK {0}, which is not installed on this machine.</value></data>
+
+  <data name="Env.DownloadInstaller" xml:space="preserve"><value>Download installer</value></data>
+  <data name="Env.OpenDownloadPage" xml:space="preserve"><value>Open download page</value></data>
+  <data name="Env.Redetect" xml:space="preserve"><value>Re-check</value></data>
+  <data name="Env.Dismiss" xml:space="preserve"><value>Dismiss</value></data>
+  <data name="Env.ShowBanner" xml:space="preserve"><value>Show reminder</value></data>
+
+  <data name="Env.Path" xml:space="preserve"><value>dotnet path</value></data>
+  <data name="Env.PathSource" xml:space="preserve"><value>Found via</value></data>
+  <data name="Env.Sdks" xml:space="preserve"><value>Installed SDKs</value></data>
+  <data name="Env.RegistrySdks" xml:space="preserve"><value>SDKs in the registry</value></data>
+  <data name="Env.RequiredSdk" xml:space="preserve"><value>Required by global.json</value></data>
+  <data name="Env.Satisfied" xml:space="preserve"><value>satisfied</value></data>
+  <data name="Env.NotSatisfied" xml:space="preserve"><value>not satisfied</value></data>
+
+  <data name="Env.Source.Configured" xml:space="preserve"><value>configured path</value></data>
+  <data name="Env.Source.DotnetRoot" xml:space="preserve"><value>DOTNET_ROOT</value></data>
+  <data name="Env.Source.Path" xml:space="preserve"><value>PATH</value></data>
+  <data name="Env.Source.ProgramFiles" xml:space="preserve"><value>Program Files</value></data>
+  <data name="Env.Source.Registry" xml:space="preserve"><value>registry</value></data>
+  <data name="Env.Source.None" xml:space="preserve"><value>not found</value></data>
+
+  <data name="Env.Download.Start" xml:space="preserve"><value>Downloading the official SDK installer…</value></data>
+  <data name="Env.Download.Done" xml:space="preserve"><value>Installer saved to {0} and started. Finish the setup, then re-check.</value></data>
+  <data name="Env.Download.Failed" xml:space="preserve"><value>Download failed: {0}</value></data>
+  <data name="Env.Download.OpenPage" xml:space="preserve"><value>Opening {0} in your browser.</value></data>
+  <data name="Env.Redetect.Done" xml:space="preserve"><value>Detected {0} SDK(s) and {1} runtime(s).</value></data>
 </root>

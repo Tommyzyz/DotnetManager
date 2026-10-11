@@ -46,6 +46,11 @@ public static class Startup
         services.AddSingleton<ILocalToolManifestService, LocalToolManifestService>();
         services.AddSingleton<IGlobalToolService, GlobalToolService>();
         services.AddSingleton<ISdkService, SdkService>();
+        services.AddSingleton<IDotnetEnvironmentService, DotnetEnvironmentService>();
+        services.AddSingleton<IDotnetSdkInstaller, SdkInstallerService>();
+
+        // Shared by the layout banner and the SDK page: one detection result for the whole app.
+        services.AddSingleton<DotnetEnvironmentViewModel>();
 
         services.AddTransient<DashboardViewModel>();
         services.AddTransient<LocalToolsViewModel>();

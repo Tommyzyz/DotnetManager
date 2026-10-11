@@ -128,7 +128,7 @@ public sealed partial class WorkloadsViewModel : ViewModelBase
                     HeadlessOperations.RunDotnet,
                     new Dictionary<string, string>
                     {
-                        ["args"] = JsonSerializer.Serialize(arguments),
+                        ["args"] = JsonSerializer.Serialize(arguments, AppJsonSerializerContext.Default.IReadOnlyListString),
                     });
 
                 if (!string.IsNullOrWhiteSpace(result.Detail))

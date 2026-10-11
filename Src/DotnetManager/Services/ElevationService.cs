@@ -28,7 +28,7 @@ public sealed class ElevationService : IElevationService
         var requestFile = Path.Combine(Path.GetTempPath(), $"dotnetmanager-request-{Guid.NewGuid():N}.json");
         var resultFile = Path.Combine(Path.GetTempPath(), $"dotnetmanager-result-{Guid.NewGuid():N}.json");
         var request = new HeadlessRequest(operation, new Dictionary<string, string>(payload));
-        await File.WriteAllTextAsync(requestFile, JsonSerializer.Serialize(request, SerializerOptions), cancellationToken)
+        await File.WriteAllTextAsync(requestFile, JsonSerializer.Serialize(request, HostJsonSerializerContext.Default.HeadlessRequest), cancellationToken)
             .ConfigureAwait(false);
 
         var startInfo = new ProcessStartInfo(executable)
@@ -76,10 +76,11 @@ public sealed class ElevationService : IElevationService
         // When the app runs as "dotnet app.dll" the entry assembly has to be passed through again.
         if (string.Equals(Path.GetFileNameWithoutExtension(executable), "dotnet", StringComparison.OrdinalIgnoreCase))
         {
-            var entryAssembly = Assembly.GetEntryAssembly()?.Location;
-            if (!string.IsNullOrWhiteSpace(entryAssembly))
+            var assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
+            var entryDll = assemblyName is not null ? Path.Combine(AppContext.BaseDirectory, $"{assemblyName}.dll") : null;
+            if (File.Exists(entryDll))
             {
-                parts.Add(Quote(entryAssembly!));
+                parts.Add(Quote(entryDll));
             }
         }
 
@@ -100,7 +101,7 @@ public sealed class ElevationService : IElevationService
         try
         {
             var json = File.ReadAllText(resultFile);
-            var result = JsonSerializer.Deserialize<HeadlessResult>(json, SerializerOptions);
+            var result = JsonSerializer.Deserialize(json, HostJsonSerializerContext.Default.HeadlessResult);
             if (result is null)
             {
                 return OperationResult.Fail("The elevated operation returned an empty result.");

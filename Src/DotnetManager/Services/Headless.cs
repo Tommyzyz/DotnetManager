@@ -40,7 +40,7 @@ public static class Headless
             else
             {
                 var json = await File.ReadAllTextAsync(requestFile).ConfigureAwait(false);
-                var request = JsonSerializer.Deserialize<HeadlessRequest>(json, SerializerOptions);
+                var request = JsonSerializer.Deserialize(json, HostJsonSerializerContext.Default.HeadlessRequest);
                 result = request is null
                     ? new HeadlessResult(false, "The request file could not be parsed.", null)
                     : await ExecuteAsync(request, services).ConfigureAwait(false);
@@ -59,7 +59,7 @@ public static class Headless
                 Directory.CreateDirectory(directory);
             }
 
-            await File.WriteAllTextAsync(resultFile, JsonSerializer.Serialize(result, SerializerOptions)).ConfigureAwait(false);
+            await File.WriteAllTextAsync(resultFile, JsonSerializer.Serialize(result, HostJsonSerializerContext.Default.HeadlessResult)).ConfigureAwait(false);
         }
 
         return result.Success ? 0 : 1;
@@ -141,7 +141,7 @@ public static class Headless
             return new HeadlessResult(false, "The 'args' payload is required.", null);
         }
 
-        var commandArguments = JsonSerializer.Deserialize<string[]>(json);
+        var commandArguments = JsonSerializer.Deserialize(json, HostJsonSerializerContext.Default.StringArray);
         if (commandArguments is null || commandArguments.Length == 0)
         {
             return new HeadlessResult(false, "The 'args' payload must contain at least one argument.", null);

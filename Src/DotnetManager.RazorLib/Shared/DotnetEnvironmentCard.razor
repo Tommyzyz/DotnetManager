@@ -1,0 +1,123 @@
+@inject DotnetEnvironmentViewModel Env
+@inject UiLocalizer L
+@inject LocalizationState Localization
+@implements IDisposable
+
+<div class="card mt-3">
+	<div class="card-body">
+		<h2 class="h6 card-title">
+			<i class="fa-solid fa-microchip"></i> @L["Env.CardTitle"]
+			<span class="badge @StateBadgeClass">@StateText</span>
+		</h2>
+
+		@if (Env.Status is { } status)
+		{
+			<dl class="row mb-0">
+				<dt class="col-4 col-xl-3">@L["Env.Path"]</dt>
+				<dd class="col-8 col-xl-9 path-box mb-1">@(string.IsNullOrWhiteSpace(status.DotnetPath) ? L["Common.None"] : status.DotnetPath)</dd>
+
+				<dt class="col-4 col-xl-3">@L["Env.PathSource"]</dt>
+				<dd class="col-8 col-xl-9 mb-1">@L["Env.Source." + PathSourceKey(status.PathSource)]</dd>
+
+				<dt class="col-4 col-xl-3">@L["Env.Sdks"]</dt>
+				<dd class="col-8 col-xl-9 mb-1">
+					@(status.Sdks.Count > 0 ? string.Join(", ", status.Sdks.Select(sdk => sdk.Version)) : L["Common.None"])
+				</dd>
+
+				@if (status.RegistrySdkVersions.Count > 0)
+				{
+					<dt class="col-4 col-xl-3">@L["Env.RegistrySdks"]</dt>
+					<dd class="col-8 col-xl-9 mb-1">
+						<code>@string.Join(", ", status.RegistrySdkVersions)</code>
+					</dd>
+				}
+
+				@if (!string.IsNullOrWhiteSpace(status.RequiredSdkVersion))
+				{
+					<dt class="col-4 col-xl-3">@L["Env.RequiredSdk"]</dt>
+					<dd class="col-8 col-xl-9 mb-1">
+						<code>@status.RequiredSdkVersion</code>
+						<span class="badge @(status.GlobalJsonSatisfied ? "text-bg-success" : "text-bg-danger")">
+							@(status.GlobalJsonSatisfied ? L["Env.Satisfied"] : L["Env.NotSatisfied"])
+						</span>
+					</dd>
+
+					<dt class="col-4 col-xl-3">global.json</dt>
+					<dd class="col-8 col-xl-9 path-box mb-1">@status.GlobalJsonPath</dd>
+				}
+			</dl>
+		}
+		else
+		{
+			<p class="hint mb-0">@L["Common.Loading"]</p>
+		}
+
+		@if (!string.IsNullOrWhiteSpace(Env.DownloadStatus))
+		{
+			<p class="hint mb-0 mt-2">@Env.DownloadStatus</p>
+		}
+
+		<div class="toolbar mt-3 mb-0">
+			@if (Env.DownloadVisible)
+			{
+				<button class="btn btn-primary btn-sm" disabled="@Env.IsBusy" @onclick="Env.DownloadInstallerAsync">
+					<i class="fa-solid fa-download"></i> @L["Env.DownloadInstaller"]
+				</button>
+			}
+			<button class="btn btn-outline-secondary btn-sm" disabled="@Env.IsBusy" @onclick="Env.OpenDownloadPageAsync">
+				<i class="fa-solid fa-globe"></i> @L["Env.OpenDownloadPage"]
+			</button>
+			<button class="btn btn-outline-secondary btn-sm" disabled="@Env.IsBusy" @onclick="Env.RefreshAsync">
+				<i class="fa-solid fa-rotate @(Env.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Env.Redetect"]
+			</button>
+			@if (Env.Status is { State: not DotnetState.Installed } && !Env.NeedsAttention)
+			{
+				<button class="btn btn-outline-secondary btn-sm" @onclick="Env.Restore">
+					<i class="fa-solid fa-bell"></i> @L["Env.ShowBanner"]
+				</button>
+			}
+		</div>
+	</div>
+</div>
+
+@code {
+	protected override void OnInitialized()
+	{
+		Env.PropertyChanged += HandleViewModelChanged;
+		Localization.Changed += HandleLocalizationChanged;
+		_ = Env.InitializeAsync();
+	}
+
+	public void Dispose()
+	{
+		Env.PropertyChanged -= HandleViewModelChanged;
+		Localization.Changed -= HandleLocalizationChanged;
+	}
+
+	private void HandleViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) =>
+		InvokeAsync(StateHasChanged);
+
+	private void HandleLocalizationChanged() => InvokeAsync(StateHasChanged);
+
+	private string StateText => Env.Status is { } status
+		? L["Env.State." + DotnetEnvironmentViewModel.StateKey(status.State)]
+		: L["Env.State.Checking"];
+
+	private string StateBadgeClass => Env.Status?.State switch
+	{
+		DotnetState.Installed => "text-bg-success",
+		DotnetState.InstalledButStalePath => "text-bg-warning",
+		{ } => "text-bg-danger",
+		_ => "text-bg-secondary",
+	};
+
+	private static string PathSourceKey(DotnetPathSource source) => source switch
+	{
+		DotnetPathSource.Configured => "Configured",
+		DotnetPathSource.DotnetRoot => "DotnetRoot",
+		DotnetPathSource.Path => "Path",
+		DotnetPathSource.ProgramFiles => "ProgramFiles",
+		DotnetPathSource.Registry => "Registry",
+		_ => "None",
+	};
+}

@@ -45,10 +45,36 @@ public interface IDotnetCli
     Task<CliResult> RunToResultAsync(IReadOnlyList<string> arguments, CliOptions? options, Action<CliLine>? onOutput, CancellationToken cancellationToken = default);
 }
 
+/// <summary>Where a resolved dotnet executable came from.</summary>
+public enum DotnetPathSource
+{
+    None,
+
+    /// <summary>The path configured by the user in the settings.</summary>
+    Configured,
+
+    /// <summary><c>DOTNET_ROOT</c> or <c>DOTNET_ROOT(x86)</c>.</summary>
+    DotnetRoot,
+
+    /// <summary>An entry on PATH.</summary>
+    Path,
+
+    /// <summary>The default install location below Program Files.</summary>
+    ProgramFiles,
+
+    /// <summary>The install location recorded in the registry.</summary>
+    Registry,
+}
+
+public sealed record ResolvedDotnet(string Path, DotnetPathSource Source);
+
 public interface IDotnetLocator
 {
     /// <summary>Resolves the dotnet executable, preferring an explicit user configured path.</summary>
     string Resolve(string? preferredPath = null);
+
+    /// <summary>Resolves the dotnet executable together with where that path came from.</summary>
+    ResolvedDotnet ResolveDetailed(string? preferredPath = null);
 
     bool IsValid(string? path);
 }

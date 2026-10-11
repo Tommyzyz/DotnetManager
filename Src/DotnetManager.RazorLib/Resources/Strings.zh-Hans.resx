@@ -189,4 +189,45 @@
   <data name="Settings.Reset" xml:space="preserve"><value>重置</value></data>
   <data name="Settings.AutoCheckUpdates" xml:space="preserve"><value>自动检查工具更新</value></data>
   <data name="Settings.OpenSettingsFile" xml:space="preserve"><value>打开设置文件</value></data>
+
+  <data name="Env.CardTitle" xml:space="preserve"><value>.NET 环境</value></data>
+  <data name="Env.State.Checking" xml:space="preserve"><value>检测中…</value></data>
+  <data name="Env.State.Unknown" xml:space="preserve"><value>检测失败</value></data>
+  <data name="Env.State.NotInstalled" xml:space="preserve"><value>未检测到 .NET</value></data>
+  <data name="Env.State.RuntimeOnly" xml:space="preserve"><value>仅有运行时，缺少 SDK</value></data>
+  <data name="Env.State.Installed" xml:space="preserve"><value>正常</value></data>
+  <data name="Env.State.StalePath" xml:space="preserve"><value>SDK 未被当前程序识别</value></data>
+  <data name="Env.State.VersionTooOld" xml:space="preserve"><value>缺少项目要求的 SDK 版本</value></data>
+
+  <data name="Env.Banner.NotInstalled" xml:space="preserve"><value>本机未找到任何 .NET 运行时或 SDK。需要安装 SDK 才能编译项目和管理工具。</value></data>
+  <data name="Env.Banner.RuntimeOnly" xml:space="preserve"><value>本机已安装 .NET 运行时，但没有 SDK。在安装 SDK 之前，dotnet build、发布和工具管理都无法使用。</value></data>
+  <data name="Env.Banner.StalePath" xml:space="preserve"><value>本机已安装 SDK，但当前进程沿用的是安装前的 PATH。现已改用注册表中记录的安装位置；安装完成后请重新检测。</value></data>
+  <data name="Env.Banner.VersionTooOld" xml:space="preserve"><value>global.json 要求 .NET SDK {0}，但本机没有安装该版本。</value></data>
+
+  <data name="Env.DownloadInstaller" xml:space="preserve"><value>下载安装包</value></data>
+  <data name="Env.OpenDownloadPage" xml:space="preserve"><value>打开下载页</value></data>
+  <data name="Env.Redetect" xml:space="preserve"><value>重新检测</value></data>
+  <data name="Env.Dismiss" xml:space="preserve"><value>不再提示</value></data>
+  <data name="Env.ShowBanner" xml:space="preserve"><value>显示提醒</value></data>
+
+  <data name="Env.Path" xml:space="preserve"><value>dotnet 路径</value></data>
+  <data name="Env.PathSource" xml:space="preserve"><value>来源</value></data>
+  <data name="Env.Sdks" xml:space="preserve"><value>已安装 SDK</value></data>
+  <data name="Env.RegistrySdks" xml:space="preserve"><value>注册表登记的 SDK</value></data>
+  <data name="Env.RequiredSdk" xml:space="preserve"><value>global.json 要求</value></data>
+  <data name="Env.Satisfied" xml:space="preserve"><value>已满足</value></data>
+  <data name="Env.NotSatisfied" xml:space="preserve"><value>未满足</value></data>
+
+  <data name="Env.Source.Configured" xml:space="preserve"><value>手动指定</value></data>
+  <data name="Env.Source.DotnetRoot" xml:space="preserve"><value>DOTNET_ROOT</value></data>
+  <data name="Env.Source.Path" xml:space="preserve"><value>PATH</value></data>
+  <data name="Env.Source.ProgramFiles" xml:space="preserve"><value>Program Files</value></data>
+  <data name="Env.Source.Registry" xml:space="preserve"><value>注册表</value></data>
+  <data name="Env.Source.None" xml:space="preserve"><value>未找到</value></data>
+
+  <data name="Env.Download.Start" xml:space="preserve"><value>正在下载官方 SDK 安装包…</value></data>
+  <data name="Env.Download.Done" xml:space="preserve"><value>安装包已保存到 {0} 并启动。请按向导完成安装，然后重新检测。</value></data>
+  <data name="Env.Download.Failed" xml:space="preserve"><value>下载失败：{0}</value></data>
+  <data name="Env.Download.OpenPage" xml:space="preserve"><value>已在浏览器中打开 {0}。</value></data>
+  <data name="Env.Redetect.Done" xml:space="preserve"><value>检测到 {0} 个 SDK、{1} 个运行时。</value></data>
 </root>

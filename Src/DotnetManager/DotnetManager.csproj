@@ -1,10 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
         <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
         <OutputType>WinExe</OutputType>
         <UseWPF>true</UseWPF>
+
+        <!-- Self-contained so the app can start on a machine with no .NET at all and then
+             guide the user to install the SDK. -->
+        <SelfContained>true</SelfContained>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+
+        <PublishAot>true</PublishAot>
+        <PublishTrimmed>false</PublishTrimmed>
+
+        <!-- Suppress WPF internal BAML/XAML helper & Blazor Router trimmer reflection warnings -->
+        <NoWarn>$(NoWarn);IL2067;IL2075;IL2110;IL2111</NoWarn>
 
         <!-- Project Options -->
         <Nullable>enable</Nullable>
