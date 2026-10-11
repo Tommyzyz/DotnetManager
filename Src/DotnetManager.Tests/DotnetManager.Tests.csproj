@@ -2,7 +2,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <!-- Matches the host application so the WPF services can be referenced as well. -->
         <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
         <UseWPF>true</UseWPF>
         <!-- <RuntimeIdentifier>win-x64</RuntimeIdentifier> -->
@@ -15,7 +14,6 @@
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
 
-        <!-- The host project is self-contained; tests run on the shared runtime instead. -->
         <SelfContained>false</SelfContained>
         <PublishAot>false</PublishAot>
     </PropertyGroup>
@@ -28,8 +26,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <!-- The tests only exercise the shared library, so they no longer depend on either host
+             project; that keeps them runnable after DotnetManager is retired. -->
         <ProjectReference Include="..\DotnetManager.RazorLib\DotnetManager.RazorLib.csproj" />
-        <ProjectReference Include="..\DotnetManager\DotnetManager.csproj" />
     </ItemGroup>
 
 </Project>

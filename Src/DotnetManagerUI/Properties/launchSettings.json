@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "DotnetManagerUI": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
