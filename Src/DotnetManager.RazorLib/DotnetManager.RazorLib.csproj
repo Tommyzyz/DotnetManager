@@ -16,6 +16,12 @@
         <SupportedPlatform Include="browser" />
     </ItemGroup>
 
+    <!-- The CLI output parsers stay internal (out of the public surface) but the test project
+         exercises them directly. -->
+    <ItemGroup>
+        <InternalsVisibleTo Include="DotnetManager.Tests" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.*" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />

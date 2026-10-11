@@ -68,22 +68,43 @@
         </Content>
     </ItemGroup>
 
-    <!-- Every rebuild changes the executable hash, and SmartScreen evaluates each unknown
-         hash again. Signing the output with the local development certificate (created by
-         New-DevCert.ps1, trusted only for the current user) keeps that prompt away.
-         The script exits without an error when no certificate exists, so this never breaks a build. -->
+    <!-- Local development signing.
+         Every rebuild produces a new executable hash and SmartScreen evaluates each unknown hash
+         again, so the freshly built executable is signed with a certificate trusted only on this
+         machine. Create it once per machine with (no admin rights needed):
+
+             $c = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=DotnetManager Dev' `
+                  -FriendlyName 'DotnetManager Local Dev Signing' -CertStoreLocation Cert:\CurrentUser\My `
+                  -NotAfter (Get-Date).AddYears(10)
+             foreach ($s in 'Root','TrustedPublisher') {
+                 $store = New-Object System.Security.Cryptography.X509Certificates.X509Store($s,'CurrentUser')
+                 $store.Open('ReadWrite'); $store.Add($c); $store.Close()
+             }
+
+         The signing runs inline so it cannot depend on a script file, and it never fails the build:
+         when the certificate or the output is missing it prints a note and carries on. -->
+    <PropertyGroup>
+        <DevSignCertificateSubject>CN=DotnetManager Dev</DevSignCertificateSubject>
+    </PropertyGroup>
+
     <Target Name="SignDevBuild" AfterTargets="Build" Condition="'$(OS)' == 'Windows_NT' and '$(TargetDir)' != ''">
-        <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\..\Sign-Dev.ps1&quot; -ExePath &quot;$(TargetDir)$(AssemblyName).exe&quot;"
+        <PropertyGroup>
+            <_DevSignTarget>$(TargetDir)$(AssemblyName).exe</_DevSignTarget>
+        </PropertyGroup>
+        <Exec Command="powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command &quot;$exe = '$(_DevSignTarget)'; $mod = Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Security'; if (Test-Path $mod) { Import-Module $mod -ErrorAction SilentlyContinue }; $cert = Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.Subject -eq '$(DevSignCertificateSubject)' -and $_.NotAfter -gt (Get-Date) } | Select-Object -First 1; if ($null -eq $cert) { Write-Host 'Sign-Dev: no code signing certificate, skipping'; exit 0 }; if (-not (Test-Path $exe)) { Write-Host 'Sign-Dev: executable not found, skipping'; exit 0 }; try { $result = Set-AuthenticodeSignature -FilePath $exe -Certificate $cert -HashAlgorithm SHA256; Write-Host ('Sign-Dev: ' + [System.IO.Path]::GetFileName($exe) + ' -> ' + $result.Status) } catch { Write-Host ('Sign-Dev: failed - ' + $_.Exception.Message) }&quot;"
               ContinueOnError="true"
               StandardOutputImportance="normal"
               StandardErrorImportance="normal" />
     </Target>
 
     <Target Name="SignDevPublish" AfterTargets="Publish" Condition="'$(OS)' == 'Windows_NT' and '$(PublishDir)' != ''">
-        <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\..\Sign-Dev.ps1&quot; -ExePath &quot;$(PublishDir)$(AssemblyName).exe&quot;"
+        <PropertyGroup>
+            <_DevSignPublishTarget>$([System.IO.Path]::GetFullPath('$(PublishDir)'))$(AssemblyName).exe</_DevSignPublishTarget>
+        </PropertyGroup>
+        <Exec Command="powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command &quot;$exe = '$(_DevSignPublishTarget)'; $mod = Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Security'; if (Test-Path $mod) { Import-Module $mod -ErrorAction SilentlyContinue }; $cert = Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.Subject -eq '$(DevSignCertificateSubject)' -and $_.NotAfter -gt (Get-Date) } | Select-Object -First 1; if ($null -eq $cert) { Write-Host 'Sign-Dev: no code signing certificate, skipping'; exit 0 }; if (-not (Test-Path $exe)) { Write-Host 'Sign-Dev: executable not found, skipping'; exit 0 }; try { $result = Set-AuthenticodeSignature -FilePath $exe -Certificate $cert -HashAlgorithm SHA256; Write-Host ('Sign-Dev: ' + [System.IO.Path]::GetFileName($exe) + ' -> ' + $result.Status) } catch { Write-Host ('Sign-Dev: failed - ' + $_.Exception.Message) }&quot;"
               ContinueOnError="true"
-              StandardOutputImportance="low"
-              StandardErrorImportance="low" />
+              StandardOutputImportance="normal"
+              StandardErrorImportance="normal" />
     </Target>
 
 </Project>

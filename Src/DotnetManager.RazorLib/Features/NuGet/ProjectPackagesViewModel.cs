@@ -380,6 +380,8 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
             return;
         }
 
+        var upgraded = false;
+
         await RunAsync(async () =>
         {
             var projectFile = item.ProjectPath;
@@ -410,14 +412,23 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
 
             if (result.Success)
             {
+                upgraded = true;
                 SetStatus($"成功升级 {item.PackageId} 为 {item.LatestVersion ?? "最新版"}。");
-                await RefreshAsync();
             }
             else
             {
                 SetStatus($"升级 {item.PackageId} 失败，详见运行输出。", isError: true);
             }
         });
+
+        // Reloading has to happen after the busy scope ends: RunAsync deliberately ignores
+        // re-entrant calls, so a refresh from inside the operation above would never run.
+        if (upgraded)
+        {
+            var message = StatusMessage;
+            await RefreshAsync();
+            SetStatus(message);
+        }
     }
 
     public async Task UpgradeAllAsync()
@@ -489,8 +500,13 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
             }
 
             SetStatus($"全部升级完成：成功 {succeeded} 个，失败 {failed} 个。", isError: failed > 0);
-            await RefreshAsync();
         });
+
+        // Same as the single-package upgrade: the reload must not run inside the busy scope.
+        var summary = StatusMessage;
+        var hadErrors = StatusIsError;
+        await RefreshAsync();
+        SetStatus(summary, hadErrors);
     }
 
     private List<string> DetermineTargetsToRun()
@@ -555,7 +571,7 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
             .ToList();
     }
 
-    private static void ParseBasePackagesJson(string stdout, List<ProjectPackageItem> resultList, string fallbackTarget)
+    internal static void ParseBasePackagesJson(string stdout, List<ProjectPackageItem> resultList, string fallbackTarget)
     {
         var json = ExtractJson(stdout);
         if (string.IsNullOrWhiteSpace(json))
@@ -662,7 +678,7 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
         }
     }
 
-    private static void MergeOutdatedPackagesJson(string stdout, List<ProjectPackageItem> packages)
+    internal static void MergeOutdatedPackagesJson(string stdout, List<ProjectPackageItem> packages)
     {
         var json = ExtractJson(stdout);
         if (string.IsNullOrWhiteSpace(json))
@@ -739,7 +755,7 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
         }
     }
 
-    private static void MergeVulnerablePackagesJson(string stdout, List<ProjectPackageItem> packages)
+    internal static void MergeVulnerablePackagesJson(string stdout, List<ProjectPackageItem> packages)
     {
         var json = ExtractJson(stdout);
         if (string.IsNullOrWhiteSpace(json))
@@ -839,7 +855,7 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
         }
     }
 
-    private static bool TryParseAndMerge(
+    internal static bool TryParseAndMerge(
         string stdout,
         List<ProjectPackageItem> packages,
         Action<string, List<ProjectPackageItem>> merge)
@@ -869,7 +885,7 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
         }
     }
 
-    private static string ExtractJson(string stdout)
+    internal static string ExtractJson(string stdout)
     {
         if (string.IsNullOrWhiteSpace(stdout))
         {

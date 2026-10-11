@@ -37,6 +37,10 @@ _ReSharper*/
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# ---- DSH 本地助手工作目录（临时脚本、运行日志等，仅本机使用）----
+.dsh/
+.dsh-*/
+
 # ---- 测试 / 覆盖率 / 基准测试目录 ----
 [Tt]est[Rr]esult*/
 test-results/
