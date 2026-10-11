@@ -1,9 +1,7 @@
 using DotnetManagerUI.Services;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Navigation;
 using Application = Microsoft.UI.Xaml.Application;
-using Frame = Microsoft.UI.Xaml.Controls.Frame;
 using Window = Microsoft.UI.Xaml.Window;
 
 namespace DotnetManagerUI
@@ -24,8 +22,8 @@ namespace DotnetManagerUI
             this.InitializeComponent();
         }
 
-        /// <summary>The shell window. The dialogs and the caption theme need its handle.</summary>
-        public static Window? MainWindow { get; private set; }
+        /// <summary>The shell window. The shell dialogs need its handle.</summary>
+        public static Window? Shell { get; private set; }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -43,34 +41,15 @@ namespace DotnetManagerUI
                 return;
             }
 
-            window ??= new Window { Title = ".NET Manager" };
-            MainWindow = window;
-            window.ExtendsContentIntoTitleBar = false;
+            window ??= new MainWindow();
+            Shell = window;
 
             if (window.AppWindow.Presenter is OverlappedPresenter presenter)
             {
-                //presenter.SetBorderAndTitleBar(false, false);
                 presenter.Maximize();
             }
 
-            if (window.Content is not Frame rootFrame)
-            {
-                rootFrame = new Frame();
-                rootFrame.NavigationFailed += OnNavigationFailed;
-                window.Content = rootFrame;
-            }
-
-            // Native WinUI caption colors; it repaints itself when the app theme changes.
-            CaptionTheme.Attach(window);
-
-            _ = rootFrame.Navigate(typeof(MainPage), e.Arguments);
             window.Activate();
-        }
-
-        /// <summary>Invoked when Navigation to a certain page fails</summary>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception($"Failed to load Page - {e.SourcePageType.FullName}");
         }
 
         private static int RunHeadless(string[] arguments)

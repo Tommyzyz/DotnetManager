@@ -1,0 +1,33 @@
+@*
+	Bridge between the native shell menu and the Blazor router. Renders nothing; it only turns an
+	IShellNavigation request (raised by the WinUI NavigationView) into a real route change.
+
+	The service is looked up through the container instead of @inject so that a host without a
+	native shell can leave it unregistered.
+*@
+@implements IDisposable
+@inject IServiceProvider Services
+@inject NavigationManager Navigation
+
+@code {
+	private IShellNavigation? shell;
+
+	protected override void OnInitialized()
+	{
+		shell = Services.GetService(typeof(IShellNavigation)) as IShellNavigation;
+		if (shell is not null)
+		{
+			shell.Requested += HandleRequested;
+		}
+	}
+
+	public void Dispose()
+	{
+		if (shell is not null)
+		{
+			shell.Requested -= HandleRequested;
+		}
+	}
+
+	private void HandleRequested(string route) => _ = InvokeAsync(() => Navigation.NavigateTo(route));
+}

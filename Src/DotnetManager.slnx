@@ -1,5 +1,4 @@
 <Solution>
-    <Project Path="DotnetManager/DotnetManager.csproj" />
     <Project Path="DotnetManager.RazorLib/DotnetManager.RazorLib.csproj" />
     <Project Path="DotnetManager.Tests/DotnetManager.Tests.csproj" />
     <Project Path="DotnetManagerUI/DotnetManagerUI.csproj">

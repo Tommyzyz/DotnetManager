@@ -179,7 +179,7 @@ public sealed class DialogService : IDialogService
         {
             try
             {
-                return App.MainWindow is { } window
+                return App.Shell is { } window
                     ? Microsoft.UI.Win32Interop.GetWindowFromWindowId(window.AppWindow.Id)
                     : 0;
             }
@@ -196,7 +196,7 @@ public sealed class DialogService : IDialogService
     /// </summary>
     private static T Invoke<T>(Func<T> action)
     {
-        var queue = App.MainWindow?.DispatcherQueue;
+        var queue = App.Shell?.DispatcherQueue;
         if (queue is null || queue.HasThreadAccess)
         {
             return action();

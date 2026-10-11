@@ -47,6 +47,7 @@ public static class Startup
         services.AddSingleton<IElevationService, ElevationService>();
         services.AddSingleton<IEnvironmentService, EnvironmentService>();
         services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<IShellNavigation, ShellNavigation>();
         services.AddSingleton<INuGetSettingsService, NuGetSettingsService>();
         services.AddSingleton<INuGetPackageQuery, NuGetPackageQuery>();
         services.AddSingleton<ICacheInspector, CacheInspector>();
