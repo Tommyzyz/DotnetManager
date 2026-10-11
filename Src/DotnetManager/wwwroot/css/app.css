@@ -710,6 +710,59 @@ div.splash {
     color: var(--text-faint);
 }
 
+/* ==================== project package dependencies ================= */
+
+.stat-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card.active-stat {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.stat-card.stat-danger {
+    background-color: var(--danger-bg);
+    border-color: rgba(192, 57, 47, 0.35);
+}
+
+.stat-card.stat-warning {
+    background-color: var(--warn-bg);
+    border-color: rgba(154, 101, 19, 0.35);
+}
+
+/* Red highlight for vulnerable packages */
+table.package-table tr.row-vulnerable td {
+    background-color: var(--danger-bg) !important;
+}
+
+table.package-table tr.row-vulnerable:hover td {
+    background-color: #fbdad6 !important;
+}
+
+table.package-table tr.row-vulnerable td:first-child {
+    border-left: 3px solid var(--danger);
+}
+
+/* Warm highlight for outdated packages */
+table.package-table tr.row-outdated td {
+    background-color: var(--warn-bg) !important;
+}
+
+table.package-table tr.row-outdated:hover td {
+    background-color: #fce7c7 !important;
+}
+
+table.package-table tr.row-outdated td:first-child {
+    border-left: 3px solid var(--warn);
+}
+
 /* ======================== reduced motion ========================= */
 
 @media (prefers-reduced-motion: reduce) {

@@ -57,6 +57,7 @@ public static class Startup
         services.AddTransient<GlobalToolsViewModel>();
         services.AddTransient<ToolSearchViewModel>();
         services.AddTransient<PackageSourcesViewModel>();
+        services.AddTransient<ProjectPackagesViewModel>();
         services.AddTransient<NuGetCachesViewModel>();
         services.AddTransient<NuGetConfigFilesViewModel>();
         services.AddTransient<WorkloadsViewModel>();

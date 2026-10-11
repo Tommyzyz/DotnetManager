@@ -230,4 +230,52 @@
   <data name="Env.Download.Failed" xml:space="preserve"><value>下载失败：{0}</value></data>
   <data name="Env.Download.OpenPage" xml:space="preserve"><value>已在浏览器中打开 {0}。</value></data>
   <data name="Env.Redetect.Done" xml:space="preserve"><value>检测到 {0} 个 SDK、{1} 个运行时。</value></data>
+
+  <data name="Nav.ProjectPackages" xml:space="preserve"><value>项目依赖与安全</value></data>
+  <data name="ProjectPackages.Title" xml:space="preserve"><value>项目依赖与过期检查</value></data>
+  <data name="ProjectPackages.TargetProject" xml:space="preserve"><value>目标项目 / 解决方案</value></data>
+  <data name="ProjectPackages.AllProjects" xml:space="preserve"><value>全部项目 (扫描所有)</value></data>
+  <data name="ProjectPackages.SelectFile" xml:space="preserve"><value>选择项目文件…</value></data>
+  <data name="ProjectPackages.CheckAll" xml:space="preserve"><value>全面检查</value></data>
+  <data name="ProjectPackages.CheckOutdated" xml:space="preserve"><value>检查新版本</value></data>
+  <data name="ProjectPackages.CheckVulnerabilities" xml:space="preserve"><value>检查安全漏洞</value></data>
+  <data name="ProjectPackages.IncludeTransitive" xml:space="preserve"><value>包含传递依赖</value></data>
+  <data name="ProjectPackages.IncludePrerelease" xml:space="preserve"><value>包含预览版本</value></data>
+  <data name="ProjectPackages.UpgradeAll" xml:space="preserve"><value>一键升级全部</value></data>
+  <data name="ProjectPackages.Upgrade" xml:space="preserve"><value>升级</value></data>
+  <data name="ProjectPackages.Upgrading" xml:space="preserve"><value>升级中…</value></data>
+  <data name="ProjectPackages.TotalPackages" xml:space="preserve"><value>总包数</value></data>
+  <data name="ProjectPackages.VulnerableCount" xml:space="preserve"><value>已知安全漏洞 (CVE)</value></data>
+  <data name="ProjectPackages.OutdatedCount" xml:space="preserve"><value>有可用新版本</value></data>
+  <data name="ProjectPackages.UpToDateCount" xml:space="preserve"><value>最新状态</value></data>
+  <data name="ProjectPackages.FilterAll" xml:space="preserve"><value>全部</value></data>
+  <data name="ProjectPackages.FilterVulnerable" xml:space="preserve"><value>仅漏洞</value></data>
+  <data name="ProjectPackages.FilterOutdated" xml:space="preserve"><value>仅过期</value></data>
+  <data name="ProjectPackages.FilterUpToDate" xml:space="preserve"><value>仅最新</value></data>
+  <data name="ProjectPackages.FilterTopLevel" xml:space="preserve"><value>仅顶级引用</value></data>
+  <data name="ProjectPackages.FilterTransitive" xml:space="preserve"><value>仅传递引用</value></data>
+  <data name="ProjectPackages.SearchPlaceholder" xml:space="preserve"><value>按包名、CVE 编号或项目搜索…</value></data>
+  <data name="ProjectPackages.NoPackagesFound" xml:space="preserve"><value>未找到任何引用的 NuGet 包。请选择有效的项目或解决方案目录。</value></data>
+  <data name="ProjectPackages.NoProjectsFound" xml:space="preserve"><value>此目录下未找到任何 .csproj 或 .sln 文件。</value></data>
+  <data name="ProjectPackages.AutoReferenced" xml:space="preserve"><value>自动引用</value></data>
+  <data name="ProjectPackages.Transitive" xml:space="preserve"><value>传递依赖</value></data>
+  <data name="ProjectPackages.TopLevel" xml:space="preserve"><value>顶级引用</value></data>
+  <data name="ProjectPackages.RequestedVersion" xml:space="preserve"><value>请求版本</value></data>
+  <data name="ProjectPackages.ResolvedVersion" xml:space="preserve"><value>解析版本</value></data>
+  <data name="ProjectPackages.LatestVersion" xml:space="preserve"><value>最新版本</value></data>
+  <data name="ProjectPackages.Vulnerabilities" xml:space="preserve"><value>安全漏洞 (CVE)</value></data>
+  <data name="ProjectPackages.ConfirmUpgradeAll" xml:space="preserve"><value>确认将检测到的 {0} 个过期包升级至最新版本吗？</value></data>
+  <data name="ProjectPackages.UpgradeSuccess" xml:space="preserve"><value>已成功升级 {0} 至 {1}。</value></data>
+  <data name="ProjectPackages.UpgradeFailed" xml:space="preserve"><value>升级 {0} 失败，详见输出面板。</value></data>
+  <data name="ProjectPackages.UpgradeAllFinished" xml:space="preserve"><value>全部升级完成：成功 {0} 个，失败 {1} 个。</value></data>
+
+  <data name="ProjectPackages.StatusVulnerable" xml:space="preserve"><value>漏洞</value></data>
+  <data name="ProjectPackages.StatusOutdated" xml:space="preserve"><value>更新</value></data>
+  <data name="ProjectPackages.StatusLatest" xml:space="preserve"><value>最新</value></data>
+  <data name="ProjectPackages.StatusSafe" xml:space="preserve"><value>安全</value></data>
+  <data name="ProjectPackages.Advisory" xml:space="preserve"><value>报告</value></data>
+  <data name="ProjectPackages.UpgradeTitle" xml:space="preserve"><value>升级此包到最新版本</value></data>
+  <data name="ProjectPackages.VulnerableTitle" xml:space="preserve"><value>存在已知安全漏洞</value></data>
+  <data name="ProjectPackages.OutdatedTitle" xml:space="preserve"><value>有新版本可用</value></data>
+  <data name="ProjectPackages.BadgeTransitive" xml:space="preserve"><value>传递</value></data>
 </root>

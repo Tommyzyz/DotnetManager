@@ -68,4 +68,22 @@
         </Content>
     </ItemGroup>
 
+    <!-- Every rebuild changes the executable hash, and SmartScreen evaluates each unknown
+         hash again. Signing the output with the local development certificate (created by
+         New-DevCert.ps1, trusted only for the current user) keeps that prompt away.
+         The script exits without an error when no certificate exists, so this never breaks a build. -->
+    <Target Name="SignDevBuild" AfterTargets="Build" Condition="'$(OS)' == 'Windows_NT' and '$(TargetDir)' != ''">
+        <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\..\Sign-Dev.ps1&quot; -ExePath &quot;$(TargetDir)$(AssemblyName).exe&quot;"
+              ContinueOnError="true"
+              StandardOutputImportance="normal"
+              StandardErrorImportance="normal" />
+    </Target>
+
+    <Target Name="SignDevPublish" AfterTargets="Publish" Condition="'$(OS)' == 'Windows_NT' and '$(PublishDir)' != ''">
+        <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\..\Sign-Dev.ps1&quot; -ExePath &quot;$(PublishDir)$(AssemblyName).exe&quot;"
+              ContinueOnError="true"
+              StandardOutputImportance="low"
+              StandardErrorImportance="low" />
+    </Target>
+
 </Project>

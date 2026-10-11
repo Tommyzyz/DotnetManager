@@ -230,4 +230,52 @@
   <data name="Env.Download.Failed" xml:space="preserve"><value>Download failed: {0}</value></data>
   <data name="Env.Download.OpenPage" xml:space="preserve"><value>Opening {0} in your browser.</value></data>
   <data name="Env.Redetect.Done" xml:space="preserve"><value>Detected {0} SDK(s) and {1} runtime(s).</value></data>
+
+  <data name="Nav.ProjectPackages" xml:space="preserve"><value>Dependencies &amp; Security</value></data>
+  <data name="ProjectPackages.Title" xml:space="preserve"><value>Project Dependencies &amp; Outdated Check</value></data>
+  <data name="ProjectPackages.TargetProject" xml:space="preserve"><value>Target Project / Solution</value></data>
+  <data name="ProjectPackages.AllProjects" xml:space="preserve"><value>All Projects (Scan All)</value></data>
+  <data name="ProjectPackages.SelectFile" xml:space="preserve"><value>Select Project File…</value></data>
+  <data name="ProjectPackages.CheckAll" xml:space="preserve"><value>Full Check</value></data>
+  <data name="ProjectPackages.CheckOutdated" xml:space="preserve"><value>Check Updates</value></data>
+  <data name="ProjectPackages.CheckVulnerabilities" xml:space="preserve"><value>Check Vulnerabilities</value></data>
+  <data name="ProjectPackages.IncludeTransitive" xml:space="preserve"><value>Include Transitive</value></data>
+  <data name="ProjectPackages.IncludePrerelease" xml:space="preserve"><value>Include Prerelease</value></data>
+  <data name="ProjectPackages.UpgradeAll" xml:space="preserve"><value>Upgrade All</value></data>
+  <data name="ProjectPackages.Upgrade" xml:space="preserve"><value>Upgrade</value></data>
+  <data name="ProjectPackages.Upgrading" xml:space="preserve"><value>Upgrading…</value></data>
+  <data name="ProjectPackages.TotalPackages" xml:space="preserve"><value>Total Packages</value></data>
+  <data name="ProjectPackages.VulnerableCount" xml:space="preserve"><value>Known Vulnerabilities (CVE)</value></data>
+  <data name="ProjectPackages.OutdatedCount" xml:space="preserve"><value>New Versions Available</value></data>
+  <data name="ProjectPackages.UpToDateCount" xml:space="preserve"><value>Up to Date</value></data>
+  <data name="ProjectPackages.FilterAll" xml:space="preserve"><value>All</value></data>
+  <data name="ProjectPackages.FilterVulnerable" xml:space="preserve"><value>Vulnerable Only</value></data>
+  <data name="ProjectPackages.FilterOutdated" xml:space="preserve"><value>Outdated Only</value></data>
+  <data name="ProjectPackages.FilterUpToDate" xml:space="preserve"><value>Up to Date Only</value></data>
+  <data name="ProjectPackages.FilterTopLevel" xml:space="preserve"><value>Top-Level Only</value></data>
+  <data name="ProjectPackages.FilterTransitive" xml:space="preserve"><value>Transitive Only</value></data>
+  <data name="ProjectPackages.SearchPlaceholder" xml:space="preserve"><value>Search by package name, CVE, or project…</value></data>
+  <data name="ProjectPackages.NoPackagesFound" xml:space="preserve"><value>No referenced NuGet packages found. Please select a valid project or solution.</value></data>
+  <data name="ProjectPackages.NoProjectsFound" xml:space="preserve"><value>No .csproj or .sln files found in this directory.</value></data>
+  <data name="ProjectPackages.AutoReferenced" xml:space="preserve"><value>Auto-Referenced</value></data>
+  <data name="ProjectPackages.Transitive" xml:space="preserve"><value>Transitive</value></data>
+  <data name="ProjectPackages.TopLevel" xml:space="preserve"><value>Top-Level</value></data>
+  <data name="ProjectPackages.RequestedVersion" xml:space="preserve"><value>Requested</value></data>
+  <data name="ProjectPackages.ResolvedVersion" xml:space="preserve"><value>Resolved</value></data>
+  <data name="ProjectPackages.LatestVersion" xml:space="preserve"><value>Latest</value></data>
+  <data name="ProjectPackages.Vulnerabilities" xml:space="preserve"><value>Vulnerabilities (CVE)</value></data>
+  <data name="ProjectPackages.ConfirmUpgradeAll" xml:space="preserve"><value>Upgrade {0} outdated package(s) to the latest version?</value></data>
+  <data name="ProjectPackages.UpgradeSuccess" xml:space="preserve"><value>Successfully upgraded {0} to {1}.</value></data>
+  <data name="ProjectPackages.UpgradeFailed" xml:space="preserve"><value>Failed to upgrade {0}. See output panel for details.</value></data>
+  <data name="ProjectPackages.UpgradeAllFinished" xml:space="preserve"><value>Upgrade complete: {0} succeeded, {1} failed.</value></data>
+
+  <data name="ProjectPackages.StatusVulnerable" xml:space="preserve"><value>VULN</value></data>
+  <data name="ProjectPackages.StatusOutdated" xml:space="preserve"><value>UPDATE</value></data>
+  <data name="ProjectPackages.StatusLatest" xml:space="preserve"><value>LATEST</value></data>
+  <data name="ProjectPackages.StatusSafe" xml:space="preserve"><value>Secure</value></data>
+  <data name="ProjectPackages.Advisory" xml:space="preserve"><value>Advisory</value></data>
+  <data name="ProjectPackages.UpgradeTitle" xml:space="preserve"><value>Upgrade this package to the latest version</value></data>
+  <data name="ProjectPackages.VulnerableTitle" xml:space="preserve"><value>Known security vulnerability</value></data>
+  <data name="ProjectPackages.OutdatedTitle" xml:space="preserve"><value>A newer version is available</value></data>
+  <data name="ProjectPackages.BadgeTransitive" xml:space="preserve"><value>trans</value></data>
 </root>
