@@ -8,9 +8,6 @@
 	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
 		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
 	</button>
-	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.PickDirectoryAsync">
-		<i class="fa-solid fa-folder-open"></i> @L["Common.SelectFolder"]
-	</button>
 	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy || ViewModel.HasManifest" @onclick="ViewModel.CreateManifestAsync">
 		<i class="fa-solid fa-plus"></i> @L["LocalTools.CreateManifest"]
 	</button>
@@ -29,10 +26,7 @@
 	</button>
 </div>
 
-<div class="mb-3">
-	<label class="hint" for="workingDirectory">@L["Common.WorkingDirectory"]</label>
-	<input id="workingDirectory" class="form-control form-control-sm path-box" readonly value="@ViewModel.WorkingDirectory" />
-</div>
+<ProjectTargetBar />
 
 @if (ViewModel.ManifestPaths.Count > 1)
 {

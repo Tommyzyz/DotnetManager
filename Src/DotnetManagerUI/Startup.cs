@@ -40,6 +40,9 @@ public static class Startup
     {
         services.AddSingleton<LocalizationState>();
         services.AddSingleton<UiLocalizer>();
+
+        // The single "current project" every project-scoped page reads and writes.
+        services.AddSingleton<ProjectTarget>();
         services.AddSingleton<IActivityLog, ActivityLog>();
         services.AddSingleton<IAppSettingsStore, AppSettingsStore>();
         services.AddSingleton<IDotnetLocator, DotnetLocator>();

@@ -27,12 +27,11 @@
 	</div>
 	@if (!ViewModel.InstallGlobally)
 	{
-		<input class="form-control form-control-sm path-box" style="max-width: 26rem" readonly value="@ViewModel.InstallDirectory" />
-		<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickInstallDirectoryAsync">
-			<i class="fa-solid fa-folder-open"></i> @L["ToolSearch.InstallDirectory"]
-		</button>
+		<span class="hint">@L["ToolSearch.InstallDirectory"]</span>
 	}
 </div>
+
+<ProjectTargetBar />
 
 <OperationPanel HasOutput="@ViewModel.HasOutput"
 				OutputText="@ViewModel.OutputText"

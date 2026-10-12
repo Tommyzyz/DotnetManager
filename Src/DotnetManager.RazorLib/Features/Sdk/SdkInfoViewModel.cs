@@ -5,11 +5,11 @@ using DotnetManager.RazorLib.Features.Common;
 namespace DotnetManager.RazorLib.Features.Sdk;
 
 /// <summary>Shows installed SDKs and runtimes, runs <c>dotnet sdk check</c> and edits <c>global.json</c>.</summary>
-public sealed partial class SdkInfoViewModel : ViewModelBase
+public sealed partial class SdkInfoViewModel : ViewModelBase, IDisposable
 {
     private readonly ISdkService _sdk;
     private readonly IDialogService _dialogs;
-    private readonly IAppSettingsStore _appSettings;
+    private readonly ProjectTarget _target;
     private readonly IDotnetCli _cli;
 
     [ObservableProperty]
@@ -25,9 +25,6 @@ public sealed partial class SdkInfoViewModel : ViewModelBase
     private string checkText = string.Empty;
 
     [ObservableProperty]
-    private string globalJsonDirectory = string.Empty;
-
-    [ObservableProperty]
     private string globalJsonPath = string.Empty;
 
     [ObservableProperty]
@@ -39,17 +36,29 @@ public sealed partial class SdkInfoViewModel : ViewModelBase
     public SdkInfoViewModel(
         ISdkService sdk,
         IDialogService dialogs,
-        IAppSettingsStore appSettings,
+        ProjectTarget target,
         IDotnetCli cli)
     {
         _sdk = sdk;
         _dialogs = dialogs;
-        _appSettings = appSettings;
+        _target = target;
         _cli = cli;
-        globalJsonDirectory = appSettings.Current.LastWorkingDirectory ?? Environment.CurrentDirectory;
+
+        _target.Changed += HandleTargetChanged;
     }
 
     protected override IDotnetCli Cli => _cli;
+
+    /// <summary>The shared project target; global.json is looked up below it.</summary>
+    public string GlobalJsonDirectory => _target.Directory;
+
+    public void Dispose() => _target.Changed -= HandleTargetChanged;
+
+    private void HandleTargetChanged()
+    {
+        OnPropertyChanged(nameof(GlobalJsonDirectory));
+        _ = RefreshGlobalJsonAsync();
+    }
 
     public IReadOnlyList<string> RollForwardOptions { get; } =
     [
@@ -78,20 +87,6 @@ public sealed partial class SdkInfoViewModel : ViewModelBase
             CheckText = result.CombinedOutput;
             SetStatus(result.Success ? "SDK check finished." : "SDK check failed.", !result.Success);
         }, clearOutput: false);
-    }
-
-    public async Task PickGlobalJsonDirectoryAsync()
-    {
-        var picked = _dialogs.PickFolder("Select the directory for global.json", GlobalJsonDirectory);
-        if (string.IsNullOrWhiteSpace(picked))
-        {
-            return;
-        }
-
-        GlobalJsonDirectory = picked;
-        _appSettings.Current.LastWorkingDirectory = picked;
-        await _appSettings.SaveAsync();
-        await RefreshGlobalJsonAsync();
     }
 
     public async Task WriteGlobalJsonAsync()

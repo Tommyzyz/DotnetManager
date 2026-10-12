@@ -4,6 +4,9 @@
 
 <h1>@L["Nav.Sdk"]</h1>
 
+@* global.json is written into the shared project target, so the target is shown here. *@
+<ProjectTargetBar />
+
 <div class="toolbar">
 	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
 		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["Common.Refresh"]
@@ -63,8 +66,6 @@
 	<div class="card-body">
 		<h2 class="h6 card-title">global.json</h2>
 		<div class="toolbar">
-			<input class="form-control form-control-sm path-box" style="max-width: 24rem" readonly value="@ViewModel.GlobalJsonDirectory" />
-			<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickGlobalJsonDirectoryAsync">@L["Common.Browse"]</button>
 			<select class="form-select form-select-sm" style="max-width: 12rem" value="@ViewModel.GlobalJsonVersion" @onchange="OnVersionChanged">
 				@foreach (var sdk in ViewModel.Sdks)
 				{

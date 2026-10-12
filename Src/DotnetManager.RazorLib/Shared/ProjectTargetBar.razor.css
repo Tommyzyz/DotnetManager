@@ -1,0 +1,39 @@
+/* The shared project target strip shown by every project-scoped page. */
+
+.target-bar {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.5rem 0.75rem;
+	margin-bottom: 1.15rem;
+	background-color: var(--surface-alt);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow-sm);
+}
+
+.target-bar-icon {
+	color: var(--accent);
+	font-size: 0.95rem;
+}
+
+.target-bar-label {
+	color: var(--text-muted);
+	font-size: 0.755rem;
+	font-weight: 640;
+	text-transform: uppercase;
+	letter-spacing: 0.045em;
+	white-space: nowrap;
+}
+
+.target-bar input {
+	flex: 1 1 auto;
+	min-width: 12rem;
+	background-color: var(--surface);
+}
+
+@media (max-width: 900px) {
+	.target-bar {
+		flex-wrap: wrap;
+	}
+}

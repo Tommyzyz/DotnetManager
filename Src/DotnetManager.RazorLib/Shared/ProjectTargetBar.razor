@@ -1,0 +1,39 @@
+@*
+	The one "current project" every project-scoped page works against: changing it here changes it for
+	LocalTools, ProjectPackages, ToolSearch and the global.json editor at the same time.
+*@
+@implements IDisposable
+@inject ProjectTarget Target
+@inject IDialogService Dialogs
+@inject UiLocalizer L
+
+<div class="target-bar">
+	<i class="fa-solid fa-folder-tree target-bar-icon"></i>
+	<span class="target-bar-label">@L["Common.CurrentProject"]</span>
+	<input class="form-control form-control-sm path-box" readonly value="@Target.Directory" title="@Target.Directory" />
+	<button class="btn btn-outline-secondary btn-sm" @onclick="PickAsync">
+		<i class="fa-solid fa-folder-open"></i> @L["Common.SelectFolder"]
+	</button>
+	<button class="btn btn-outline-secondary btn-sm" @onclick="Reveal">
+		<i class="fa-solid fa-up-right-from-square"></i> @L["Common.OpenFolder"]
+	</button>
+</div>
+
+@code {
+	protected override void OnInitialized() => Target.PropertyChanged += HandleChanged;
+
+	public void Dispose() => Target.PropertyChanged -= HandleChanged;
+
+	private void HandleChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) =>
+		_ = InvokeAsync(StateHasChanged);
+
+	private async Task PickAsync() => await Target.PickAsync(L["Common.ChangeProject"]);
+
+	private void Reveal()
+	{
+		if (!string.IsNullOrWhiteSpace(Target.Directory))
+		{
+			Dialogs.RevealInShell(Target.Directory);
+		}
+	}
+}

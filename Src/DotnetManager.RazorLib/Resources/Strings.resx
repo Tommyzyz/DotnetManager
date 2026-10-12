@@ -63,6 +63,8 @@
   <data name="Common.Unknown" xml:space="preserve"><value>Unknown</value></data>
   <data name="Common.NotAvailable" xml:space="preserve"><value>n/a</value></data>
   <data name="Common.SelectFolder" xml:space="preserve"><value>Select folder</value></data>
+  <data name="Common.CurrentProject" xml:space="preserve"><value>Project</value></data>
+  <data name="Common.ChangeProject" xml:space="preserve"><value>Select the project directory</value></data>
   <data name="Common.WorkingDirectory" xml:space="preserve"><value>Working directory</value></data>
   <data name="Common.AdminRequired" xml:space="preserve"><value>Administrator rights are required for this operation.</value></data>
   <data name="Common.ElevationDenied" xml:space="preserve"><value>The elevation prompt was declined or failed.</value></data>
@@ -94,6 +96,7 @@
   <data name="Common.OperationCancelled" xml:space="preserve"><value>Operation cancelled.</value></data>
 
   <data name="Nav.GroupTools" xml:space="preserve"><value>Tools</value></data>
+  <data name="Nav.GroupProject" xml:space="preserve"><value>Project</value></data>
   <data name="Nav.GroupNuGet" xml:space="preserve"><value>NuGet</value></data>
   <data name="Nav.GroupEnvironment" xml:space="preserve"><value>Environment</value></data>
   <data name="Nav.Overview" xml:space="preserve"><value>Overview</value></data>
@@ -182,6 +185,7 @@
   <data name="Workloads.UpdateAll" xml:space="preserve"><value>Update all</value></data>
   <data name="Workloads.Repair" xml:space="preserve"><value>Repair</value></data>
   <data name="Workloads.RunElevated" xml:space="preserve"><value>Run elevated</value></data>
+  <data name="Workloads.PickInstallable" xml:space="preserve"><value>Select a workload to install...</value></data>
 
   <data name="Settings.ResolvedPath" xml:space="preserve"><value>In use</value></data>
   <data name="Settings.ResolvedPathHint" xml:space="preserve"><value>Leave empty to use the dotnet found on PATH</value></data>

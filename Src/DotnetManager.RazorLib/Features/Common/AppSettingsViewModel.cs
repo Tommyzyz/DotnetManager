@@ -4,12 +4,13 @@ using DotnetManager.RazorLib.Abstractions;
 namespace DotnetManager.RazorLib.Features.Common;
 
 /// <summary>Application level settings: language, dotnet location and default directories.</summary>
-public sealed partial class AppSettingsViewModel : ViewModelBase
+public sealed partial class AppSettingsViewModel : ViewModelBase, IDisposable
 {
     private readonly IAppSettingsStore _settings;
     private readonly IDotnetLocator _locator;
     private readonly IDialogService _dialogs;
     private readonly LocalizationState _localization;
+    private readonly ProjectTarget _target;
     private readonly IDotnetCli _cli;
 
     [ObservableProperty]
@@ -32,20 +33,29 @@ public sealed partial class AppSettingsViewModel : ViewModelBase
         IDotnetLocator locator,
         IDialogService dialogs,
         LocalizationState localization,
+        ProjectTarget target,
         IDotnetCli cli)
     {
         _settings = settings;
         _locator = locator;
         _dialogs = dialogs;
         _localization = localization;
+        _target = target;
         _cli = cli;
 
         language = settings.Current.Language;
         dotnetPath = settings.Current.DotnetPath ?? string.Empty;
-        defaultWorkingDirectory = settings.Current.LastWorkingDirectory ?? string.Empty;
+        defaultWorkingDirectory = target.Directory;
         includePrerelease = settings.Current.IncludePrerelease;
         autoCheckToolUpdates = settings.Current.AutoCheckToolUpdates;
+
+        _target.Changed += HandleTargetChanged;
     }
+
+    public void Dispose() => _target.Changed -= HandleTargetChanged;
+
+    /// <summary>Another page moved the project target, so the text box follows it.</summary>
+    private void HandleTargetChanged() => DefaultWorkingDirectory = _target.Directory;
 
     protected override IDotnetCli Cli => _cli;
 
@@ -62,15 +72,16 @@ public sealed partial class AppSettingsViewModel : ViewModelBase
         {
             _settings.Current.Language = Language;
             _settings.Current.DotnetPath = string.IsNullOrWhiteSpace(DotnetPath) ? null : DotnetPath.Trim();
-            _settings.Current.LastWorkingDirectory = string.IsNullOrWhiteSpace(DefaultWorkingDirectory)
-                ? null
-                : DefaultWorkingDirectory.Trim();
             _settings.Current.IncludePrerelease = IncludePrerelease;
             _settings.Current.AutoCheckToolUpdates = AutoCheckToolUpdates;
 
             // Switch language before any await so the change and its Changed event land in the calling flow.
             _localization.SetLanguage(Language);
             await _settings.SaveAsync();
+
+            // The working directory is the shared project target, so it is written through its one owner.
+            await _target.UseAsync(DefaultWorkingDirectory);
+
             SetStatus($"Saved to {SettingsFilePath}");
         });
     }
@@ -84,12 +95,11 @@ public sealed partial class AppSettingsViewModel : ViewModelBase
         }
     }
 
-    public void PickWorkingDirectory()
+    public async Task PickWorkingDirectoryAsync()
     {
-        var picked = _dialogs.PickFolder("Select the default working directory", DefaultWorkingDirectory);
-        if (!string.IsNullOrWhiteSpace(picked))
+        if (await _target.PickAsync("Select the default working directory"))
         {
-            DefaultWorkingDirectory = picked;
+            DefaultWorkingDirectory = _target.Directory;
         }
     }
 

@@ -63,6 +63,8 @@
   <data name="Common.Unknown" xml:space="preserve"><value>未知</value></data>
   <data name="Common.NotAvailable" xml:space="preserve"><value>不可用</value></data>
   <data name="Common.SelectFolder" xml:space="preserve"><value>选择目录</value></data>
+  <data name="Common.CurrentProject" xml:space="preserve"><value>当前项目</value></data>
+  <data name="Common.ChangeProject" xml:space="preserve"><value>选择项目目录</value></data>
   <data name="Common.WorkingDirectory" xml:space="preserve"><value>工作目录</value></data>
   <data name="Common.AdminRequired" xml:space="preserve"><value>此操作需要管理员权限。</value></data>
   <data name="Common.ElevationDenied" xml:space="preserve"><value>提权请求被拒绝或失败。</value></data>
@@ -94,6 +96,7 @@
   <data name="Common.OperationCancelled" xml:space="preserve"><value>操作已取消。</value></data>
 
   <data name="Nav.GroupTools" xml:space="preserve"><value>工具</value></data>
+  <data name="Nav.GroupProject" xml:space="preserve"><value>项目</value></data>
   <data name="Nav.GroupNuGet" xml:space="preserve"><value>NuGet</value></data>
   <data name="Nav.GroupEnvironment" xml:space="preserve"><value>环境</value></data>
   <data name="Nav.Overview" xml:space="preserve"><value>概览</value></data>
@@ -182,6 +185,7 @@
   <data name="Workloads.UpdateAll" xml:space="preserve"><value>全部更新</value></data>
   <data name="Workloads.Repair" xml:space="preserve"><value>修复</value></data>
   <data name="Workloads.RunElevated" xml:space="preserve"><value>以管理员身份运行</value></data>
+  <data name="Workloads.PickInstallable" xml:space="preserve"><value>选择要安装的工作负载...</value></data>
 
   <data name="Settings.ResolvedPath" xml:space="preserve"><value>实际使用</value></data>
   <data name="Settings.ResolvedPathHint" xml:space="preserve"><value>留空则使用 PATH 中的 dotnet</value></data>

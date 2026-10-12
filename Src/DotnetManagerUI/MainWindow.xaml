@@ -24,36 +24,45 @@
              the fallback labels and are replaced with the localized strings once the shell is live.
              OpenPaneLength is 220: the default 320 leaves too much empty space next to the
              (localized) item labels and squeezes the content area.
-             Items carry Height="36" so every row matches the pane toggle button's 36px row;
-             without it the items shrink to their 19px content height and the rows look uneven. -->
+             The built-in Settings entry (IsSettingsVisible) opens the settings page, so there is no
+             separate 设置 item here - the pane would otherwise list it twice. -->
         <NavigationView
             x:Name="NavView"
             Grid.Row="1"
             IsBackButtonVisible="Collapsed"
-            IsSettingsVisible="False"
+            IsSettingsVisible="True"
             IsTitleBarAutoPaddingEnabled="False"
-            PaneDisplayMode="Left"
             OpenPaneLength="220"
+            PaneDisplayMode="Left"
             SelectionChanged="OnNavigationSelectionChanged">
 
+            <!-- Row height for the menu items lives here, in one Resource. -->
+            <NavigationView.Resources>
+                <Style TargetType="NavigationViewItem">
+                    <Setter Property="Height" Value="36" />
+                </Style>
+            </NavigationView.Resources>
+
             <NavigationView.MenuItems>
+                <!-- Everything that works against the shared project target lives in this one group. -->
+                <NavigationViewItemHeader x:Name="GroupProject" Content="项目" />
+                <NavigationViewItem x:Name="ItemLocalTools" Content="本地工具" Icon="Folder" Tag="/tools/local" />
+                <NavigationViewItem x:Name="ItemProjectPackages" Content="项目依赖与安全" Icon="Library" Tag="/nuget/packages" />
+                <NavigationViewItem x:Name="ItemToolSearch" Content="工具搜索" Icon="Find" Tag="/tools/search" />
+                <NavigationViewItem x:Name="ItemSdk" Content="SDK 与运行时" Icon="Repair" Tag="/sdk" />
+
                 <NavigationViewItemHeader x:Name="GroupTools" Content="工具" />
-                <NavigationViewItem x:Name="ItemOverview" Content="概览" Icon="Home" Tag="/" Height="40" />
-                <NavigationViewItem x:Name="ItemLocalTools" Content="本地工具" Icon="Folder" Tag="/tools/local" Height="40" />
-                <NavigationViewItem x:Name="ItemGlobalTools" Content="全局工具" Icon="Globe" Tag="/tools/global" Height="40" />
-                <NavigationViewItem x:Name="ItemToolSearch" Content="工具搜索" Icon="Find" Tag="/tools/search" Height="40" />
+                <NavigationViewItem x:Name="ItemOverview" Content="概览" Icon="Home" Tag="/" />
+                <NavigationViewItem x:Name="ItemGlobalTools" Content="全局工具" Icon="Globe" Tag="/tools/global" />
 
                 <NavigationViewItemHeader x:Name="GroupNuGet" Content="NuGet" />
-                <NavigationViewItem x:Name="ItemProjectPackages" Content="项目依赖与安全" Icon="Library" Tag="/nuget/packages" Height="40" />
-                <NavigationViewItem x:Name="ItemPackageSources" Content="包源" Icon="List" Tag="/nuget/sources" Height="40" />
-                <NavigationViewItem x:Name="ItemNuGetCaches" Content="缓存" Icon="Save" Tag="/nuget/caches" Height="40" />
-                <NavigationViewItem x:Name="ItemNuGetConfig" Content="配置文件" Icon="Document" Tag="/nuget/config" Height="40" />
+                <NavigationViewItem x:Name="ItemPackageSources" Content="包源" Icon="List" Tag="/nuget/sources" />
+                <NavigationViewItem x:Name="ItemNuGetCaches" Content="缓存" Icon="Save" Tag="/nuget/caches" />
+                <NavigationViewItem x:Name="ItemNuGetConfig" Content="配置文件" Icon="Document" Tag="/nuget/config" />
 
                 <NavigationViewItemHeader x:Name="GroupEnvironment" Content="环境" />
-                <NavigationViewItem x:Name="ItemWorkloads" Content="工作负载" Icon="Manage" Tag="/workloads" Height="40" />
-                <NavigationViewItem x:Name="ItemSdk" Content="SDK 与运行时" Icon="Repair" Tag="/sdk" Height="40" />
-                <NavigationViewItem x:Name="ItemOutput" Content="运行日志" Icon="Page" Tag="/output" Height="40" />
-                <NavigationViewItem x:Name="ItemSettings" Content="设置" Icon="Setting" Tag="/settings" Height="40" />
+                <NavigationViewItem x:Name="ItemWorkloads" Content="工作负载" Icon="Manage" Tag="/workloads" />
+                <NavigationViewItem x:Name="ItemOutput" Content="运行日志" Icon="Page" Tag="/output" />
             </NavigationView.MenuItems>
 
             <Frame x:Name="ContentFrame" />

@@ -8,9 +8,6 @@
 	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
 		<i class="fa-solid fa-rotate @(ViewModel.IsBusy ? "fa-spin" : string.Empty)"></i> @L["ProjectPackages.CheckAll"]
 	</button>
-	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.PickDirectoryAsync">
-		<i class="fa-solid fa-folder-open"></i> @L["Common.SelectFolder"]
-	</button>
 	<button class="btn btn-outline-secondary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.PickFileAsync">
 		<i class="fa-solid fa-file-code"></i> @L["ProjectPackages.SelectFile"]
 	</button>
@@ -23,11 +20,9 @@
 	</button>
 </div>
 
+<ProjectTargetBar />
+
 <div class="row g-2 mb-3">
-	<div class="col-md-7">
-		<label class="hint" for="workingDirectory">@L["Common.WorkingDirectory"]</label>
-		<input id="workingDirectory" class="form-control form-control-sm path-box" readonly value="@ViewModel.WorkingDirectory" />
-	</div>
 	@if (ViewModel.AvailableTargets.Count > 1)
 	{
 		<div class="col-md-5">

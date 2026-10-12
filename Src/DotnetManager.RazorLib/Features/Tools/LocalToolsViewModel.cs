@@ -5,16 +5,14 @@ using DotnetManager.RazorLib.Features.Common;
 namespace DotnetManager.RazorLib.Features.Tools;
 
 /// <summary>Manages the tools declared in <c>.config/dotnet-tools.json</c> manifests.</summary>
-public sealed partial class LocalToolsViewModel : ViewModelBase
+public sealed partial class LocalToolsViewModel : ViewModelBase, IDisposable
 {
     private readonly ILocalToolManifestService _manifests;
     private readonly INuGetPackageQuery _query;
     private readonly IDialogService _dialogs;
     private readonly IAppSettingsStore _settings;
+    private readonly ProjectTarget _target;
     private readonly IDotnetCli _cli;
-
-    [ObservableProperty]
-    private string workingDirectory = string.Empty;
 
     [ObservableProperty]
     private IReadOnlyList<string> manifestPaths = [];
@@ -42,17 +40,31 @@ public sealed partial class LocalToolsViewModel : ViewModelBase
         INuGetPackageQuery query,
         IDialogService dialogs,
         IAppSettingsStore settings,
+        ProjectTarget target,
         IDotnetCli cli)
     {
         _manifests = manifests;
         _query = query;
         _dialogs = dialogs;
         _settings = settings;
+        _target = target;
         _cli = cli;
-        workingDirectory = settings.Current.LastWorkingDirectory ?? Environment.CurrentDirectory;
+
+        _target.Changed += HandleTargetChanged;
     }
 
     protected override IDotnetCli Cli => _cli;
+
+    /// <summary>The shared project target; this page never keeps a directory of its own.</summary>
+    public string WorkingDirectory => _target.Directory;
+
+    public void Dispose() => _target.Changed -= HandleTargetChanged;
+
+    private void HandleTargetChanged()
+    {
+        OnPropertyChanged(nameof(WorkingDirectory));
+        _ = RefreshAsync();
+    }
 
     public string? ManifestDirectory
     {
@@ -111,21 +123,6 @@ public sealed partial class LocalToolsViewModel : ViewModelBase
             SelectedManifestPath = path;
             await LoadManifestAsync(path);
         });
-    }
-
-    public async Task PickDirectoryAsync()
-    {
-        var picked = _dialogs.PickFolder("Select the directory that contains the tool manifest", WorkingDirectory);
-        if (string.IsNullOrWhiteSpace(picked))
-        {
-            return;
-        }
-
-        WorkingDirectory = picked;
-        SelectedManifestPath = null;
-        _settings.Current.LastWorkingDirectory = picked;
-        await _settings.SaveAsync();
-        await RefreshAsync();
     }
 
     public void OpenManifestFolder()

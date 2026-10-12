@@ -30,9 +30,16 @@ public abstract class ViewModelPage<TViewModel> : ComponentBase, IDisposable
         DisposeViewModel();
     }
 
-    /// <summary>Override to release view model resources when the page is destroyed.</summary>
+    /// <summary>
+    /// Releases the view model. It subscribes to shared services (the project target, for one), so the
+    /// default implementation disposes it when it implements <see cref="IDisposable"/>.
+    /// </summary>
     protected virtual void DisposeViewModel()
     {
+        if (ViewModel is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
     }
 
     private void HandleViewModelChanged(object? sender, PropertyChangedEventArgs e) =>

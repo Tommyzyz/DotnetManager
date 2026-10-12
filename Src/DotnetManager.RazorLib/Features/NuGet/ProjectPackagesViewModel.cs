@@ -5,14 +5,11 @@ using DotnetManager.RazorLib.Features.Common;
 
 namespace DotnetManager.RazorLib.Features.NuGet;
 
-public sealed partial class ProjectPackagesViewModel : ViewModelBase
+public sealed partial class ProjectPackagesViewModel : ViewModelBase, IDisposable
 {
     private readonly IDotnetCli _cli;
     private readonly IDialogService _dialogs;
-    private readonly IAppSettingsStore _settings;
-
-    [ObservableProperty]
-    private string workingDirectory = string.Empty;
+    private readonly ProjectTarget _target;
 
     [ObservableProperty]
     private IReadOnlyList<ProjectTargetOption> availableTargets = [];
@@ -55,15 +52,30 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
     public ProjectPackagesViewModel(
         IDotnetCli cli,
         IDialogService dialogs,
-        IAppSettingsStore settings)
+        ProjectTarget target)
     {
         _cli = cli;
         _dialogs = dialogs;
-        _settings = settings;
-        workingDirectory = settings.Current.LastWorkingDirectory ?? Environment.CurrentDirectory;
+        _target = target;
+
+        _target.Changed += HandleTargetChanged;
     }
 
     protected override IDotnetCli Cli => _cli;
+
+    /// <summary>The shared project target; this page never keeps a directory of its own.</summary>
+    public string WorkingDirectory => _target.Directory;
+
+    public void Dispose() => _target.Changed -= HandleTargetChanged;
+
+    private void HandleTargetChanged()
+    {
+        // The previously selected file belongs to the old directory.
+        SelectedTargetPath = null;
+        OnPropertyChanged(nameof(WorkingDirectory));
+        ScanTargets();
+        _ = RefreshAsync();
+    }
 
     public async Task InitializeAsync()
     {
@@ -84,22 +96,6 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
         ApplyFilter();
     }
 
-    public async Task PickDirectoryAsync()
-    {
-        var picked = _dialogs.PickFolder("选择包含 .NET 项目或解决方案的目录", WorkingDirectory);
-        if (string.IsNullOrWhiteSpace(picked))
-        {
-            return;
-        }
-
-        WorkingDirectory = picked;
-        _settings.Current.LastWorkingDirectory = picked;
-        await _settings.SaveAsync();
-
-        ScanTargets();
-        await RefreshAsync();
-    }
-
     public async Task PickFileAsync()
     {
         var picked = _dialogs.PickFile(
@@ -115,9 +111,8 @@ public sealed partial class ProjectPackagesViewModel : ViewModelBase
         var directory = Path.GetDirectoryName(picked);
         if (!string.IsNullOrWhiteSpace(directory))
         {
-            WorkingDirectory = directory;
-            _settings.Current.LastWorkingDirectory = directory;
-            await _settings.SaveAsync();
+            // The file sits in the shared target; adopting its directory moves the other pages too.
+            await _target.UseAsync(directory);
         }
 
         ScanTargets();

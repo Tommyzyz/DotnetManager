@@ -6,6 +6,9 @@ public sealed record RuntimeInfo(string Name, string Version, string Path);
 
 public sealed record WorkloadInfo(string Id, string InstallSource, string ManifestVersion);
 
+/// <summary>An installable workload, as reported by <c>dotnet workload search</c>.</summary>
+public sealed record WorkloadCandidate(string Id, string Description);
+
 public interface ISdkService
 {
     Task<IReadOnlyList<SdkInfo>> GetSdksAsync(CancellationToken cancellationToken = default);
@@ -15,6 +18,9 @@ public interface ISdkService
     Task<string> GetInfoAsync(CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<WorkloadInfo>> GetWorkloadsAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Lists every workload the installed SDK could install (<c>dotnet workload search</c>).</summary>
+    Task<IReadOnlyList<WorkloadCandidate>> GetInstallableWorkloadsAsync(CancellationToken cancellationToken = default);
 
     Task<CliResult> SdkCheckAsync(CancellationToken cancellationToken = default);
 

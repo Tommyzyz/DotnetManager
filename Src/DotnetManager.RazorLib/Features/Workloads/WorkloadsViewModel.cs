@@ -17,6 +17,10 @@ public sealed partial class WorkloadsViewModel : ViewModelBase
     [ObservableProperty]
     private IReadOnlyList<WorkloadInfo> workloads = [];
 
+    /// <summary>Workloads the SDK could install but has not installed yet - the install dropdown.</summary>
+    [ObservableProperty]
+    private IReadOnlyList<WorkloadCandidate> installableWorkloads = [];
+
     [ObservableProperty]
     private string searchQuery = string.Empty;
 
@@ -49,7 +53,17 @@ public sealed partial class WorkloadsViewModel : ViewModelBase
         await RunAsync(async () =>
         {
             Workloads = await _sdk.GetWorkloadsAsync();
-            SetStatus($"{Workloads.Count} workload(s) installed.");
+
+            // Read both lists together so the install dropdown only offers what is missing.
+            var installed = new HashSet<string>(
+                Workloads.Select(workload => workload.Id),
+                StringComparer.OrdinalIgnoreCase);
+
+            InstallableWorkloads = (await _sdk.GetInstallableWorkloadsAsync())
+                .Where(candidate => !installed.Contains(candidate.Id))
+                .ToList();
+
+            SetStatus($"{Workloads.Count} workload(s) installed, {InstallableWorkloads.Count} installable.");
         });
     }
 

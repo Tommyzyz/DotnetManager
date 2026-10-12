@@ -1,4 +1,5 @@
 using System.IO;
+using DotnetManager.RazorLib.Features.Common;
 using DotnetManager.RazorLib.Features.NuGet;
 using DotnetManager.Tests.Fakes;
 using Xunit;
@@ -127,9 +128,13 @@ public sealed class ProjectTargetsTests
     [Fact]
     public void ScanTargets_tolerates_a_working_directory_that_does_not_exist()
     {
-        using var dir = new TempDirectory();
-        var vm = CreateViewModel(dir);
-        vm.WorkingDirectory = Path.Combine(dir.Path, "missing");
+        var dir = new TempDirectory();
+        var target = CreateTarget(dir);
+
+        // The shared target still points at a directory that is gone by the time the scan runs.
+        dir.Dispose();
+
+        var vm = CreateViewModel(target);
 
         vm.ScanTargets();
 
@@ -137,8 +142,16 @@ public sealed class ProjectTargetsTests
     }
 
     private static ProjectPackagesViewModel CreateViewModel(TempDirectory dir) =>
-        new(new FakeDotnetCli(), new FakeDialogService(), new FakeAppSettingsStore())
-        {
-            WorkingDirectory = dir.Path,
-        };
+        CreateViewModel(CreateTarget(dir));
+
+    private static ProjectPackagesViewModel CreateViewModel(ProjectTarget target) =>
+        new(new FakeDotnetCli(), new FakeDialogService(), target);
+
+    /// <summary>The shared project target, seeded from a throw-away directory.</summary>
+    private static ProjectTarget CreateTarget(TempDirectory dir)
+    {
+        var settings = new FakeAppSettingsStore();
+        settings.Current.LastWorkingDirectory = dir.Path;
+        return new ProjectTarget(settings, new FakeDialogService());
+    }
 }

@@ -66,6 +66,13 @@ namespace DotnetManagerUI
 
         private void OnNavigationSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
+            // The built-in Settings entry has no route tag of its own, so it is handled separately.
+            if (args.IsSettingsSelected)
+            {
+                Resolve<IShellNavigation>()?.Request(ShellRoutes.Settings);
+                return;
+            }
+
             if (args.SelectedItem is NavigationViewItem { Tag: string route } && !string.IsNullOrWhiteSpace(route))
             {
                 Resolve<IShellNavigation>()?.Request(route);
@@ -81,23 +88,31 @@ namespace DotnetManagerUI
                 return;
             }
 
+            SetText(GroupProject, localizer, "Nav.GroupProject");
+            SetText(ItemLocalTools, localizer, "Nav.LocalTools");
+            SetText(ItemProjectPackages, localizer, "Nav.ProjectPackages");
+            SetText(ItemToolSearch, localizer, "Nav.ToolSearch");
+            SetText(ItemSdk, localizer, "Nav.Sdk");
+
             SetText(GroupTools, localizer, "Nav.GroupTools");
             SetText(ItemOverview, localizer, "Nav.Overview");
-            SetText(ItemLocalTools, localizer, "Nav.LocalTools");
             SetText(ItemGlobalTools, localizer, "Nav.GlobalTools");
-            SetText(ItemToolSearch, localizer, "Nav.ToolSearch");
 
             SetText(GroupNuGet, localizer, "Nav.GroupNuGet");
-            SetText(ItemProjectPackages, localizer, "Nav.ProjectPackages");
             SetText(ItemPackageSources, localizer, "Nav.PackageSources");
             SetText(ItemNuGetCaches, localizer, "Nav.Caches");
             SetText(ItemNuGetConfig, localizer, "Nav.ConfigFiles");
 
             SetText(GroupEnvironment, localizer, "Nav.GroupEnvironment");
             SetText(ItemWorkloads, localizer, "Nav.Workloads");
-            SetText(ItemSdk, localizer, "Nav.Sdk");
             SetText(ItemOutput, localizer, "Nav.Output");
-            SetText(ItemSettings, localizer, "Nav.Settings");
+
+            // The shell's own Settings entry lives at the bottom of the pane; WinUI labels it from the
+            // system language, so it is re-labelled here to follow the app language instead.
+            if (NavView.SettingsItem is NavigationViewItem settingsItem)
+            {
+                SetText(settingsItem, localizer, "Nav.Settings");
+            }
 
             var title = localizer["App.Title"];
             NavView.PaneTitle = title;

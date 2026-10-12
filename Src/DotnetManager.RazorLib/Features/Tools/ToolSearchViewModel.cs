@@ -5,11 +5,12 @@ using DotnetManager.RazorLib.Features.Common;
 namespace DotnetManager.RazorLib.Features.Tools;
 
 /// <summary>Searches nuget.org for dotnet tool packages and installs them globally or locally.</summary>
-public sealed partial class ToolSearchViewModel : ViewModelBase
+public sealed partial class ToolSearchViewModel : ViewModelBase, IDisposable
 {
     private readonly INuGetPackageQuery _query;
     private readonly IDialogService _dialogs;
     private readonly IAppSettingsStore _settings;
+    private readonly ProjectTarget _target;
     private readonly IDotnetCli _cli;
 
     [ObservableProperty]
@@ -28,26 +29,33 @@ public sealed partial class ToolSearchViewModel : ViewModelBase
     private bool installGlobally = true;
 
     [ObservableProperty]
-    private string installDirectory = string.Empty;
-
-    [ObservableProperty]
     private bool hasSearched;
 
     public ToolSearchViewModel(
         INuGetPackageQuery query,
         IDialogService dialogs,
         IAppSettingsStore settings,
+        ProjectTarget target,
         IDotnetCli cli)
     {
         _query = query;
         _dialogs = dialogs;
         _settings = settings;
+        _target = target;
         _cli = cli;
-        installDirectory = settings.Current.LastWorkingDirectory ?? Environment.CurrentDirectory;
         includePrerelease = settings.Current.IncludePrerelease;
+
+        _target.Changed += HandleTargetChanged;
     }
 
     protected override IDotnetCli Cli => _cli;
+
+    /// <summary>The shared project target, used as the working directory of <c>--local</c> installs.</summary>
+    public string InstallDirectory => _target.Directory;
+
+    public void Dispose() => _target.Changed -= HandleTargetChanged;
+
+    private void HandleTargetChanged() => OnPropertyChanged(nameof(InstallDirectory));
     public async Task SearchAsync()
     {
         await RunAsync(async () =>
@@ -104,19 +112,6 @@ public sealed partial class ToolSearchViewModel : ViewModelBase
 
             SetStatus(result.Success ? $"Installed {package.Id}." : $"Installing {package.Id} failed.", !result.Success);
         });
-    }
-
-    public async Task PickInstallDirectoryAsync()
-    {
-        var picked = _dialogs.PickFolder("Select the directory for the local tool manifest", InstallDirectory);
-        if (string.IsNullOrWhiteSpace(picked))
-        {
-            return;
-        }
-
-        InstallDirectory = picked;
-        _settings.Current.LastWorkingDirectory = picked;
-        await _settings.SaveAsync();
     }
 
     public void OpenPackagePage(PackageSearchResult? package)

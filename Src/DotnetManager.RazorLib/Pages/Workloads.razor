@@ -37,8 +37,21 @@
 	<div class="card-body">
 		<h2 class="h6 card-title">@L["Workloads.Install"]</h2>
 		<div class="toolbar mb-0">
-			<input class="form-control form-control-sm" style="max-width: 18rem" placeholder="@L["Workloads.IdPlaceholder"]"
-				   @bind="ViewModel.NewWorkloadId" @bind:event="oninput" />
+			@* The list comes from `dotnet workload search`, read on every refresh and filtered down to
+			   what is not installed yet; picking an option fills the id the install button uses. *@
+			<select class="form-select form-select-sm" style="max-width: 32rem"
+					disabled="@ViewModel.IsBusy" @bind="ViewModel.NewWorkloadId">
+				<option value="">@L["Workloads.PickInstallable"]</option>
+				@foreach (var workload in ViewModel.InstallableWorkloads)
+				{
+					<option value="@workload.Id">@Label(workload)</option>
+				}
+			</select>
+
+			@* Kept as a fallback for ids that never show up in the search list. *@
+			<input class="form-control form-control-sm" style="max-width: 13rem" placeholder="@L["Workloads.IdPlaceholder"]"
+				   disabled="@ViewModel.IsBusy" @bind="ViewModel.NewWorkloadId" @bind:event="oninput" />
+
 			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.InstallAsync">
 				<i class="fa-solid fa-plus"></i> @L["Common.Install"]
 			</button>
@@ -87,4 +100,9 @@
 
 @code {
 	protected override async Task OnInitializedAsync() => await ViewModel.InitializeAsync();
+
+	private static string Label(WorkloadCandidate workload) =>
+		string.IsNullOrWhiteSpace(workload.Description)
+			? workload.Id
+			: $"{workload.Id} — {workload.Description}";
 }

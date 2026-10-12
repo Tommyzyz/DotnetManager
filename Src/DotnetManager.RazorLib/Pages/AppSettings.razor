@@ -43,7 +43,7 @@
 			<div class="toolbar mb-0">
 				<input id="workingDirectory" class="form-control form-control-sm path-box" style="max-width: 32rem"
 					   @bind="ViewModel.DefaultWorkingDirectory" @bind:event="oninput" />
-				<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickWorkingDirectory">@L["Common.Browse"]</button>
+				<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.PickWorkingDirectoryAsync">@L["Common.Browse"]</button>
 			</div>
 		</div>
 

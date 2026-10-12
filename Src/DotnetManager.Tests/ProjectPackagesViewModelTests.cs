@@ -1,5 +1,6 @@
 using System.IO;
 using DotnetManager.RazorLib.Abstractions;
+using DotnetManager.RazorLib.Features.Common;
 using DotnetManager.RazorLib.Features.NuGet;
 using DotnetManager.Tests.Fakes;
 using Xunit;
@@ -307,17 +308,24 @@ public sealed class ProjectPackagesViewModelTests
     }
 
     [Fact]
-    public async Task Picking_a_folder_updates_the_working_directory_and_remembers_it()
+    public async Task Picking_a_folder_moves_the_shared_target_for_every_page_that_follows_it()
     {
         using var h = new Harness();
         using var picked = new TempDirectory();
-        h.Dialogs.FolderToPick = picked.Path;
 
-        await h.Vm.PickDirectoryAsync();
+        // A second page bound to the same target, the way each shell page has its own view model.
+        using var otherPage = new ProjectPackagesViewModel(h.Cli, h.Dialogs, h.Target);
+        var notified = 0;
+        h.Target.Changed += () => notified++;
+
+        h.Dialogs.FolderToPick = picked.Path;
+        await h.Target.PickAsync("Select the project directory");
 
         Assert.Equal(picked.Path, h.Vm.WorkingDirectory);
+        Assert.Equal(picked.Path, otherPage.WorkingDirectory);
         Assert.Equal(picked.Path, h.Settings.Current.LastWorkingDirectory);
         Assert.Equal(1, h.Settings.SaveCount);
+        Assert.Equal(1, notified);
     }
 
     [Fact]
@@ -339,7 +347,9 @@ public sealed class ProjectPackagesViewModelTests
     public async Task Refreshing_a_directory_that_does_not_exist_reports_an_error()
     {
         using var h = new Harness();
-        h.Vm.WorkingDirectory = Path.Combine(Path.GetTempPath(), "DotnetManager.Tests", "missing-" + Guid.NewGuid().ToString("N"));
+
+        // The shared target keeps the path after the directory disappears behind its back.
+        h.Dir.Dispose();
 
         await h.Vm.RefreshAsync();
 
@@ -419,7 +429,9 @@ public sealed class ProjectPackagesViewModelTests
     {
         public Harness()
         {
-            Vm = new ProjectPackagesViewModel(Cli, Dialogs, Settings) { WorkingDirectory = Dir.Path };
+            Settings.Current.LastWorkingDirectory = Dir.Path;
+            Target = new ProjectTarget(Settings, Dialogs);
+            Vm = new ProjectPackagesViewModel(Cli, Dialogs, Target);
         }
 
         public TempDirectory Dir { get; } = new();
@@ -429,6 +441,9 @@ public sealed class ProjectPackagesViewModelTests
         public FakeDialogService Dialogs { get; } = new();
 
         public FakeAppSettingsStore Settings { get; } = new();
+
+        /// <summary>The shared project target the view model reads its directory from.</summary>
+        public ProjectTarget Target { get; }
 
         public ProjectPackagesViewModel Vm { get; }
 

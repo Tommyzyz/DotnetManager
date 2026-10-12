@@ -2,6 +2,7 @@ using System.IO;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using DotnetManager.RazorLib.Abstractions;
+using DotnetManager.RazorLib.Features.Workloads;
 
 namespace DotnetManagerUI.Services;
 
@@ -37,6 +38,19 @@ public sealed partial class SdkService : ISdkService
     {
         var result = await RunAsync(["workload", "list"], "dotnet workload list", cancellationToken).ConfigureAwait(false);
         return result.Success ? ParseWorkloads(result.StandardOutput) : [];
+    }
+
+    /// <summary>
+    /// Read from the SDK's workload manifests on disk rather than through <c>dotnet workload search</c>:
+    /// the search table is localized prose, while WorkloadManifest.json carries the same data in a
+    /// fixed shape and needs no extra process.
+    /// </summary>
+    public Task<IReadOnlyList<WorkloadCandidate>> GetInstallableWorkloadsAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var dotnetRoot = Path.GetDirectoryName(_cli.ExecutablePath);
+        return Task.FromResult(WorkloadManifestReader.Read(dotnetRoot));
     }
 
     public Task<CliResult> SdkCheckAsync(CancellationToken cancellationToken = default) =>
