@@ -14,9 +14,9 @@
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
-            <Color x:Key="Primary">#512BD4</Color>
 
-            <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+            <!-- 使用带 Alpha 的十六进制颜色直接为 SolidColorBrush 赋值 -->
+            <SolidColorBrush x:Key="PrimaryBrush" Color="#FF512BD4" />
             <SolidColorBrush x:Key="WhiteBrush" Color="White" />
             <SolidColorBrush x:Key="BlackBrush" Color="Black" />
 
