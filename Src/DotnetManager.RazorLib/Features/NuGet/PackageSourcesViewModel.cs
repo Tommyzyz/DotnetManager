@@ -52,31 +52,31 @@ public sealed partial class PackageSourcesViewModel : ViewModelBase
 
     public bool TargetNeedsElevation => _settings.RequiresElevation(EffectiveTargetFile);
     public async Task InitializeAsync() => await RefreshAsync();
-    public async Task RefreshAsync()
+    public Task RefreshAsync() => RunAsync(RefreshCoreAsync);
+
+    /// <summary>Reloads sources without the busy guard, so mutations can refresh from their own RunAsync scope.</summary>
+    private async Task RefreshCoreAsync()
     {
-        await RunAsync(async () =>
+        await Task.Yield();
+        var snapshot = _settings.Load(RootDirectory);
+        Snapshot = snapshot;
+        Sources = snapshot.Sources;
+        ConfigFiles = snapshot.ConfigFiles;
+
+        TargetConfigFile = ConfigFiles.FirstOrDefault(file => file.Exists && !file.IsMachineWide)
+            ?? ConfigFiles.FirstOrDefault(file => !file.IsMachineWide);
+
+        OnPropertyChanged(nameof(EffectiveTargetFile));
+        OnPropertyChanged(nameof(TargetNeedsElevation));
+
+        if (snapshot.LoadError is not null)
         {
-            await Task.Yield();
-            var snapshot = _settings.Load(RootDirectory);
-            Snapshot = snapshot;
-            Sources = snapshot.Sources;
-            ConfigFiles = snapshot.ConfigFiles;
-
-            TargetConfigFile = ConfigFiles.FirstOrDefault(file => file.Exists && !file.IsMachineWide)
-                ?? ConfigFiles.FirstOrDefault(file => !file.IsMachineWide);
-
-            OnPropertyChanged(nameof(EffectiveTargetFile));
-            OnPropertyChanged(nameof(TargetNeedsElevation));
-
-            if (snapshot.LoadError is not null)
-            {
-                SetStatus(snapshot.LoadError, isError: true);
-            }
-            else
-            {
-                SetStatus($"{Sources.Count} source(s), {Sources.Count(source => source.Enabled)} enabled.");
-            }
-        });
+            SetStatus(snapshot.LoadError, isError: true);
+        }
+        else
+        {
+            SetStatus($"{Sources.Count} source(s), {Sources.Count(source => source.Enabled)} enabled.");
+        }
     }
 
     public async Task PickRootDirectoryAsync()
@@ -112,14 +112,15 @@ public sealed partial class PackageSourcesViewModel : ViewModelBase
 
             var target = EffectiveTargetFile;
             var result = await _settings.AddOrUpdateSourceAsync(target, NewSourceName.Trim(), NewSourceUrl.Trim());
-            SetStatus(result.Message, !result.Success);
 
             if (result.Success)
             {
                 NewSourceName = string.Empty;
                 NewSourceUrl = string.Empty;
-                await RefreshAsync();
+                await RefreshCoreAsync();
             }
+
+            SetStatus(result.Message, !result.Success);
         });
     }
 
@@ -139,8 +140,8 @@ public sealed partial class PackageSourcesViewModel : ViewModelBase
         await RunAsync(async () =>
         {
             var result = await _settings.RemoveSourceAsync(target, source.Name);
+            await RefreshCoreAsync();
             SetStatus(result.Message, !result.Success);
-            await RefreshAsync();
         });
     }
 
@@ -153,26 +154,25 @@ public sealed partial class PackageSourcesViewModel : ViewModelBase
 
         await RunAsync(async () =>
         {
+            OperationResult result;
             if (source.Enabled)
             {
                 // Disabling always has to be recorded in a higher precedence file than the definition.
-                var result = await _settings.SetSourceEnabledAsync(EffectiveTargetFile, source.Name, enabled: false);
-                SetStatus(result.Message, !result.Success);
+                result = await _settings.SetSourceEnabledAsync(EffectiveTargetFile, source.Name, enabled: false);
             }
             else
             {
                 var disabledEntry = Snapshot?.DisabledSources.FirstOrDefault(entry =>
                     string.Equals(entry.Key, source.Name, StringComparison.OrdinalIgnoreCase));
 
-                var result = await _settings.SetSourceEnabledAsync(
+                result = await _settings.SetSourceEnabledAsync(
                     disabledEntry?.ConfigFile ?? EffectiveTargetFile,
                     source.Name,
                     enabled: true);
-
-                SetStatus(result.Message, !result.Success);
             }
 
-            await RefreshAsync();
+            await RefreshCoreAsync();
+            SetStatus(result.Message, !result.Success);
         });
     }
 
@@ -206,8 +206,8 @@ public sealed partial class PackageSourcesViewModel : ViewModelBase
                 </configuration>
                 """);
 
+            await RefreshCoreAsync();
             SetStatus(result.Message, !result.Success);
-            await RefreshAsync();
         });
     }
 

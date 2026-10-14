@@ -60,22 +60,25 @@ public sealed partial class GlobalToolsViewModel : ViewModelBase
             await CheckUpdatesAsync();
         }
     }
-    public async Task RefreshAsync()
-    {
-        await RunAsync(async () =>
-        {
-            var tools = await _tools.ListAsync();
-            Tools = tools
-                .Select(tool => new ToolRow
-                {
-                    PackageId = tool.PackageId,
-                    Version = tool.Version,
-                    Commands = tool.Commands,
-                })
-                .ToList();
+    public Task RefreshAsync() => RunAsync(LoadToolsAsync);
 
-            SetStatus($"{Tools.Count} global tool(s) installed.");
-        });
+    /// <summary>
+    /// Reloads the tool list. Safe to call from inside a <see cref="ViewModelBase.RunAsync"/> scope: a nested
+    /// <see cref="RefreshAsync"/> call would return immediately because the busy guard rejects re-entrant calls.
+    /// </summary>
+    private async Task LoadToolsAsync()
+    {
+        var tools = await _tools.ListAsync();
+        Tools = tools
+            .Select(tool => new ToolRow
+            {
+                PackageId = tool.PackageId,
+                Version = tool.Version,
+                Commands = tool.Commands,
+            })
+            .ToList();
+
+        SetStatus($"{Tools.Count} global tool(s) installed.");
     }
 
     public async Task InstallAsync()
@@ -101,14 +104,16 @@ public sealed partial class GlobalToolsViewModel : ViewModelBase
             }
 
             var result = await RunCliAsync(arguments, $"dotnet tool install --global {NewPackageId}");
-            SetStatus(result.Success ? $"Installed {NewPackageId}." : "The installation failed.", !result.Success);
+            var message = result.Success ? $"Installed {NewPackageId}." : "The installation failed.";
 
             if (result.Success)
             {
                 NewPackageId = string.Empty;
                 NewPackageVersion = string.Empty;
-                await RefreshAsync();
+                await LoadToolsAsync();
             }
+
+            SetStatus(message, !result.Success);
         });
     }
 
@@ -125,11 +130,13 @@ public sealed partial class GlobalToolsViewModel : ViewModelBase
                 ["tool", "update", row.PackageId, "--global"],
                 $"dotnet tool update --global {row.PackageId}");
 
-            SetStatus(result.Success ? $"Updated {row.PackageId}." : "The update failed.", !result.Success);
+            var message = result.Success ? $"Updated {row.PackageId}." : "The update failed.";
             if (result.Success)
             {
-                await RefreshAsync();
+                await LoadToolsAsync();
             }
+
+            SetStatus(message, !result.Success);
         });
     }
 
@@ -141,8 +148,9 @@ public sealed partial class GlobalToolsViewModel : ViewModelBase
                 ["tool", "update", "--global", "--all"],
                 "dotnet tool update --global --all");
 
-            SetStatus(result.Success ? "All global tools were updated." : "The update failed.", !result.Success);
-            await RefreshAsync();
+            var message = result.Success ? "All global tools were updated." : "The update failed.";
+            await LoadToolsAsync();
+            SetStatus(message, !result.Success);
         });
     }
 
@@ -164,8 +172,9 @@ public sealed partial class GlobalToolsViewModel : ViewModelBase
                 ["tool", "uninstall", row.PackageId, "--global"],
                 $"dotnet tool uninstall --global {row.PackageId}");
 
-            SetStatus(result.Success ? $"Uninstalled {row.PackageId}." : "The uninstall failed.", !result.Success);
-            await RefreshAsync();
+            var message = result.Success ? $"Uninstalled {row.PackageId}." : "The uninstall failed.";
+            await LoadToolsAsync();
+            SetStatus(message, !result.Success);
         });
     }
 

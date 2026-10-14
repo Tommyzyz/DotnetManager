@@ -93,27 +93,27 @@ public sealed partial class LocalToolsViewModel : ViewModelBase, IDisposable
             await CheckUpdatesAsync();
         }
     }
-    public async Task RefreshAsync()
+    public Task RefreshAsync() => RunAsync(RefreshCoreAsync);
+
+    /// <summary>Reloads manifests without the busy guard, so CreateManifestAsync can call it from its own scope.</summary>
+    private async Task RefreshCoreAsync()
     {
-        await RunAsync(async () =>
+        ManifestPaths = _manifests.FindManifests(WorkingDirectory);
+
+        if (ManifestPaths.Count == 0)
         {
-            ManifestPaths = _manifests.FindManifests(WorkingDirectory);
+            SelectedManifestPath = null;
+            Manifest = null;
+            Tools = [];
+            SetStatus("No tool manifest was found below this directory.");
+            return;
+        }
 
-            if (ManifestPaths.Count == 0)
-            {
-                SelectedManifestPath = null;
-                Manifest = null;
-                Tools = [];
-                SetStatus("No tool manifest was found below this directory.");
-                return;
-            }
+        var target = SelectedManifestPath is not null && ManifestPaths.Contains(SelectedManifestPath)
+            ? SelectedManifestPath
+            : ManifestPaths[0];
 
-            var target = SelectedManifestPath is not null && ManifestPaths.Contains(SelectedManifestPath)
-                ? SelectedManifestPath
-                : ManifestPaths[0];
-
-            await LoadManifestAsync(target);
-        });
+        await LoadManifestAsync(target);
     }
 
     public async Task SelectManifestAsync(string path)
@@ -140,7 +140,7 @@ public sealed partial class LocalToolsViewModel : ViewModelBase, IDisposable
         {
             var result = await _manifests.CreateManifestAsync(WorkingDirectory);
             SetStatus(result.Message, !result.Success);
-            await RefreshAsync();
+            await RefreshCoreAsync();
         });
     }
 

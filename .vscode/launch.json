@@ -9,7 +9,6 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "D:\\code\\blazor\\DotnetManager\\Src\\DotnetManagerUI\\DotnetManagerUI.csproj",
-            "launchProfileName": "DotnetManagerUI",
             "launchConfigurationId": "DotnetManagerUI"
         }
     ]

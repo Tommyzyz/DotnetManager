@@ -50,50 +50,50 @@ public sealed partial class NuGetConfigFilesViewModel : ViewModelBase
 
     public bool CanSave => SelectedFile is not null && IsDirty;
     public async Task InitializeAsync() => await RefreshAsync();
-    public async Task RefreshAsync()
+    public Task RefreshAsync() => RunAsync(RefreshCoreAsync);
+
+    /// <summary>Reloads the file list and reselects without the busy guard, so mutations can refresh in-place.</summary>
+    private async Task RefreshCoreAsync()
     {
-        await RunAsync(async () =>
-        {
-            await Task.Yield();
-            var snapshot = _settings.Load(_appSettings.Current.LastWorkingDirectory);
-            Files = snapshot.ConfigFiles;
-            ConfigValues = snapshot.ConfigValues;
-            DisabledSources = snapshot.DisabledSources;
+        await Task.Yield();
+        var snapshot = _settings.Load(_appSettings.Current.LastWorkingDirectory);
+        Files = snapshot.ConfigFiles;
+        ConfigValues = snapshot.ConfigValues;
+        DisabledSources = snapshot.DisabledSources;
 
-            var target = SelectedFile is not null
-                ? Files.FirstOrDefault(file => string.Equals(file.Path, SelectedFile.Path, StringComparison.OrdinalIgnoreCase))
-                : Files.FirstOrDefault(file => file.Exists);
+        var target = SelectedFile is not null
+            ? Files.FirstOrDefault(file => string.Equals(file.Path, SelectedFile.Path, StringComparison.OrdinalIgnoreCase))
+            : Files.FirstOrDefault(file => file.Exists);
 
-            await SelectAsync(target);
-        });
+        await LoadFileAsync(target);
     }
 
-    public async Task SelectAsync(NuGetConfigFileInfo? file)
+    public Task SelectAsync(NuGetConfigFileInfo? file) => RunAsync(() => LoadFileAsync(file));
+
+    /// <summary>Loads a single file without the busy guard; the file's content is re-read on every call.</summary>
+    private async Task LoadFileAsync(NuGetConfigFileInfo? file)
     {
-        await RunAsync(async () =>
+        await Task.Yield();
+        SelectedFile = file;
+        OnPropertyChanged(nameof(RequiresElevation));
+        OnPropertyChanged(nameof(CanSave));
+
+        if (file is null)
         {
-            await Task.Yield();
-            SelectedFile = file;
-            OnPropertyChanged(nameof(RequiresElevation));
-            OnPropertyChanged(nameof(CanSave));
-
-            if (file is null)
-            {
-                RawContent = string.Empty;
-                _originalContent = string.Empty;
-                IsDirty = false;
-                return;
-            }
-
-            _originalContent = _settings.ReadRawFile(file.Path);
-            RawContent = _originalContent;
+            RawContent = string.Empty;
+            _originalContent = string.Empty;
             IsDirty = false;
+            return;
+        }
 
-            if (!file.Exists)
-            {
-                SetStatus("This file does not exist yet; saving will create it.");
-            }
-        });
+        _originalContent = _settings.ReadRawFile(file.Path);
+        RawContent = _originalContent;
+        IsDirty = false;
+
+        if (!file.Exists)
+        {
+            SetStatus("This file does not exist yet; saving will create it.");
+        }
     }
 
     public async Task SelectByPathAsync(string? path)
@@ -115,12 +115,13 @@ public sealed partial class NuGetConfigFilesViewModel : ViewModelBase
         await RunAsync(async () =>
         {
             var result = await _settings.WriteRawFileAsync(SelectedFile.Path, RawContent);
-            SetStatus(result.Message, !result.Success);
 
             if (result.Success)
             {
-                await RefreshAsync();
+                await RefreshCoreAsync();
             }
+
+            SetStatus(result.Message, !result.Success);
         });
     }
 
@@ -141,8 +142,8 @@ public sealed partial class NuGetConfigFilesViewModel : ViewModelBase
                 </configuration>
                 """);
 
+            await RefreshCoreAsync();
             SetStatus(result.Message, !result.Success);
-            await RefreshAsync();
         });
     }
 

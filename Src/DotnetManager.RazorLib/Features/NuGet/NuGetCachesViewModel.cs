@@ -90,39 +90,39 @@ public sealed partial class NuGetCachesViewModel : ViewModelBase
     /// <summary>Only the global packages folder has a matching NuGet.Config key (globalPackagesFolder).</summary>
     public bool CanApplyConfigValue => SelectedCache?.SupportsConfigValue == true;
     public async Task InitializeAsync() => await RefreshAsync();
-    public async Task RefreshAsync()
+    public Task RefreshAsync() => RunAsync(RefreshCoreAsync);
+
+    /// <summary>Reloads cache locations without the busy guard, so mutations can refresh from their own scope.</summary>
+    private async Task RefreshCoreAsync()
     {
-        await RunAsync(async () =>
+        var snapshot = _settings.Load(_appSettings.Current.LastWorkingDirectory);
+        Snapshot = snapshot;
+
+        var fromCli = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var cliResult = await _cli.RunToResultAsync(
+            ["nuget", "locals", "all", "--list"],
+            new CliOptions { Description = "dotnet nuget locals all --list", InvariantOutput = true });
+
+        if (cliResult.Success)
         {
-            var snapshot = _settings.Load(_appSettings.Current.LastWorkingDirectory);
-            Snapshot = snapshot;
-
-            var fromCli = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            var cliResult = await _cli.RunToResultAsync(
-                ["nuget", "locals", "all", "--list"],
-                new CliOptions { Description = "dotnet nuget locals all --list", InvariantOutput = true });
-
-            if (cliResult.Success)
+            foreach (var (key, value) in NuGetLocalsParser.Parse(cliResult.StandardOutput))
             {
-                foreach (var (key, value) in NuGetLocalsParser.Parse(cliResult.StandardOutput))
-                {
-                    fromCli[key] = value;
-                }
+                fromCli[key] = value;
             }
+        }
 
-            Caches =
-            [
-                Build("global-packages", "NuGetCache.GlobalPackages", "NUGET_PACKAGES", snapshot.GlobalPackagesFolder, fromCli),
-                Build("http-cache", "NuGetCache.HttpCache", "NUGET_HTTP_CACHE_PATH", snapshot.HttpCacheFolder, fromCli),
-                Build("plugins-cache", "NuGetCache.PluginsCache", "NUGET_PLUGINS_CACHE_PATH", snapshot.PluginsCacheFolder, fromCli),
-                Build("temp", "NuGetCache.Temp", "NUGET_SCRATCH", snapshot.TempFolder, fromCli),
-            ];
+        Caches =
+        [
+            Build("global-packages", "NuGetCache.GlobalPackages", "NUGET_PACKAGES", snapshot.GlobalPackagesFolder, fromCli),
+            Build("http-cache", "NuGetCache.HttpCache", "NUGET_HTTP_CACHE_PATH", snapshot.HttpCacheFolder, fromCli),
+            Build("plugins-cache", "NuGetCache.PluginsCache", "NUGET_PLUGINS_CACHE_PATH", snapshot.PluginsCacheFolder, fromCli),
+            Build("temp", "NuGetCache.Temp", "NUGET_SCRATCH", snapshot.TempFolder, fromCli),
+        ];
 
-            FallbackFolders = snapshot.FallbackFolders;
-            SetStatus(cliResult.Success
-                ? "Cache locations loaded from the CLI."
-                : "Cache locations were computed locally because the CLI call failed.");
-        });
+        FallbackFolders = snapshot.FallbackFolders;
+        SetStatus(cliResult.Success
+            ? "Cache locations loaded from the CLI."
+            : "Cache locations were computed locally because the CLI call failed.");
     }
 
     public async Task MeasureAsync(CacheRow? row)
@@ -249,9 +249,8 @@ public sealed partial class NuGetCachesViewModel : ViewModelBase
             }
 
             var result = await _environment.SetAsync(variable, EditPath.Trim(), EditScope);
+            await RefreshCoreAsync();
             SetStatus(result.Message, !result.Success);
-
-            await RefreshAsync();
         });
     }
 
@@ -266,8 +265,8 @@ public sealed partial class NuGetCachesViewModel : ViewModelBase
             }
 
             var result = await _environment.SetAsync(variable, null, EditScope);
+            await RefreshCoreAsync();
             SetStatus(result.Message, !result.Success);
-            await RefreshAsync();
         });
     }
 
@@ -282,8 +281,8 @@ public sealed partial class NuGetCachesViewModel : ViewModelBase
             }
 
             var result = await _settings.SetConfigValueAsync(_settings.UserConfigPath, "globalPackagesFolder", EditPath.Trim());
+            await RefreshCoreAsync();
             SetStatus(result.Message, !result.Success);
-            await RefreshAsync();
         });
     }
 
@@ -304,9 +303,9 @@ public sealed partial class NuGetCachesViewModel : ViewModelBase
             }
 
             var result = await _settings.SetFallbackFoldersAsync(_settings.UserConfigPath, folders);
-            SetStatus(result.Message, !result.Success);
             NewFallbackFolder = string.Empty;
-            await RefreshAsync();
+            await RefreshCoreAsync();
+            SetStatus(result.Message, !result.Success);
         });
     }
 
@@ -325,8 +324,8 @@ public sealed partial class NuGetCachesViewModel : ViewModelBase
                 .ToList();
 
             var result = await _settings.SetFallbackFoldersAsync(_settings.UserConfigPath, folders);
+            await RefreshCoreAsync();
             SetStatus(result.Message, !result.Success);
-            await RefreshAsync();
         });
     }
 
