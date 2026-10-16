@@ -2,8 +2,8 @@
 @inherits ViewModelPage<SdkInfoViewModel>
 @inject UiLocalizer L
 
-@* Machine scoped: the SDKs and runtimes installed on this computer. The global.json editor that
-   used to sit below belongs to one project directory and lives on its own page now. *@
+@* Machine scoped: the SDKs and runtimes installed on this computer. Nothing on this page reads the
+   selected project, so it carries no project target selector. *@
 <h1><i class="fa-solid fa-microchip me-2"></i>@L["Nav.Sdk"]</h1>
 
 <div class="toolbar">

@@ -100,7 +100,6 @@
   <data name="Nav.GroupEnvironment" xml:space="preserve"><value>Environment</value></data>
   <data name="Nav.Overview" xml:space="preserve"><value>Overview</value></data>
   <data name="Nav.Tools" xml:space="preserve"><value>Tools</value></data>
-  <data name="Nav.GlobalJson" xml:space="preserve"><value>global.json</value></data>
   <data name="Nav.PackageSources" xml:space="preserve"><value>Package sources</value></data>
   <data name="Nav.Caches" xml:space="preserve"><value>Caches</value></data>
   <data name="Nav.ConfigFiles" xml:space="preserve"><value>Config files</value></data>

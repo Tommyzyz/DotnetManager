@@ -100,7 +100,6 @@
   <data name="Nav.GroupEnvironment" xml:space="preserve"><value>环境</value></data>
   <data name="Nav.Overview" xml:space="preserve"><value>概览</value></data>
   <data name="Nav.Tools" xml:space="preserve"><value>工具</value></data>
-  <data name="Nav.GlobalJson" xml:space="preserve"><value>global.json</value></data>
   <data name="Nav.PackageSources" xml:space="preserve"><value>包源</value></data>
   <data name="Nav.Caches" xml:space="preserve"><value>缓存</value></data>
   <data name="Nav.ConfigFiles" xml:space="preserve"><value>配置文件</value></data>

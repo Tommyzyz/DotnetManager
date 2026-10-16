@@ -91,7 +91,6 @@ namespace DotnetManagerUI
             SetText(GroupProject, localizer, "Nav.GroupProject");
             SetText(ItemProjectPackages, localizer, "Nav.ProjectPackages");
             SetText(ItemTools, localizer, "Nav.Tools");
-            SetText(ItemGlobalJson, localizer, "Nav.GlobalJson");
 
             SetText(GroupNuGet, localizer, "Nav.GroupNuGet");
             SetText(ItemPackageSources, localizer, "Nav.PackageSources");

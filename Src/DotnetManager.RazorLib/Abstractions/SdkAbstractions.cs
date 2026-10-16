@@ -23,10 +23,6 @@ public interface ISdkService
     Task<IReadOnlyList<WorkloadCandidate>> GetInstallableWorkloadsAsync(CancellationToken cancellationToken = default);
 
     Task<CliResult> SdkCheckAsync(CancellationToken cancellationToken = default);
-
-    string? FindGlobalJson(string? directory);
-
-    Task<OperationResult> WriteGlobalJsonAsync(string directory, string sdkVersion, string rollForward, CancellationToken cancellationToken = default);
 }
 
 public interface ICacheInspector

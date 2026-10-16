@@ -24,9 +24,6 @@ public static class ShellRoutes
     /// <summary>Machine scoped: the SDKs and runtimes installed on this computer.</summary>
     public const string Sdk = "/sdk";
 
-    /// <summary>Project scoped: the global.json of the shared project target.</summary>
-    public const string GlobalJson = "/global-json";
-
     public const string Output = "/output";
 
     public const string Settings = "/settings";

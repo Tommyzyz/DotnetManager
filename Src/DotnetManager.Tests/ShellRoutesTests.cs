@@ -30,7 +30,6 @@ public sealed class ShellRoutesTests
         ShellRoutes.NuGetConfigFiles,
         ShellRoutes.Workloads,
         ShellRoutes.Sdk,
-        ShellRoutes.GlobalJson,
         ShellRoutes.Output,
         ShellRoutes.Settings,
     ];
@@ -51,14 +50,14 @@ public sealed class ShellRoutesTests
         Assert.DoesNotContain(route, Declared);
 
     /// <summary>
-    /// The SDK page is machine scoped now and global.json moved to its own project scoped page, so the two
-    /// must stay separate - a regression here would put the global.json editor back on a machine page.
+    /// The per-project global.json editor was removed as unused. The environment banner still reads
+    /// global.json to warn about a missing SDK, but that check belongs to the host service and has no
+    /// page, so a route here would mean the deleted editor came back.
     /// </summary>
     [Fact]
-    public void Global_json_has_its_own_route_next_to_the_sdk_page()
+    public void There_is_no_global_json_page()
     {
-        Assert.NotEqual(ShellRoutes.Sdk, ShellRoutes.GlobalJson);
-        Assert.Contains(ShellRoutes.Sdk, Declared);
-        Assert.Contains(ShellRoutes.GlobalJson, Declared);
+        Assert.DoesNotContain("/global-json", Declared);
+        Assert.DoesNotContain("GlobalJson", typeof(ShellRoutes).GetFields().Select(field => field.Name));
     }
 }

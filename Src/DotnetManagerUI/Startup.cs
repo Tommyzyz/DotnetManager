@@ -71,7 +71,6 @@ public static class Startup
         services.AddTransient<NuGetConfigFilesViewModel>();
         services.AddTransient<WorkloadsViewModel>();
         services.AddTransient<SdkInfoViewModel>();
-        services.AddTransient<GlobalJsonViewModel>();
         services.AddTransient<ActivityLogViewModel>();
         services.AddTransient<AppSettingsViewModel>();
     }

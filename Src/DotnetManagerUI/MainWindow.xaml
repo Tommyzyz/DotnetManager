@@ -50,7 +50,6 @@
                 <NavigationViewItemHeader x:Name="GroupProject" Content="项目" />
                 <NavigationViewItem x:Name="ItemProjectPackages" Content="项目依赖与安全" Icon="Library" Tag="/nuget/packages" />
                 <NavigationViewItem x:Name="ItemTools" Content="工具" Icon="Repair" Tag="/tools" />
-                <NavigationViewItem x:Name="ItemGlobalJson" Content="global.json" Icon="Document" Tag="/global-json" />
 
                 <NavigationViewItemHeader x:Name="GroupNuGet" Content="NuGet" />
                 <NavigationViewItem x:Name="ItemPackageSources" Content="包源" Icon="List" Tag="/nuget/sources" />

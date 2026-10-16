@@ -19,7 +19,6 @@ public sealed class LocalizationTests
         "Nav.GroupNuGet",
         "Nav.GroupEnvironment",
         "Nav.Tools",
-        "Nav.GlobalJson",
         "Nav.Sdk",
         "Nav.Workloads",
         "Nav.Output",

@@ -7,9 +7,10 @@ namespace DotnetManager.RazorLib.Features.Sdk;
 /// <summary>
 /// Machine scoped: the installed SDKs and runtimes, <c>dotnet sdk check</c> and <c>dotnet --info</c>.
 /// <para>
-/// This page never looks at the selected project. It used to, because the <c>global.json</c> editor
-/// lived here, but global.json is written into a project directory: that editor moved to
-/// <see cref="GlobalJsonViewModel"/>, which is the only part of this feature that is project scoped.
+/// This page never looks at the selected project, and nothing here writes to one: the global.json editor
+/// that used to sit beside the SDK list was dropped, because selecting an SDK version per project is not
+/// something this app needs to do. The environment banner still reads global.json to warn when the SDK it
+/// asks for is missing - that check lives in the host's <c>DotnetEnvironmentService</c>, not here.
 /// </para>
 /// </summary>
 public sealed partial class SdkInfoViewModel : ViewModelBase

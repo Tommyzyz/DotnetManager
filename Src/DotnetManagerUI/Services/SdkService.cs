@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using DotnetManager.RazorLib.Abstractions;
 using DotnetManager.RazorLib.Features.Workloads;
@@ -56,8 +55,6 @@ public sealed partial class SdkService : ISdkService
     public Task<CliResult> SdkCheckAsync(CancellationToken cancellationToken = default) =>
         RunAsync(["sdk", "check"], "dotnet sdk check", cancellationToken);
 
-    public string? FindGlobalJson(string? directory) => FindGlobalJsonIn(directory);
-
     /// <summary>Walks up from <paramref name="directory"/> looking for global.json.</summary>
     public static string? FindGlobalJsonIn(string? directory)
     {
@@ -79,51 +76,6 @@ public sealed partial class SdkService : ISdkService
         }
 
         return null;
-    }
-
-    public Task<OperationResult> WriteGlobalJsonAsync(string directory, string sdkVersion, string rollForward, CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
-        {
-            return Task.FromResult(OperationResult.Fail("The selected directory does not exist."));
-        }
-
-        if (string.IsNullOrWhiteSpace(sdkVersion))
-        {
-            return Task.FromResult(OperationResult.Fail("An SDK version is required."));
-        }
-
-        var path = Path.Combine(directory, "global.json");
-        try
-        {
-            JsonObject root;
-            if (File.Exists(path))
-            {
-                root = JsonNode.Parse(File.ReadAllText(path)) as JsonObject
-                    ?? throw new InvalidOperationException("'global.json' is not a JSON object.");
-            }
-            else
-            {
-                root = new JsonObject();
-            }
-
-            var sdk = root["sdk"] as JsonObject ?? new JsonObject();
-            sdk["version"] = sdkVersion;
-            if (!string.IsNullOrWhiteSpace(rollForward))
-            {
-                sdk["rollForward"] = rollForward;
-            }
-
-            root["sdk"] = sdk;
-            File.WriteAllText(path, root.ToJsonString(new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
-            return Task.FromResult(OperationResult.Ok($"Wrote {path}"));
-        }
-        catch (Exception ex) when (ex is System.Text.Json.JsonException or IOException or UnauthorizedAccessException or InvalidOperationException)
-        {
-            return Task.FromResult(OperationResult.Fail(ex.Message));
-        }
     }
 
     public static IReadOnlyList<SdkInfo> ParseSdks(string output)
