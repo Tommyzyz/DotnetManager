@@ -15,12 +15,9 @@
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
 
-            <!-- 使用带 Alpha 的十六进制颜色直接为 SolidColorBrush 赋值 -->
-            <SolidColorBrush x:Key="PrimaryBrush" Color="#FF512BD4" />
-            <SolidColorBrush x:Key="WhiteBrush" Color="White" />
-            <SolidColorBrush x:Key="BlackBrush" Color="Black" />
-
-            <x:Double x:Key="AppFontSize">14</x:Double>
+            <!-- The page content is Blazor/HTML and styles itself from wwwroot/css/app.css, so no
+                 brushes or font sizes are declared here. The brushes that used to sit below
+                 (Primary/White/Black + AppFontSize) had no consumer in any XAML or code file. -->
         </ResourceDictionary>
     </Application.Resources>
 </Application>

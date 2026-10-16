@@ -24,7 +24,10 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.*" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+        <!-- The view models and the pages both lean on the MVVM source generators, so this is a real
+             dependency. It is pinned rather than floating because the host project references the same
+             build; a floating 8.* here could restore to a different patch than the host resolves. -->
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     </ItemGroup>
 
 </Project>

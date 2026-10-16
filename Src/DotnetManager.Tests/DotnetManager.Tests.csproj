@@ -19,7 +19,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+        <!-- CommunityToolkit.Mvvm comes in through the ProjectReference to DotnetManager.RazorLib,
+             which is the project whose view models use it. The test code itself never touches an
+             ObservableObject, so there is no direct reference here. -->
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
