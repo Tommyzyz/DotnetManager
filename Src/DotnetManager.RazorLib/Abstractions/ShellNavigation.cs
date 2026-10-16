@@ -8,11 +8,8 @@ public static class ShellRoutes
 {
     public const string Overview = "/";
 
-    public const string LocalTools = "/tools/local";
-
-    public const string GlobalTools = "/tools/global";
-
-    public const string ToolSearch = "/tools/search";
+    /// <summary>Both tool scopes live here; the page switches between global and local.</summary>
+    public const string Tools = "/tools";
 
     public const string ProjectPackages = "/nuget/packages";
 
@@ -24,7 +21,11 @@ public static class ShellRoutes
 
     public const string Workloads = "/workloads";
 
+    /// <summary>Machine scoped: the SDKs and runtimes installed on this computer.</summary>
     public const string Sdk = "/sdk";
+
+    /// <summary>Project scoped: the global.json of the shared project target.</summary>
+    public const string GlobalJson = "/global-json";
 
     public const string Output = "/output";
 

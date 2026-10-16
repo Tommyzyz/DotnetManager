@@ -10,10 +10,6 @@
         <WindowsPackageType>None</WindowsPackageType>
 		<IsAotCompatible>true</IsAotCompatible>
 
-        <!-- .NET MAUI --><!--
-        <UseMaui>true</UseMaui>
-        <MauiEnablePlatformUsings>true</MauiEnablePlatformUsings>-->
-
         <!-- Project Options -->
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
@@ -53,10 +49,11 @@
 
         <!-- Moved over from DotnetManager: the services and the headless host need these. -->
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
         <PackageReference Include="NuGet.Configuration" Version="7.*" />
         <PackageReference Include="NuGet.Protocol" Version="7.*" />
+        <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
 
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>

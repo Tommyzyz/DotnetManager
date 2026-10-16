@@ -4,12 +4,17 @@ using DotnetManager.RazorLib.Features.Common;
 
 namespace DotnetManager.RazorLib.Features.Sdk;
 
-/// <summary>Shows installed SDKs and runtimes, runs <c>dotnet sdk check</c> and edits <c>global.json</c>.</summary>
-public sealed partial class SdkInfoViewModel : ViewModelBase, IDisposable
+/// <summary>
+/// Machine scoped: the installed SDKs and runtimes, <c>dotnet sdk check</c> and <c>dotnet --info</c>.
+/// <para>
+/// This page never looks at the selected project. It used to, because the <c>global.json</c> editor
+/// lived here, but global.json is written into a project directory: that editor moved to
+/// <see cref="GlobalJsonViewModel"/>, which is the only part of this feature that is project scoped.
+/// </para>
+/// </summary>
+public sealed partial class SdkInfoViewModel : ViewModelBase
 {
     private readonly ISdkService _sdk;
-    private readonly IDialogService _dialogs;
-    private readonly ProjectTarget _target;
     private readonly IDotnetCli _cli;
 
     [ObservableProperty]
@@ -24,48 +29,16 @@ public sealed partial class SdkInfoViewModel : ViewModelBase, IDisposable
     [ObservableProperty]
     private string checkText = string.Empty;
 
-    [ObservableProperty]
-    private string globalJsonPath = string.Empty;
-
-    [ObservableProperty]
-    private string globalJsonVersion = string.Empty;
-
-    [ObservableProperty]
-    private string globalJsonRollForward = "latestMinor";
-
-    public SdkInfoViewModel(
-        ISdkService sdk,
-        IDialogService dialogs,
-        ProjectTarget target,
-        IDotnetCli cli)
+    public SdkInfoViewModel(ISdkService sdk, IDotnetCli cli)
     {
         _sdk = sdk;
-        _dialogs = dialogs;
-        _target = target;
         _cli = cli;
-
-        _target.Changed += HandleTargetChanged;
     }
 
     protected override IDotnetCli Cli => _cli;
 
-    /// <summary>The shared project target; global.json is looked up below it.</summary>
-    public string GlobalJsonDirectory => _target.Directory;
+    public Task InitializeAsync() => RefreshAsync();
 
-    public void Dispose() => _target.Changed -= HandleTargetChanged;
-
-    private void HandleTargetChanged()
-    {
-        OnPropertyChanged(nameof(GlobalJsonDirectory));
-        _ = RefreshGlobalJsonAsync();
-    }
-
-    public IReadOnlyList<string> RollForwardOptions { get; } =
-    [
-        "disable", "patch", "feature", "minor", "major",
-        "latestPatch", "latestFeature", "latestMinor", "latestMajor",
-    ];
-    public async Task InitializeAsync() => await RefreshAsync();
     public async Task RefreshAsync()
     {
         await RunAsync(async () =>
@@ -73,8 +46,6 @@ public sealed partial class SdkInfoViewModel : ViewModelBase, IDisposable
             Sdks = await _sdk.GetSdksAsync();
             Runtimes = await _sdk.GetRuntimesAsync();
             InfoText = await _sdk.GetInfoAsync();
-            GlobalJsonVersion = Sdks.LastOrDefault()?.Version ?? string.Empty;
-            await RefreshGlobalJsonAsync();
             SetStatus($"{Sdks.Count} SDK(s) and {Runtimes.Count} runtime(s) detected.");
         });
     }
@@ -87,34 +58,5 @@ public sealed partial class SdkInfoViewModel : ViewModelBase, IDisposable
             CheckText = result.CombinedOutput;
             SetStatus(result.Success ? "SDK check finished." : "SDK check failed.", !result.Success);
         }, clearOutput: false);
-    }
-
-    public async Task WriteGlobalJsonAsync()
-    {
-        await RunAsync(async () =>
-        {
-            var result = await _sdk.WriteGlobalJsonAsync(GlobalJsonDirectory, GlobalJsonVersion.Trim(), GlobalJsonRollForward);
-            SetStatus(result.Message, !result.Success);
-            await RefreshGlobalJsonAsync();
-        });
-    }
-
-    public void OpenGlobalJson()
-    {
-        if (File.Exists(GlobalJsonPath))
-        {
-            _dialogs.RevealInShell(GlobalJsonPath);
-        }
-        else
-        {
-            _dialogs.RevealInShell(GlobalJsonDirectory);
-        }
-    }
-
-    private Task RefreshGlobalJsonAsync()
-    {
-        GlobalJsonPath = _sdk.FindGlobalJson(GlobalJsonDirectory) ?? Path.Combine(GlobalJsonDirectory, "global.json");
-        SetStatus(File.Exists(GlobalJsonPath) ? $"global.json found at {GlobalJsonPath}" : "No global.json in this directory chain.");
-        return Task.CompletedTask;
     }
 }

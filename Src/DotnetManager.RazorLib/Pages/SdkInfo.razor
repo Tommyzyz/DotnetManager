@@ -2,10 +2,9 @@
 @inherits ViewModelPage<SdkInfoViewModel>
 @inject UiLocalizer L
 
-<h1>@L["Nav.Sdk"]</h1>
-
-@* global.json is written into the shared project target, so the target is shown here. *@
-<ProjectTargetBar />
+@* Machine scoped: the SDKs and runtimes installed on this computer. The global.json editor that
+   used to sit below belongs to one project directory and lives on its own page now. *@
+<h1><i class="fa-solid fa-microchip me-2"></i>@L["Nav.Sdk"]</h1>
 
 <div class="toolbar">
 	<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.RefreshAsync">
@@ -27,7 +26,7 @@
 	<div class="col-12 col-xl-6">
 		<div class="card h-100">
 			<div class="card-body">
-				<h2 class="h6 card-title">SDK</h2>
+				<h2 class="h6 card-title">SDK <span class="badge text-bg-secondary">@ViewModel.Sdks.Count</span></h2>
 				<table class="table table-sm grid mb-0">
 					<tbody>
 						@foreach (var sdk in ViewModel.Sdks)
@@ -62,29 +61,6 @@
 	</div>
 </div>
 
-<div class="card mt-3">
-	<div class="card-body">
-		<h2 class="h6 card-title">global.json</h2>
-		<div class="toolbar">
-			<select class="form-select form-select-sm" style="max-width: 12rem" value="@ViewModel.GlobalJsonVersion" @onchange="OnVersionChanged">
-				@foreach (var sdk in ViewModel.Sdks)
-				{
-					<option value="@sdk.Version">@sdk.Version</option>
-				}
-			</select>
-			<select class="form-select form-select-sm" style="max-width: 12rem" value="@ViewModel.GlobalJsonRollForward" @onchange="OnRollForwardChanged">
-				@foreach (var option in ViewModel.RollForwardOptions)
-				{
-					<option value="@option">@option</option>
-				}
-			</select>
-			<button class="btn btn-primary btn-sm" disabled="@ViewModel.IsBusy" @onclick="ViewModel.WriteGlobalJsonAsync">@L["Common.Save"]</button>
-			<button class="btn btn-outline-secondary btn-sm" @onclick="ViewModel.OpenGlobalJson">@L["Common.OpenFolder"]</button>
-		</div>
-		<p class="hint path-box mb-0">@ViewModel.GlobalJsonPath</p>
-	</div>
-</div>
-
 @if (!string.IsNullOrWhiteSpace(ViewModel.CheckText))
 {
 	<div class="card mt-3">
@@ -104,16 +80,4 @@
 
 @code {
 	protected override async Task OnInitializedAsync() => await ViewModel.InitializeAsync();
-
-	private async Task OnVersionChanged(ChangeEventArgs args)
-	{
-		ViewModel.GlobalJsonVersion = args.Value?.ToString() ?? string.Empty;
-		await Task.CompletedTask;
-	}
-
-	private async Task OnRollForwardChanged(ChangeEventArgs args)
-	{
-		ViewModel.GlobalJsonRollForward = args.Value?.ToString() ?? string.Empty;
-		await Task.CompletedTask;
-	}
 }

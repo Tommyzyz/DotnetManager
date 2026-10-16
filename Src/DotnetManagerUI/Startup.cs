@@ -64,15 +64,14 @@ public static class Startup
         services.AddSingleton<DotnetEnvironmentViewModel>();
 
         services.AddTransient<DashboardViewModel>();
-        services.AddTransient<LocalToolsViewModel>();
-        services.AddTransient<GlobalToolsViewModel>();
-        services.AddTransient<ToolSearchViewModel>();
+        services.AddTransient<ToolsViewModel>();
         services.AddTransient<PackageSourcesViewModel>();
         services.AddTransient<ProjectPackagesViewModel>();
         services.AddTransient<NuGetCachesViewModel>();
         services.AddTransient<NuGetConfigFilesViewModel>();
         services.AddTransient<WorkloadsViewModel>();
         services.AddTransient<SdkInfoViewModel>();
+        services.AddTransient<GlobalJsonViewModel>();
         services.AddTransient<ActivityLogViewModel>();
         services.AddTransient<AppSettingsViewModel>();
     }

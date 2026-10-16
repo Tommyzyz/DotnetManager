@@ -89,14 +89,9 @@ namespace DotnetManagerUI
             }
 
             SetText(GroupProject, localizer, "Nav.GroupProject");
-            SetText(ItemLocalTools, localizer, "Nav.LocalTools");
             SetText(ItemProjectPackages, localizer, "Nav.ProjectPackages");
-            SetText(ItemToolSearch, localizer, "Nav.ToolSearch");
-            SetText(ItemSdk, localizer, "Nav.Sdk");
-
-            SetText(GroupTools, localizer, "Nav.GroupTools");
-            SetText(ItemOverview, localizer, "Nav.Overview");
-            SetText(ItemGlobalTools, localizer, "Nav.GlobalTools");
+            SetText(ItemTools, localizer, "Nav.Tools");
+            SetText(ItemGlobalJson, localizer, "Nav.GlobalJson");
 
             SetText(GroupNuGet, localizer, "Nav.GroupNuGet");
             SetText(ItemPackageSources, localizer, "Nav.PackageSources");
@@ -104,6 +99,7 @@ namespace DotnetManagerUI
             SetText(ItemNuGetConfig, localizer, "Nav.ConfigFiles");
 
             SetText(GroupEnvironment, localizer, "Nav.GroupEnvironment");
+            SetText(ItemSdk, localizer, "Nav.Sdk");
             SetText(ItemWorkloads, localizer, "Nav.Workloads");
             SetText(ItemOutput, localizer, "Nav.Output");
 

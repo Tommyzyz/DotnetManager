@@ -95,14 +95,12 @@
   <data name="Common.RestartRequired" xml:space="preserve"><value>需要重启 Visual Studio 或终端后生效。</value></data>
   <data name="Common.OperationCancelled" xml:space="preserve"><value>操作已取消。</value></data>
 
-  <data name="Nav.GroupTools" xml:space="preserve"><value>工具</value></data>
   <data name="Nav.GroupProject" xml:space="preserve"><value>项目</value></data>
   <data name="Nav.GroupNuGet" xml:space="preserve"><value>NuGet</value></data>
   <data name="Nav.GroupEnvironment" xml:space="preserve"><value>环境</value></data>
   <data name="Nav.Overview" xml:space="preserve"><value>概览</value></data>
-  <data name="Nav.LocalTools" xml:space="preserve"><value>本地工具</value></data>
-  <data name="Nav.GlobalTools" xml:space="preserve"><value>全局工具</value></data>
-  <data name="Nav.ToolSearch" xml:space="preserve"><value>工具搜索</value></data>
+  <data name="Nav.Tools" xml:space="preserve"><value>工具</value></data>
+  <data name="Nav.GlobalJson" xml:space="preserve"><value>global.json</value></data>
   <data name="Nav.PackageSources" xml:space="preserve"><value>包源</value></data>
   <data name="Nav.Caches" xml:space="preserve"><value>缓存</value></data>
   <data name="Nav.ConfigFiles" xml:space="preserve"><value>配置文件</value></data>
@@ -142,10 +140,18 @@
   <data name="GlobalTools.Directory" xml:space="preserve"><value>工具目录</value></data>
   <data name="GlobalTools.Store" xml:space="preserve"><value>工具存储 (store)</value></data>
 
+  <data name="Tools.Title" xml:space="preserve"><value>工具</value></data>
+  <data name="Tools.Scope" xml:space="preserve"><value>工具作用域</value></data>
+  <data name="Tools.Scope.Global" xml:space="preserve"><value>全局</value></data>
+  <data name="Tools.Scope.Local" xml:space="preserve"><value>本地</value></data>
+  <data name="Tools.Install" xml:space="preserve"><value>安装工具</value></data>
+  <data name="Tools.InstallTarget.Global" xml:space="preserve"><value>安装到</value></data>
+  <data name="Tools.InstallTarget.Local" xml:space="preserve"><value>安装到清单</value></data>
+  <data name="Tools.SearchTitle" xml:space="preserve"><value>在 nuget.org 上搜索</value></data>
+  <data name="Tools.NoneInstalled" xml:space="preserve"><value>此作用域下尚未安装任何工具。</value></data>
+
   <data name="ToolSearch.Query" xml:space="preserve"><value>在 nuget.org 上搜索</value></data>
   <data name="ToolSearch.ToolOnly" xml:space="preserve"><value>仅搜索工具包</value></data>
-  <data name="ToolSearch.InstallGlobally" xml:space="preserve"><value>安装为全局工具</value></data>
-  <data name="ToolSearch.InstallDirectory" xml:space="preserve"><value>本地安装目录</value></data>
 
   <data name="Sources.RootDirectory" xml:space="preserve"><value>选择根目录</value></data>
   <data name="Sources.UserOnly" xml:space="preserve"><value>仅使用用户级配置</value></data>

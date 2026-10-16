@@ -10,12 +10,29 @@ namespace DotnetManager.Tests;
 /// </summary>
 public sealed class LocalizationTests
 {
-    /// <summary>Keys used by the navigation menu and the project dependency page.</summary>
+    /// <summary>Keys used by the navigation menu, the tools page and the project dependency page.</summary>
     private static readonly string[] FeatureKeys =
     [
         "App.Title",
+        "Nav.Overview",
+        "Nav.GroupProject",
         "Nav.GroupNuGet",
+        "Nav.GroupEnvironment",
+        "Nav.Tools",
+        "Nav.GlobalJson",
+        "Nav.Sdk",
+        "Nav.Workloads",
+        "Nav.Output",
+        "Nav.Settings",
         "Nav.ProjectPackages",
+        "Tools.Title",
+        "Tools.Scope.Global",
+        "Tools.Scope.Local",
+        "Tools.Install",
+        "Tools.InstallTarget.Global",
+        "Tools.InstallTarget.Local",
+        "Tools.SearchTitle",
+        "Tools.NoneInstalled",
         "ProjectPackages.Title",
         "ProjectPackages.TargetProject",
         "ProjectPackages.AllProjects",

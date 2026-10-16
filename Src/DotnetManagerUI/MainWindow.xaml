@@ -44,23 +44,22 @@
             </NavigationView.Resources>
 
             <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="ItemOverview" Content="概览" Icon="Home" Tag="/" />
+
                 <!-- Everything that works against the shared project target lives in this one group. -->
                 <NavigationViewItemHeader x:Name="GroupProject" Content="项目" />
-                <NavigationViewItem x:Name="ItemLocalTools" Content="本地工具" Icon="Folder" Tag="/tools/local" />
                 <NavigationViewItem x:Name="ItemProjectPackages" Content="项目依赖与安全" Icon="Library" Tag="/nuget/packages" />
-                <NavigationViewItem x:Name="ItemToolSearch" Content="工具搜索" Icon="Find" Tag="/tools/search" />
-                <NavigationViewItem x:Name="ItemSdk" Content="SDK 与运行时" Icon="Repair" Tag="/sdk" />
-
-                <NavigationViewItemHeader x:Name="GroupTools" Content="工具" />
-                <NavigationViewItem x:Name="ItemOverview" Content="概览" Icon="Home" Tag="/" />
-                <NavigationViewItem x:Name="ItemGlobalTools" Content="全局工具" Icon="Globe" Tag="/tools/global" />
+                <NavigationViewItem x:Name="ItemTools" Content="工具" Icon="Repair" Tag="/tools" />
+                <NavigationViewItem x:Name="ItemGlobalJson" Content="global.json" Icon="Document" Tag="/global-json" />
 
                 <NavigationViewItemHeader x:Name="GroupNuGet" Content="NuGet" />
                 <NavigationViewItem x:Name="ItemPackageSources" Content="包源" Icon="List" Tag="/nuget/sources" />
                 <NavigationViewItem x:Name="ItemNuGetCaches" Content="缓存" Icon="Save" Tag="/nuget/caches" />
                 <NavigationViewItem x:Name="ItemNuGetConfig" Content="配置文件" Icon="Document" Tag="/nuget/config" />
 
+                <!-- Machine wide: nothing in this group reads the project target. -->
                 <NavigationViewItemHeader x:Name="GroupEnvironment" Content="环境" />
+                <NavigationViewItem x:Name="ItemSdk" Content="SDK 与运行时" Icon="Repair" Tag="/sdk" />
                 <NavigationViewItem x:Name="ItemWorkloads" Content="工作负载" Icon="Manage" Tag="/workloads" />
                 <NavigationViewItem x:Name="ItemOutput" Content="运行日志" Icon="Page" Tag="/output" />
             </NavigationView.MenuItems>
