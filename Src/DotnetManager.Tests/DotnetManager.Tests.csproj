@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
+        <TargetFramework>net11.0-windows10.0.17763.0</TargetFramework>
         <UseWPF>true</UseWPF>
         <!-- <RuntimeIdentifier>win-x64</RuntimeIdentifier> -->
 
@@ -22,7 +22,7 @@
         <!-- CommunityToolkit.Mvvm comes in through the ProjectReference to DotnetManager.RazorLib,
              which is the project whose view models use it. The test code itself never touches an
              ObservableObject, so there is no direct reference here. -->
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
@@ -31,7 +31,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="xunit.v3" Version="4.0.2" />
+        <PackageReference Include="xunit.v3" Version="4.0.3" />
     </ItemGroup>
 
     <ItemGroup>
